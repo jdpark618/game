@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e11">
 <title>언더크립트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3155,11 +3161,13 @@ const SND=(()=>{
   function lvEl(T){ if(T.direct&&T.el) T.el.volume=Math.max(0,Math.min(1,(T.tlv||0)*VB()*2)); }
   function setLv(T,lv,tc){ T.tlv=lv; if(T.g&&ctx) T.g.gain.setTargetAtTime(lv,ctx.currentTime,tc); else lvEl(T); }
   function route(T){ if(!ctx||T.g||T.direct) return; try{ const sN=ctx.createMediaElementSource(T.el); T.g=ctx.createGain(); T.g.gain.value=0; sN.connect(T.g); T.g.connect(bgmBus); }catch(e){ T.direct=true; } }
-  function ready(T){ if(T.want){ if(T.restart){ try{T.el.currentTime=0;}catch(e){} T.restart=false; } play(T); setLv(T,T.tlv,.8); } }
-  function trk(n){ const T=TR[n]; if(T.el) return T; const a=new Audio(); a.loop=true; a.preload='auto'; T.el=a;
-    const fb=()=>{ T.direct=true; a.src=T.src; ready(T); };
-    try{ fetch(T.src).then(r=>{ if(!r.ok) throw 0; return r.blob(); }).then(b=>{ a.src=URL.createObjectURL(b); route(T); ready(T); }).catch(fb); }catch(e){ fb(); }
+  function mk(T,cors){ const a=new Audio(); a.loop=true; a.preload='auto'; if(cors) a.crossOrigin='anonymous'; a.src=T.src; return a; }
+  function trk(n){ const T=TR[n]; if(T.el) return T;
+    T.el=mk(T,true); route(T);
+    T.el.addEventListener('error',()=>{ if(T.fb) return; T.fb=1; const t0=T.el.currentTime||0; try{T.el.pause();}catch(e){} if(T.g){ try{T.g.disconnect();}catch(e){} T.g=null; } T.direct=true; T.el=mk(T,false); lvEl(T); if(T.want) play(T); });
     return T; }
+  function prime(){ if(!ctx||prime.done) return; prime.done=1; try{ if(W.navigator&&W.navigator.audioSession) W.navigator.audioSession.type='playback'; }catch(e){}
+    for(const k in TR){ const T=trk(k); if(!T.want){ const pr=T.el.play(); if(pr&&pr.then) pr.then(()=>{ if(!T.want) T.el.pause(); }).catch(()=>{}); else if(!T.want) T.el.pause(); } } }
   function init(){
     if(ctx||!AC) return; try{ ctx=new AC(); }catch(e){ ctx=null; return; }
     master=ctx.createGain(); master.gain.value=.7; master.connect(ctx.destination);
@@ -3231,7 +3239,7 @@ const SND=(()=>{
     if(m===mood) return; mood=m; if(!ctx) return;
     const name=m==='lobby'?'lobby':m?'dungeon':null, lv=m==='dim'?.45:1;
     for(const k in TR){ const T=TR[k];
-      if(k===name){ trk(k); clearTimeout(T.pt); const was=T.want; T.want=true; T.tlv=lv; if(T.el.src){ if(!was){ if(T.restart){ try{T.el.currentTime=0;}catch(e){} T.restart=false; } play(T); } setLv(T,lv,was?.5:.6); } }
+      if(k===name){ trk(k); clearTimeout(T.pt); const was=T.want; T.want=true; T.tlv=lv; { if(!was){ if(T.restart){ try{T.el.currentTime=0;}catch(e){} T.restart=false; } play(T); } setLv(T,lv,was?.5:.6); } }
       else if(T.el&&T.want){ T.want=false; setLv(T,0,.3); T.restart=true; clearTimeout(T.pt); T.pt=setTimeout(()=>{ if(!T.want) T.el.pause(); },1600); }
     }
   }
@@ -3252,7 +3260,7 @@ const SND=(()=>{
       nextT+=sp; step++;
     }
   }
-  function unlock(){ init(); if(ctx&&ctx.state==='suspended') ctx.resume(); }
+  function unlock(){ init(); if(ctx&&ctx.state==='suspended') ctx.resume(); prime(); }
   if(W.document&&W.document.addEventListener){ const u=()=>unlock(); W.document.addEventListener('pointerdown',u,{capture:true}); W.document.addEventListener('keydown',u,{capture:true}); }
   return {sfx,setMood,apply,unlock,dbg:()=>({mood,TR:Object.fromEntries(Object.entries(TR).map(([k,T])=>[k,T.el?{want:!!T.want,paused:T.el.paused,t:+T.el.currentTime.toFixed(1),direct:!!T.direct,lv:T.tlv,vol:T.el.volume,src:(T.el.src||'').slice(0,20)}:null]))})};
 })();
