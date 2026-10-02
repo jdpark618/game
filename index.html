@@ -940,6 +940,16 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .sndn{margin:0;font-size:11px;color:var(--dim)}
 .sndrow.vbox{flex-direction:column;align-items:stretch;gap:8px}.sndrow.vbox>span{font-size:12px}
 .sfit{display:flex;flex-direction:column;gap:8px;flex:0 0 auto;min-height:0}
+.pphint{font-size:12.5px!important;margin:0!important;color:var(--mute)}
+.pplist{display:flex;flex-direction:column;gap:6px}
+.pprow{display:grid;grid-template-columns:44px 1fr 14px;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--bone);background:#14171b;border:2px solid #2a3036;border-left:4px solid var(--gc);box-shadow:inset 0 0 0 2px #0a0a0c;padding:8px 8px 8px 8px;cursor:pointer;min-height:64px}
+.pprow:active{transform:translateY(1px)}.pprow:hover{border-color:var(--gc)}
+.pprow .pti{width:44px!important;height:44px!important;flex-basis:44px!important}
+.ppt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ppn{display:flex;align-items:center;flex-wrap:wrap;gap:5px}.ppn b{font-size:14.5px;font-family:var(--f-disp)}.ppn .lvp{margin:0}
+.ppd{font-size:12.5px;line-height:1.4;color:#c8c0ad}.ppd b.up{color:#9be08a}
+.ppa{color:#ffd27a;font-size:14px}
+.tg.up{border-color:#4a6a3a;color:#9be08a}.tg.new{border-color:#6a5420;color:#ffd27a}
 </style>
 
 <div id="app"></div>
@@ -1653,7 +1663,7 @@ const META_DEF={stones:0,unlocked:['warrior','mage','priest'],best:0,graves:[],s
 let META=Object.assign({},META_DEF,load(META_KEY)||{});
 for(const k of ['parts','equip','maxFloor']) if(!META[k]||typeof META[k]!=='object') META[k]={};
 for(const k of ['contracts','codex','graves','unlocked']) if(!Array.isArray(META[k])) META[k]=META_DEF[k].slice();
-if(!META.vol||typeof META.vol!=='object'||META.volv!==2){ META.vol={bgm:(META.snd==='sfx'||META.snd==='off')?0:.45,sfx:META.snd==='off'?0:.75}; META.volv=2; }
+if(!META.vol||typeof META.vol!=='object'||META.volv!==3){ META.vol={bgm:.45,sfx:.75}; META.volv=3; } delete META.snd;
 const saveMeta=()=>store(META_KEY,META);
 let G=load(RUN_KEY);
 let pops=[], shakeE=false, hurtP=false, lvFlag=false, critFlag=false, toastT=null;
@@ -2733,8 +2743,9 @@ function renderLoot(){
   const rr=`<button class="btn" data-loot="reroll" ${p.stones<c?'disabled':''}>다시 고르기 ${c===0?'(무료)':`<span class="stone num">${c}</span>`}</button>`;
   const head=`${UI.kill?sceneHtml('',G.room,corpseHtml(),'sm'):''}<div class="label">전리품${G.loot.length>1?` · 남은 ${G.loot.length}`:''}</div>`;
   if(o.kind==='part'){
-    return `${head}<p class="story" style="font-size:14px">층의 주인이 남긴 부품 하나를 보관함에 넣는다. 로비의 <b>개조</b> 탭에서 이식한다.</p>
-    <div class="cards3 picks">${o.opts.map(id=>{ const L=META.parts[id]||0; return pickCard(partCard(id,Math.min(3,L+1),L?`강화 Lv${L} → Lv${L+1} `:'새 부품 ','',true,L),`data-part="${id}"`); }).join('')}</div>
+    return `${head}<p class="story pphint">층의 주인이 남긴 부품 하나를 고른다 · 로비 <b>개조</b> 탭에서 이식</p>
+    <div class="pplist">${o.opts.map(id=>{ const P=PARTS[id], L=META.parts[id]||0, N=Math.min(3,L+1), df=L?dTx(P.d(L),P.d(N)):null;
+      return `<button class="pprow flipin" data-part="${id}" style="--gc:${PGC[P.t]}">${partIc(id)}<span class="ppt"><span class="ppn"><b>${esc(P.n)}</b>${lvPips(N)}<span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span>${L?`<span class="tg up">강화 Lv${L}→${N}</span>`:'<span class="tg new">NEW</span>'}</span><span class="ppd">${df||esc(P.d(N))}</span></span><span class="ppa">▸</span></button>`; }).join('')}</div>
     ${menuHtml([rerollItem(o),{a:'data-loot="skip"',l:'두고 간다'}])}`;
   }
   if(o.kind==='eq'){
