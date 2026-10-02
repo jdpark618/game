@@ -883,7 +883,7 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .pti.ii{background:radial-gradient(circle,#1d2229,#0b0d10 75%)}.pti.ii img{width:100%!important;height:100%!important;object-fit:contain;padding:1px}
 .pti.sil img{filter:brightness(0) drop-shadow(0 0 1px #6a727c)!important}
 .slots .slot .pti{width:36px;height:36px;flex-basis:36px}
-.mrow{grid-template-columns:40px 1fr auto!important}.mrow.no{grid-template-columns:40px 1fr!important}.mrow .pti{width:40px!important;height:40px!important;flex-basis:40px!important}
+.prow{grid-template-columns:40px 1fr auto!important}.prow.no{grid-template-columns:40px 1fr!important}.prow .pti{width:40px!important;height:40px!important;flex-basis:40px!important}
 .card.ptc h4 .pti{width:34px;height:34px;flex-basis:34px}
 .pti{display:inline-flex;width:22px;height:22px;flex:0 0 22px;align-items:center;justify-content:center;background:#0b0d10;border:1px solid var(--gc,#3a424b);overflow:hidden;vertical-align:middle}
 .pti canvas{width:16px!important;height:16px!important;image-rendering:pixelated}
@@ -893,7 +893,7 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .card.ptc{border-color:var(--gc)!important}.card.ptc h4{display:flex;align-items:center;gap:6px}.card.ptc .pnm{flex:1;min-width:0}
 .badge.r{border-color:#6a5a2a;color:#e0cf62}.badge.c{border-color:#4a5056;color:#b8bec4}.badge.k{border-color:#5a3a6a;color:#c99cf0}
 .mstick{position:sticky;top:44px;z-index:6;background:#0e1013;padding:2px 0 6px;display:flex;flex-direction:column;gap:6px}
-.mhead{display:flex;align-items:center;gap:10px;padding:6px 8px}
+.modhead{display:flex;align-items:center;gap:10px;padding:6px 8px}
 .mpic{width:40px;height:40px;flex:0 0 40px;overflow:hidden;background:#0b0d10;border:1px solid #3a424b;display:block}
 .mpic img,.mpic canvas{width:100%!important;height:100%!important;object-fit:cover;object-position:50% 10%}
 .mhi{flex:1;min-width:0;display:flex;flex-direction:column}.mhi b{font-family:var(--f-disp);font-size:15px}.mhi span{font-size:11px;color:var(--mute)}
@@ -914,10 +914,10 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .mgrid{display:grid;grid-template-columns:1fr;gap:4px;max-height:min(46vh,380px);overflow-y:auto;padding:3px;border:2px solid #23282e;background:#0b0d10;scrollbar-width:thin}
 @media (min-width:620px){.mgrid{grid-template-columns:1fr 1fr}}
 .mgrid.flash{animation:mflash .6s}@keyframes mflash{0%{border-color:var(--accent)}100%{border-color:#23282e}}
-.mrow{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;min-height:62px;padding:5px 6px;background:#14171b;border:1px solid #2a3036;border-left:3px solid var(--gc)}
-.mrow .pti{width:30px;height:30px;flex-basis:30px}.mrow .pti canvas{width:22px!important;height:22px!important}
-.mrow.on{background:#18211e;border-color:#3a5a50;border-left-color:var(--gc)}
-.mrow.no{opacity:.6;grid-template-columns:30px 1fr}
+.prow{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;min-height:62px;padding:5px 6px;background:#14171b;border:1px solid #2a3036;border-left:3px solid var(--gc)}
+.prow .pti{width:30px;height:30px;flex-basis:30px}.prow .pti canvas{width:22px!important;height:22px!important}
+.prow.on{background:#18211e;border-color:#3a5a50;border-left-color:var(--gc)}
+.prow.no{opacity:.6;grid-template-columns:30px 1fr}
 .prt{min-width:0;display:flex;flex-direction:column;gap:2px}
 .prn{display:flex;align-items:center;flex-wrap:wrap;gap:4px}.prn b{font-size:12.5px;color:var(--bone)}.prn .lvp{margin:0}
 .prd{font-size:11px;color:var(--mute);line-height:1.3}
@@ -967,6 +967,7 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
   .g-stage.explore .tile.near{height:100%;max-height:190px;justify-content:center}
   .g-stage.event .scene{flex:0 0 auto!important;height:clamp(120px,24vh,200px)!important;aspect-ratio:auto!important}
 }
+.vrow.scl{grid-template-columns:48px 1fr}.sclb{display:flex;flex-wrap:wrap;gap:4px}.sclb .btn{padding:3px 7px;font-size:11.5px}
 </style>
 
 <div id="app"></div>
@@ -3066,7 +3067,7 @@ function renderModTab(){
   let cls=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior';
   const c=CLASSES[cls], slots=slotsFor(cls), eq=eqClean(cls), mf=META.maxFloor[cls]||0, nx=SLOT_FLOORS.find(f=>mf<f);
   const usedBy={}; for(const [k,l] of Object.entries(META.equip)) if(k!==cls&&CLASSES[k]) for(const id of new Set(l)) if(META.parts[id]) (usedBy[id]=usedBy[id]||[]).push(CLASSES[k].n);
-  const head=`<div class="mhead pxf panel-f"><span class="mpic">${illImg('hp_'+cls,'pic')||artC('hero:'+cls)}</span><div class="mhi"><b>${c.n}</b><span>개조 ${eq.length}/${slots}${nx?` · 다음 슬롯: 아무 탑 B${nx}F`:' · 슬롯 모두 열림'}</span></div><button class="btn sm" data-act="mpick">직업 ${UI.modPick?'▴':'▾'}</button></div>`;
+  const head=`<div class="modhead pxf panel-f"><span class="mpic">${illImg('hp_'+cls,'pic')||artC('hero:'+cls)}</span><div class="mhi"><b>${c.n}</b><span>개조 ${eq.length}/${slots}${nx?` · 다음 슬롯: 아무 탑 B${nx}F`:' · 슬롯 모두 열림'}</span></div><button class="btn sm" data-act="mpick">직업 ${UI.modPick?'▴':'▾'}</button></div>`;
   const pick=UI.modPick?`<div class="mcls">${Object.entries(CLASSES).filter(([k])=>META.unlocked.includes(k)).map(([k,x])=>`<button class="mc ${k===cls?'on':''}" data-modcls="${k}"><span class="mpic">${illImg('hp_'+k,'pic')||artC('hero:'+k)}</span><span>${x.n}</span></button>`).join('')}</div>`:'';
   const slotHtml=[0,1,2,3].map(i=>{
     if(i>=slots) return `<div class="slot locked" data-tip="<b>슬롯 해금</b><br>${c.n}(으)로 아무 탑에서나 B${SLOT_FLOORS[i-1]}F에 도달"><span class="lk">🔒</span><span>아무 탑</span><b style="font-size:13px;color:var(--bone)">B${SLOT_FLOORS[i-1]}F</b></div>`;
@@ -3082,11 +3083,11 @@ function renderModTab(){
   const ids=all.filter(id=>f==='all'||PARTS[id].t===f).sort((x,y)=>(!META.parts[x])-(!META.parts[y])||ord[PARTS[x].t]-ord[PARTS[y].t]);
   const rows=ids.map(id=>{
     const P=PARTS[id], L=META.parts[id]||0;
-    if(!L){ const hint=P.t==='k'?`${CLASSES[P.cls].n}(으)로 B10F 도달`:'층의 주인 처치 보상'; return `<div class="mrow no" style="--gc:${PGC[P.t]}">${partIc(id,'sil')}<div class="prt"><div class="prn"><b>???</b><span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span></div><div class="prd">${hint}</div></div></div>`; }
+    if(!L){ const hint=P.t==='k'?`${CLASSES[P.cls].n}(으)로 B10F 도달`:'층의 주인 처치 보상'; return `<div class="prow no" style="--gc:${PGC[P.t]}">${partIc(id,'sil')}<div class="prt"><div class="prn"><b>???</b><span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span></div><div class="prd">${hint}</div></div></div>`; }
     const on=eq.includes(id), why=partAllowed(cls,id), cost=L<3?PART_LV_COST[L]:0, nxt=partNext(id,L);
     const b1=on?`<button class="btn sm" data-unequip="${eq.indexOf(id)}">해제</button>`:why?`<button class="btn sm" disabled>${why==='빈 슬롯 없음'?'슬롯 가득':why==='자기 직업에는 이식할 수 없다'?'본 직업':esc(why)}</button>`:`<button class="btn pri sm" data-equip="${id}">이식</button>`;
     const b2=L<3?`<button class="btn sm up" data-lvpart="${id}" ${META.stones<cost?'disabled':''}>강화 <span class="stone num">${cost}</span></button>`:`<span class="max">MAX</span>`;
-    return `<div class="mrow ${on?'on':''} ${!on&&!why?'can':''}" style="--gc:${PGC[P.t]}">${partIc(id)}<div class="prt"><div class="prn"><b>${esc(P.n)}</b>${lvPips(L)}<span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span>${on?'<span class="tg on">이식 중</span>':''}${usedBy[id]?`<span class="tg">${usedBy[id].join('·')} 사용</span>`:''}</div><div class="prd">${esc(P.d(L))}</div>${nxt?`<div class="prx">강화 시 ${nxt}</div>`:''}</div><div class="prb">${b1}${b2}</div></div>`;
+    return `<div class="prow ${on?'on':''} ${!on&&!why?'can':''}" style="--gc:${PGC[P.t]}">${partIc(id)}<div class="prt"><div class="prn"><b>${esc(P.n)}</b>${lvPips(L)}<span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span>${on?'<span class="tg on">이식 중</span>':''}${usedBy[id]?`<span class="tg">${usedBy[id].join('·')} 사용</span>`:''}</div><div class="prd">${esc(P.d(L))}</div>${nxt?`<div class="prx">강화 시 ${nxt}</div>`:''}</div><div class="prb">${b1}${b2}</div></div>`;
   }).join('');
   return `<div class="mstick">${head}${pick}<div class="slots">${slotHtml}</div></div>
    <div class="mlab"><span>부품 보관함</span><button class="iconbtn" data-act="mhelp">?</button></div>
@@ -3207,7 +3208,7 @@ const TUT={explore:['갈림길','두 방 중 하나를 고른다. 위쪽 점 지
  event:['이벤트','방에 놓인 물건이나 사람이다. 해 보거나 지나친다. 좋은 일만 있지는 않다.']};
 function tutHtml(){ if(!G||G.tower!=='crypt') return ''; const m=G.mode, T=TUT[m]; META.tut=META.tut||{}; if(!T||META.tut[m]) return '';
   return `<div class="tutwrap"><div class="tut pxf dlg-f"><b>${T[0]}</b><p>${T[1]}</p><button class="mbtn pxf btn-on-f" data-act="tutok" data-v="${m}"><span class="cur">▸</span><span class="ml">알겠다</span></button></div></div>`; }
-function render(){
+function render(){ applyScale();
   hideTip(); SND.setMood(sndMood());
   if(!G){ { const mg=document.querySelector('.mgrid'); if(mg&&UI.mgTop!==0) UI.mgTop=mg.scrollTop; } renderHall(); paintSprites(app); renderSheet(); { const rb=document.querySelector('.roster'); if(rb&&UI.rosterTop) rb.scrollTop=UI.rosterTop; const gb=document.querySelector('.pgrid'); if(gb&&UI.petTop) gb.scrollTop=UI.petTop; const mg=document.querySelector('.mgrid'); if(mg){ mg.scrollTop=UI.mgTop||0; UI.mgTop=mg.scrollTop; } } return; }
   renderGame(); { const th=tutHtml(); if(th&&app.insertAdjacentHTML) app.insertAdjacentHTML('beforeend',th); } paintSprites(app);
@@ -3332,9 +3333,15 @@ if(typeof window!=='undefined') window.__snd=SND;
 function sndMood(){ if(!G) return 'lobby'; if(G.mode==='dead'||G.mode==='clear') return 'dim'; return 'dungeon'; }
 function sndRows(){ const v=META.vol; return [['bgm','배경음'],['sfx','효과음']].map(([k,n])=>`<label class="vrow"><span class="vn">${n}</span><input type="range" min="0" max="100" step="5" value="${Math.round(v[k]*100)}" data-vol="${k}"><b class="num vv" data-vv="${k}">${Math.round(v[k]*100)}</b></label>`).join(''); }
 function renderSnd(){ let r=document.getElementById('sndRoot'); if(!r){ r=document.createElement('div'); r.id='sndRoot'; document.body.appendChild(r); }
-  r.innerHTML=UI.sndOpen?`<div class="sndwrap" data-act="sndclose"><div class="sndpan pxf panel-f" role="dialog" aria-label="소리 설정"><div class="sndh"><b>소리 설정</b><button class="iconbtn" data-act="sndclose">닫기</button></div>${sndRows()}<p class="sndn">0으로 내리면 꺼진다.</p></div></div>`:''; }
+  r.innerHTML=UI.sndOpen?`<div class="sndwrap" data-act="sndclose"><div class="sndpan pxf panel-f" role="dialog" aria-label="소리 설정"><div class="sndh"><b>소리 설정</b><button class="iconbtn" data-act="sndclose">닫기</button></div>${sndRows()}<p class="sndn">0으로 내리면 꺼진다.</p>${scaleRow()}</div></div>`:''; }
 document.addEventListener('input',ev=>{ const k=ev.target&&ev.target.dataset&&ev.target.dataset.vol; if(!k) return; META.vol[k]=+ev.target.value/100; SND.unlock(); SND.apply(); document.querySelectorAll(`[data-vv="${k}"]`).forEach(e=>e.textContent=ev.target.value); });
 document.addEventListener('change',ev=>{ const k=ev.target&&ev.target.dataset&&ev.target.dataset.vol; if(!k) return; saveMeta(); if(k==='sfx') SND.sfx('hit'); const b=document.querySelector('.sndb'); if(b) b.textContent=sndIc(); });
+const SCALES=['auto',1,1.25,1.5,1.75,2];
+function fitScale(){ const W=window.innerWidth||0, H=window.innerHeight||0; if(W<900) return 1; return Math.max(1,Math.floor(Math.min((H-24)/880,(W-40)/460)*20)/20); }
+function uiScale(){ const f=fitScale(), v=META.scale||'auto'; if(f===1&&(window.innerWidth||0)<900) return 1; return v==='auto'?f:Math.min(+v,f); }
+function applyScale(){ if(typeof document==='undefined'||!document.documentElement||!document.documentElement.style) return; const s=uiScale(); document.documentElement.style.zoom=s===1?'':String(s); }
+if(typeof window!=='undefined'&&window.addEventListener){ window.addEventListener('resize',applyScale); }
+function scaleRow(){ if((window.innerWidth||0)<900) return ''; const v=META.scale||'auto'; return `<div class="vrow scl"><span class="vn">화면</span><div class="sclb">${SCALES.filter(k=>k==='auto'||k<=fitScale()).map(k=>`<button class="btn sm ${String(v)===String(k)?'pri':''}" data-act="scale" data-v="${k}">${k==='auto'?'자동':Math.round(k*100)+'%'}</button>`).join('')}</div></div>`; }
 const sndIc=()=>(META.vol.bgm||META.vol.sfx)?'♫':'✕';
 function sndBtn(){ return `<button class="pxf btn-f mini sndb" data-act="sndopen" aria-label="소리 설정">${sndIc()}</button>`; }
 
@@ -3369,7 +3376,7 @@ document.addEventListener('click',ev=>{
   if(a==='mpick'){ UI.modPick=!UI.modPick; return render(); }
   if(a==='mhelp'){ UI.modHelp=!UI.modHelp; return render(); }
   if(a&&a.startsWith('mf:')){ UI.modF=a.slice(3); UI.mgTop=0; return render(); }
-  if(a==='mjump'){ const g=document.querySelector('.mgrid'), r=g&&g.querySelector('.mrow.can'); if(g){ g.scrollTop=r?r.offsetTop-g.offsetTop-4:0; g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash'); } return; }
+  if(a==='mjump'){ const g=document.querySelector('.mgrid'), r=g&&g.querySelector('.prow.can'); if(g){ g.scrollTop=r?r.offsetTop-g.offsetTop-4:0; g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash'); } return; }
   if(a==='map'){ UI.mapOpen=true; return render(); }
   if(a==='mapclose'){ UI.mapOpen=false; return render(); }
   if(t.dataset.pet){ const gb=document.querySelector('.pgrid'); UI.petTop=gb?gb.scrollTop:0; META.pet=t.dataset.pet; saveMeta(); return render(); }
@@ -3379,6 +3386,7 @@ document.addEventListener('click',ev=>{
   if(a==='gclose'){ UI.gacha=null; return render(); }
   if(a==='tutok'){ META.tut=META.tut||{}; META.tut[t.dataset.v]=1; saveMeta(); return render(); }
   if(a==='sndset'){ META.snd=t.dataset.v; saveMeta(); SND.unlock(); SND.apply(); return renderSheet(); }
+  if(a==='scale'){ const v=t.dataset.v; META.scale=v==='auto'?'auto':+v; saveMeta(); applyScale(); return renderSnd(); }
   if(a==='sndopen'){ UI.sndOpen=true; SND.unlock(); return renderSnd(); }
   if(a==='sndclose'){ if(ev.target.closest('.sndpan')&&ev.target.dataset.act!=='sndclose') return; UI.sndOpen=false; return renderSnd(); }
   if(a==='snd'){ const o=['all','sfx','off']; META.snd=o[(o.indexOf(META.snd||'all')+1)%3]; saveMeta(); SND.unlock(); SND.apply(); toast(META.snd==='all'?'배경음·효과음 켬':META.snd==='sfx'?'효과음만 켬':'소리 끔'); return render(); }
