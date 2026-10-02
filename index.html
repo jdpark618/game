@@ -1091,6 +1091,12 @@ img.npcic{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0
 .tcard .tf b{font-size:14px}.tcard .tf small{font-size:10px;line-height:1.35;color:#5a4a30}
 .tcard.fl{transform:rotateY(180deg);cursor:default}.tcard.fl:not(.me){opacity:.55}.tcard.me .tf{box-shadow:0 0 0 2px #ffe2a6,0 0 16px #e8c37a}
 /* home */
+.hfigw{pointer-events:auto!important;background:none;border:0;padding:0;cursor:pointer}
+.hlinks{display:flex;gap:14px;margin-top:6px}.hlinks .hlink{margin-top:0}
+.cpopw{position:absolute;inset:0;z-index:80;background:rgba(4,5,7,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:16px;animation:cpin .18s}
+@keyframes cpin{from{opacity:0}to{opacity:1}}
+.cpop{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px;animation:cpup .22s}@keyframes cpup{from{transform:translateY(14px)}to{transform:none}}
+.cpop .show{margin:0;position:relative!important;top:0!important}.cpop .show .sd,.cpop .show .spv{display:block!important;-webkit-line-clamp:unset!important;height:auto!important;min-height:0!important;overflow:visible!important}.cpop .show .sd{font-size:12.5px}.cpop .show .spv{font-size:12px}.cpop .show .sp{height:210px!important}.cpop .skd{grid-column:1/-1;padding:0 10px 10px;display:flex;flex-direction:column;gap:5px}.cpop .skd div{font-size:11.5px;color:#b9b2a0;line-height:1.4}.cpop .skd b{color:#efe6d2;margin-right:6px}.cpopb{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
 .hside{position:absolute;left:12px;top:64px;width:50%;z-index:12;display:flex;flex-direction:column;gap:8px}
 .hcard{background:rgba(10,12,16,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(232,195,122,.22);border-radius:10px;padding:8px 10px;font-size:11.5px;color:#d8d0bd;line-height:1.45}
 .hcard h5{margin:0 0 5px;font-size:11px;color:#e8c37a;letter-spacing:1px;font-weight:700}
@@ -3610,7 +3616,7 @@ function renderHall(){
   const bar=tab==='battle'?'':`<nav class="lbar">${TB.map(([k,n,d])=>{ const op=['home','cls'].includes(k)||tabOpen(k), nw=op&&HTUT[k]&&!(META.htut||{})[k], on=tab===k||(k==='home'&&tab==='battle');
     return op?`<button class="lb ${on?'on':''}" data-tab="${k}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg><span>${n}</span>${nw?'<i class="tnew"></i>':''}</button>`:`<button class="lb lockt" data-tip="<b>${n}</b><br>${TAB_LOCK[k]}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg><span>🔒 ${n}</span></button>`; }).join('')}</nav>`;
   const hud=`<div class="lhud">${tab==='battle'?'<button class="lpill back" data-tab="home">‹ 로비</button>':''}<span class="sp"></span><span class="lpill"><i class="gem"></i><b class="num">${META.stones.toLocaleString()}</b></span>${sndBtn()}</div>`;
-  app.innerHTML=`<div class="lob ${cls}"><div class="lbg" style="background-image:url(${LBG[bgk]||LBG.lobby})"></div><div class="lshade ${cls}"></div>${hud}<main class="lmain ${cls}">${body}</main>${bar}</div>${gachaHtml()}${hallTut()}`;
+  app.innerHTML=`<div class="lob ${cls}"><div class="lbg" style="background-image:url(${LBG[bgk]||LBG.lobby})"></div><div class="lshade ${cls}"></div>${hud}<main class="lmain ${cls}">${body}</main>${bar}</div>${gachaHtml()}${hallTut()}${tab==='home'?clsPop():''}`;
 }
 const HTIPS=['{P}★ 직업은 {P} 계열 기술이 더 자주 나온다.','층의 주인을 쓰러뜨리면 개조 부품을 얻는다.','지도에서 앞의 두 칸까지 내다보고 길을 고르자.','빛나는 샘과 쉼터는 체력이 낮을 때 아껴 두자.','떠돌이 나그네는 희귀 기술을 가르쳐 준다.','계약을 걸면 어려워지는 대신 보상이 커진다.','물약은 위험할 때 자동으로 쓰도록 설정할 수 있다.'];
 function renderHome(){
@@ -3626,10 +3632,10 @@ function renderHome(){
   else { const lk=Object.entries(TOWERS).find(([k])=>!towerOpen(k)); nxt=lk?`<div class="nx"><i>🗝</i><span>${lk[1].n}<small>${lk[1].need&&TOWERS[lk[1].need]?TOWERS[lk[1].need].n+' 제패 시 열림':'조건 달성 시 열림'}</small></span></div>`:`<div class="nx"><i>✨</i><span>개조 슬롯 모두 열림<small>다른 직업도 키워 보자</small></span></div>`; }
   const tip=HTIPS[((META.graves||[]).length+sel.length)%HTIPS.length].replace('{P}',prim.join('·')||'주력');
   const side=`<div class="hside"><div class="hcard"><h5>탑 기록</h5>${trows}</div><div class="hcard"><h5>다음 해금</h5>${nxt}</div><div class="hcard htip"><h5>팁</h5>${tip}</div></div>`;
-  return `<div class="hgoal">${goalBanner()}</div>${side}<div class="hfigw">${img}</div>
+  return `<div class="hgoal">${goalBanner()}</div>${side}<button class="hfigw" data-act="cpop" aria-label="직업 정보">${img}</button>
   <div class="hinfo"><div class="hk">${META.maxFloor[sel]?`최고 B${META.maxFloor[sel]}F`:'기록 없음'}</div><div class="hn">${c.n}</div>
    <div class="hchips"><span class="lchip">${prim.join('·')} ★</span>${tabOpen('mod')?`<span class="lchip">개조 ${eq.length}/${slots}</span>`:''}</div>
-   <button class="hlink" data-tab="cls">직업 변경 ▸</button></div>
+   <div class="hlinks"><button class="hlink" data-act="cpop">ⓘ 직업 정보</button><button class="hlink" data-tab="cls">직업 변경 ▸</button></div></div>
   <button class="lgo" data-tab="battle"><b>전 투</b><small>탑 선택 →</small></button>`;
 }
 function renderBattle(){
@@ -3669,6 +3675,18 @@ function renderRunTab(){
   const t=TOWERS[META.tower]||TOWERS.crypt;
   return `<button class="backbar pxf btn-f" data-act="towers"><span class="bk">◂</span><span class="bt"><b>${t.no} · ${t.n}</b><span>${t.tags.slice(0,2).join(' · ')}${t.fee?` · 입장료 ${t.fee}`:''}</span></span><span class="bc">탑 변경</span></button>`+renderPrep();
 }
+function clsCard(sel,extra){ const c=CLASSES[sel], un=META.unlocked.includes(sel), slots=slotsFor(sel), eq=(META.equip[sel]||[]).filter(id=>META.parts[id]).slice(0,slots);
+  const sks=c.skills.map(id=>`<span class="ssk" data-tip="<b>${esc(SK[id].n)}</b><br>${esc(skText(SK[id]))}">${artC('icon:'+skIcon(SK[id]))}${esc(SK[id].n)}</span>`).join('');
+  return `<section class="show pxf panel-f ${un?'':'locked'} ${extra||''}"><div class="sp">${artC('hero:'+sel)}</div><div class="si">
+      <div class="sn"><b>${c.n}</b>${BEGIN.includes(sel)?'<span class="beg s" data-tip="처음이라면 추천하는 직업. 단순하고 튼튼하다.">입문 추천</span>':''}<span class="rate">${c.rate}</span></div>
+      <div class="sd">${c.desc}</div>
+      <div class="spv"><b>${c.pv[0]}</b> · ${c.pv[1]}</div>
+      ${statAff(c)}
+      <div class="sks">${sks}</div>
+      <div class="sb">${META.maxFloor[sel]?`최고 기록 B${META.maxFloor[sel]}F`:'기록 없음'}${un?` · 개조 ${eq.length}/${slots}`:''}</div>
+    </div>${extra==='inpop'?`<div class="skd">${c.skills.map(id=>`<div><b>${esc(SK[id].n)}</b>${esc(skText(SK[id]))}</div>`).join('')}</div>`:''}</section>`; }
+function clsPop(){ if(!UI.clsPop) return ''; const sel=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior';
+  return `<div class="cpopw" data-act="cpopx"><div class="cpop">${clsCard(sel,'inpop')}<div class="cpopb"><button class="mbtn pxf btn-f" data-act="cpopx"><span class="ml">닫기</span></button><button class="mbtn pxf btn-on-f" data-tab="cls"><span class="cur">▸</span><span class="ml">직업 변경</span></button></div></div></div>`; }
 function renderPrep(){
   const sel=META.sel&&CLASSES[META.sel]?META.sel:'warrior';
   const roster=Object.entries(CLASSES).map(([k,c])=>{ const un=META.unlocked.includes(k);
@@ -3680,7 +3698,8 @@ function renderPrep(){
   const ctList=[`<button class="ct ${!ctSel?'on':''}" data-ct=""><b>계약 없음</b><span class="m">×1.0</span><span class="tx">기본 규칙으로 내려간다</span></button>`].concat(
     META.contracts.map(k=>`<button class="ct ${ctSel===k?'on':''}" data-ct="${k}"><b>${CT[k].n}</b><span class="m">×${CT[k].m}</span><span class="tx">${CT[k].d}</span></button>`)).join('');
   const sks=c.skills.map(id=>`<span class="ssk" data-tip="<b>${esc(SK[id].n)}</b><br>${esc(skText(SK[id]))}">${artC('icon:'+skIcon(SK[id]))}${esc(SK[id].n)}</span>`).join('');
-  const show=`<section class="show pxf panel-f ${un?'':'locked'}"><div class="sp">${artC('hero:'+sel)}</div><div class="si">
+  const show=clsCard(sel);
+  const _old=`<section class="show pxf panel-f ${un?'':'locked'}"><div class="sp">${artC('hero:'+sel)}</div><div class="si">
       <div class="sn"><b>${c.n}</b>${BEGIN.includes(sel)?'<span class="beg s" data-tip="처음이라면 추천하는 직업. 단순하고 튼튼하다.">입문 추천</span>':''}<span class="rate">${c.rate}</span></div>
       <div class="sd">${c.desc}</div>
       <div class="spv"><b>${c.pv[0]}</b> · ${c.pv[1]}</div>
@@ -4010,6 +4029,7 @@ document.addEventListener('click',ev=>{
   if(t.dataset.lvpart) return levelPart(t.dataset.lvpart);
   if(t.dataset.stab){ UI.sheetTab=t.dataset.stab; return renderSheet(); }
   if(t.dataset.speed){ META.speed=t.dataset.speed; saveMeta(); return render(); }
+  if(t.dataset.tab) UI.clsPop=0;
   if(t.dataset.btower2){ META.tower=t.dataset.btower2; META.tab='battle'; saveMeta(); return render(); }
   if(t.dataset.btower){ META.tower=t.dataset.btower; saveMeta(); return render(); }
   if(t.dataset.tower){ const k=t.dataset.tower; if(!towerOpen(k)){ toast(`${TOWERS[TOWERS[k].need].no}을(를) 클리어하면 열린다`); return; } META.tower=k; UI.step='prep'; saveMeta(); return render(); }
@@ -4025,6 +4045,8 @@ document.addEventListener('click',ev=>{
   if(a==='g10') return summon(10);
   if(a==='gnext'){ if(UI.gacha) UI.gacha.phase='cards'; return render(); }
   if(a==='gclose'){ UI.gacha=null; return render(); }
+  if(a==='cpop'){ UI.clsPop=1; return render(); }
+  if(a==='cpopx'){ if(ev.target.closest('.cpop')&&!ev.target.closest('button[data-act="cpopx"]')) return; UI.clsPop=0; return render(); }
   if(a==='htutok'){ META.htut=META.htut||{}; META.htut[t.dataset.v]=1; saveMeta(); return render(); }
   if(a==='tutok'){ META.tut=META.tut||{}; META.tut[t.dataset.v]=1; saveMeta(); return render(); }
   if(a==='sndset'){ META.snd=t.dataset.v; saveMeta(); SND.unlock(); SND.apply(); return renderSheet(); }
