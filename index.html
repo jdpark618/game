@@ -822,6 +822,42 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .arena.v2 .field .anc.hr{left:20%;bottom:40%}
 .petb img,.petb canvas{width:16px;height:16px;object-fit:contain}
 .petline{display:flex;gap:8px;align-items:center;font-size:12px;color:#d9cfb6;line-height:1.5}.petline img{width:44px;height:44px;object-fit:contain}
+.pop.combo{display:flex;flex-direction:column;align-items:center;top:-92px!important;animation:combo 1.4s ease-out forwards;z-index:6}
+.pop.combo b{font-family:'Silkscreen',var(--f-num);font-size:13px;color:#ffd27a;letter-spacing:.08em;text-shadow:1px 1px 0 #000,0 0 6px #ff9a3a}
+.pop.combo canvas{image-rendering:pixelated;width:auto!important;height:30px!important}
+@keyframes combo{0%{opacity:0;transform:translateX(-50%) scale(.6)}15%{opacity:1;transform:translateX(-50%) scale(1.15)}25%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-12px)}}
+.arena.v2 .field .abox .fig.hitk{animation:hitk .16s}
+@keyframes hitk{0%{translate:0 0;filter:brightness(2.6) saturate(.4)}40%{translate:-5px 0}70%{translate:4px 0}100%{translate:0 0}}
+#popLayer{position:fixed;inset:0;pointer-events:none;z-index:40}
+#popLayer .pophost{position:absolute;width:0;height:0}
+#popLayer .pop{top:0}
+.card.skc{border-color:var(--gc)!important}
+.card.skc.gA{box-shadow:inset 0 0 0 2px #0a0a0c,0 0 10px #c99cf055}.card.skc.gB{box-shadow:inset 0 0 0 2px #0a0a0c,0 0 8px #e0cf6244}
+.skr{margin-left:auto;font-size:10.5px;padding:0 6px;border:1px solid var(--gc);color:var(--gc);background:#0a0a0c;letter-spacing:.04em}
+.card .k{display:flex;align-items:center;gap:6px}
+.skup{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:4px 6px;margin:2px 0;background:linear-gradient(90deg,#3a2c10,#1a160c);border:1px solid #8a6a20}
+.skup b{font-size:11px;color:#ffd27a}.skup span{font-family:'Silkscreen',var(--f-num);font-size:14px;color:#c9c2ad}.skup i{font-style:normal;color:#8a8478}.skup em{font-style:normal;color:#ffd27a;font-size:16px;text-shadow:0 0 6px #ff9a3a}
+.skup small{font-size:10.5px;color:#d9cfb6;margin-left:auto}
+/* gacha / pet cards: fixed portrait frames */
+.gcard{height:auto}
+.gcard .gimg{aspect-ratio:3/4!important;width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent 100%);mask-image:linear-gradient(#000 70%,transparent 100%);background:radial-gradient(circle at 50% 45%,#262b31,#0b0d10 75%)}
+.gcard .gimg img,.gcard .gimg canvas{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 18%!important}
+.gcard b{display:block;width:100%;height:2.3em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:10px}
+.gcard .gg,.gcard .gs{height:1.3em;line-height:1.3em;white-space:nowrap}
+.pcard .pimg{aspect-ratio:3/4!important;-webkit-mask-image:linear-gradient(#000 72%,transparent 100%);mask-image:linear-gradient(#000 72%,transparent 100%)}
+.pcard .pimg img,.pcard .pimg canvas{object-fit:cover!important;object-position:50% 18%!important}
+.pcard.no .pimg img{object-fit:cover!important}
+.pcomp .pimg{flex:0 0 84px!important;height:112px!important;-webkit-mask-image:linear-gradient(#000 72%,transparent 100%);mask-image:linear-gradient(#000 72%,transparent 100%)}
+.pcomp .pimg img,.pcomp .pimg canvas{object-fit:cover!important;object-position:50% 18%!important}
+.pop.px2.dot i{color:#b8f080}.pop.px2.delay i{color:#e8a0ff;font-size:13px}.pop.px2.sub i{color:#b8c4e8;font-size:10px}
+.pop.px2.dot,.pop.px2.sub{animation-duration:1s}
+.pop.px2.stb i,.pop.px2.std i,.pop.px2.stp i,.pop.px2.std2 i{font-size:11.5px!important;padding:1px 6px;border:1px solid #0a0a0c;letter-spacing:.02em;white-space:nowrap}
+.pop.px2.stb i{background:#123a34;color:#9ff0d8;box-shadow:0 0 0 1px #3fbfa0}
+.pop.px2.std i{background:#2e1240;color:#e0b0ff;box-shadow:0 0 0 1px #9a5ad0}
+.pop.px2.stp i{background:#1c3410;color:#c0f090;box-shadow:0 0 0 1px #6ab03a}
+.pop.px2.std2 i{background:#3a1030;color:#ffb0e8;box-shadow:0 0 0 1px #c05aa0}
+.pop.px2.stb,.pop.px2.std,.pop.px2.stp,.pop.px2.std2{animation:stpop 1.1s ease-out forwards}
+@keyframes stpop{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}15%{opacity:1;transform:translate(-50%,0) scale(1.05)}25%{transform:translate(-50%,0) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
 </style>
 
 <div id="app"></div>
@@ -1740,7 +1776,7 @@ function tickStatuses(u,outside){
   for(const s of u.st){
     if(s.id==='dot'){
       if(unholy) healU(u,s.v,'부정한 피');
-      else if(!outside) hurt(null,u,s.v,{label:'지속피해'});
+      else if(!outside) hurt(null,u,s.v,{label:'지속피해',kind:'dot',tag:'중독'});
       else { u.hp-=Math.round(s.v); log(`지속피해 ${Math.round(s.v)}`,'dmg'); }
     }
     if(s.id==='regen') healU(u,s.v,'자연치유');
@@ -1748,7 +1784,7 @@ function tickStatuses(u,outside){
   const exp=[];
   for(const s of u.st){ s.dur--; if(s.dur<=0) exp.push(s); }
   u.st=u.st.filter(s=>s.dur>0);
-  for(const s of exp){ if(s.id==='delay'){ log(`지연피해가 터졌다!`,'dmg'); if(outside) u.hp-=s.v; else hurt(null,u,s.v,{}); } }
+  for(const s of exp){ if(s.id==='delay'){ log(`지연피해가 터졌다!`,'dmg'); if(outside) u.hp-=s.v; else hurt(null,u,s.v,{kind:'delay',tag:'폭발'}); } }
   if(!u.isE && u.hp>mx) u.hp=mx;
 }
 function addSt(src,tgt,s,self,force){
@@ -1763,6 +1799,7 @@ function addSt(src,tgt,s,self,force){
     if(R()*100 < res*0.6){ log(`${nm(tgt)}이(가) ${ST[s.id].n}에 저항했다.`,'mute'); pop(tgt,'저항','miss'); return; }
   }
   tgt.st.push({id:s.id,v:s.v,dur:s.dur});
+  if(s.id!=='scout'&&!(force&&!self)) pop(tgt,(isBuff?'▲ ':'▼ ')+ST[s.id].n+(s.id==='dot'||s.id==='delay'?` ${s.v}`:'')+` · ${s.dur}턴`,isBuff?'stb':(s.id==='dot'?'stp':s.id==='delay'?'std2':'std'));
   if(s.id!=='scout'&&!force) log(`${nm(tgt)}: ${ST[s.id].n}${ST[s.id].flag?'':' '+s.v+(ST[s.id].pct?'%':'')} (${s.dur}턴)`, isBuff?'good':'bad');
 }
 
@@ -1792,14 +1829,14 @@ function hurt(src,tgt,amt,o={}){
   if(tgt.isE&&tot>0) shakeE=true;
   if(isP(tgt)&&tot>0) hurtP=true;
   if(o.crit) critFlag=true;
-  pop(tgt,(o.crit?'치명 ':'')+tot,o.crit?'crit':(amt===0&&s>0?'sh':'dmg'));
+  pop(tgt,(o.crit?'치명 ':o.tag?o.tag+' ':'')+tot,o.crit?'crit':o.kind?o.kind:(amt===0&&s>0?'sh':'dmg'));
   log(`${o.label?o.label+': ':''}${nm(tgt)}에게 ${tot} 피해${o.crit?' (치명타)':''}${o.pierce?' (관통)':''}${s>0?` · 보호막 ${s} 흡수`:''}`,isP(tgt)?'dmg':'hit');
   if(o.direct && src && src!==tgt && tot>0 && src.hp>0){
     let rf=sum(tgt,'reflect')+(isP(tgt)?D(tgt).reflect:0);
     if(isP(tgt)&&pv(tgt,'paladin')) rf=Math.round(rf*1.5);
     if(isP(tgt)){ const mi=fl(D(tgt),'mirror'); if(mi) rf+=Math.round(tot*[0,.15,.25,.35][mi]); }
     if(isP(src)&&D(src).flags.mirror) rf=0;
-    if(rf>0) hurt(tgt,src,rf,{label:'반사'});
+    if(rf>0) hurt(tgt,src,rf,{label:'반사',kind:'sub',tag:'반사'});
     if(isP(tgt)&&tgt.hp>0){
       const d=D(tgt);
       if(d.uniq.marble) tgt.st.push({id:'dr',v:5,dur:3});
@@ -2030,7 +2067,7 @@ function waitTurn(){ if(!G||G.mode!=='combat'||G.C.busy||G.C.turn!=='p') return;
 function endPlayerTurn(){
   const p=G.p, e=G.C.e, d=D(p);
   const pu=(sum(p,'pursuit')+d.pursuit)*(d.uniq.necro?2:1);
-  if(pu>0&&e.hp>0) hurt(p,e,pu*(isColor('red')?1.15:1),{label:'추격'});
+  if(pu>0&&e.hp>0) hurt(p,e,pu*(isColor('red')?1.15:1),{label:'추격',kind:'sub',tag:'추격'});
   if(ctIs('bloodcurse')) p.sk.forEach(s=>{ s.cd=Math.max(0,s.cd-1); });
   if(d.uniq.godspeed){ const c=p.sk.filter(s=>s.cd>0); if(c.length) pick(c).cd--; }
   if(d.flags.swift&&R()<[0,.25,.4,.55][fl(d,'swift')]){ const c=p.sk.filter(s=>s.cd>0); if(c.length){ const s=pick(c); s.cd--; log(`날랜 재주: [${SK[s.id].n}] 대기 -1`,'good'); } }
@@ -2053,7 +2090,7 @@ function enemyTurn(){
   runActions(e,p,s.def,1);
   s.cd=s.def.cd + (fx('swamp')?1:0) + (isColor('sky')?1:0) - (isColor('green')?1:0); if(fx('wind')) s.cd=0; if(ctIs('storm')) s.cd=1; s.cd=Math.max(0,s.cd);
   for(const o of e.sk) if(o!==s) o.cd=Math.max(0,o.cd-1);
-  const pu=sum(e,'pursuit'); if(pu>0&&p.hp>0) hurt(e,p,e.atk*pu/100,{label:'망자 추격'});
+  const pu=sum(e,'pursuit'); if(pu>0&&p.hp>0) hurt(e,p,e.atk*pu/100,{label:'망자 추격',kind:'sub',tag:'추격'});
   if(p.hp<=0){ die(nm(e)+'에게 쓰러져'); render(); return; }
   if(e.hp<=0){ victory(); render(); return; }
   G.C.round++;
@@ -2512,9 +2549,11 @@ function eqCard(it,label,cmp,cls,anim){
   if(!it) return `<div class="card"><div class="k">${label}</div><h4>없음</h4></div>`;
   return `<div class="card rar-${it.rar} ${anim?'flipin':''}"><div class="k">${label} · ${SLOTN[it.slot]} · Lv${it.lvl}</div><h4 class="${RARN[it.rar][1]}">${artC('icon:'+eqIcon(it,cls||G.p.cls))}${esc(it.name)}</h4><ul class="mods">${it.mods.map(m=>modLi(m,cmp)).join('')}${it.uniq&&LEGD[it.uniq]?`<li class="u"><span>${LEGD[it.uniq].d}</span></li>`:''}</ul></div>`;
 }
-function skCard(id,lvl,label,btn,mut,anim){
-  const d=SK[id], m=mut&&MUT[mut];
-  return `<div class="card ${anim?'flipin':''}"><div class="k">${label} · 등급 ${d.r}</div><h4>${artC('icon:'+skIcon(d))}<span>${m?`<span class="mut">${m.n}</span> `:''}${esc(d.n)}${lvl>1?' +'+(lvl-1):''}</span></h4><div class="tx">${esc(skText(d))}</div>${m?`<div class="tx mut">${esc(m.d)}</div>`:''}<div style="font-size:11px;color:var(--dim)">대기 ${d.cd}턴${d.t?' · 턴 소모 없음':''}${d.f?' · 선제 발동':''}${d.b?' · 방벽 '+d.b+' 소모':''}</div>${btn||''}</div>`;
+const SKR={D:['일반','#9aa0a6'],C:['고급','#7fb8e8'],B:['희귀','#e0cf62'],A:['영웅','#c99cf0']};
+function skCard(id,lvl,label,btn,mut,anim,own){
+  const d=SK[id], m=mut&&MUT[mut], R=SKR[d.r]||[d.r,'#9aa0a6'];
+  const up=own?`<div class="skup"><b>보유 중 · 강화</b><span>+${own-1} <i>→</i> <em>+${Math.min(8,own+1)-1}</em></span><small>위력 +10%${own+1===5?' · 대기 -1':''}${own>=8?' (최대)':''}</small></div>`:'';
+  return `<div class="card skc g${d.r} ${own?'own':''} ${anim?'flipin':''}" style="--gc:${R[1]}"><div class="k">${label}<span class="skr" data-tip="<b>기술 등급</b><br>일반 &lt; 고급 &lt; 희귀 &lt; 영웅">${R[0]}</span></div>${up}<h4>${artC('icon:'+skIcon(d))}<span>${m?`<span class="mut">${m.n}</span> `:''}${esc(d.n)}${lvl>1?' +'+(lvl-1):''}</span></h4><div class="tx">${esc(skText(d))}</div>${m?`<div class="tx mut">${esc(m.d)}</div>`:''}<div style="font-size:11px;color:var(--dim)">대기 ${d.cd}턴${d.t?' · 턴 소모 없음':''}${d.f?' · 선제 발동':''}${d.b?' · 방벽 '+d.b+' 소모':''}</div>${btn||''}</div>`;
 }
 function partCard(id,L,label,btn,anim){
   const P=PARTS[id];
@@ -2552,7 +2591,7 @@ function renderLoot(){
   if(ex>=0) body=menuHtml([{a:'data-loot="learn" data-slot="-1"',l:`${esc(SK[o.id].n)} 강화`,s:`+${p.sk[ex].lvl-1} → +${p.sk[ex].lvl}${o.mut?' · 접두어 교체':''}`,pri:1},...sub]);
   else if(p.sk.length<4) body=menuHtml([{a:'data-loot="learn" data-slot="-1"',l:'빈 칸에 배운다',s:`${p.sk.length+1}번째 칸`,pri:1},...sub]);
   else body=`<div class="label">어느 기술을 잊을까 <span style="color:var(--dim)">· 강화와 접두어도 함께 사라진다</span></div><div class="slotg">${p.sk.map((s,i)=>{ const df=SK[s.id]; return `<button class="slt pxf btn-f" data-loot="learn" data-slot="${i}"><span class="k">${i+1}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${esc(skillName(s))}${s.lvl>1?` <b>+${s.lvl-1}</b>`:''}</span><span class="ds">${esc(skText(df).split(' / ')[0])} · 대기 ${df.cd}</span></button>`; }).join('')}</div>${menuHtml(sub)}`;
-  return `${head}${skCard(o.id,1,'새 기술','',o.mut,true)}${body}`;
+  return `${head}${skCard(o.id,1,ex>=0?'같은 기술 발견':'새 기술','',o.mut,true,ex>=0?p.sk[ex].lvl:0)}${body}`;
 }
 function renderDraft(){
   return `<div class="label">출정 준비 · 시작 기술</div><p class="story" style="font-size:14px">이 몸이 기억하는 기술 하나를 깨운다. 기술 도감에서 제시된다.</p>
@@ -2866,7 +2905,7 @@ function renderSheet(){
   } else if(tab==='gear'){
     body=`<div style="display:flex;flex-direction:column;gap:8px">${['weapon','armor','acc'].map(s=>eqCard(p.eq[s],SLOTN[s],null)).join('')}</div>`;
   } else {
-    body=`<div style="display:flex;flex-direction:column;gap:8px">${p.sk.map(s=>skCard(s.id,s.lvl,'보유','',s.mut)).join('')}</div>
+    body=`<div style="display:flex;flex-direction:column;gap:8px">${p.sk.map(s=>skCard(s.id,s.lvl,'보유','',s.mut,false,0)).join('')}</div>
     <h3>이식된 부품</h3>${(p.parts||[]).length?`<div class="cards3">${p.parts.map(x=>partCard(x.id,x.lvl,'')).join('')}</div>`:'<p style="margin:0;font-size:12px;color:var(--dim)">없음</p>'}
     <h3>계약</h3>${p.contract?`<div class="ct on"><b>${CT[p.contract].n}</b><span class="m">×${CT[p.contract].m}</span><span class="tx">${CT[p.contract].d}</span></div>`:'<p style="margin:0;font-size:12px;color:var(--dim)">없음</p>'}`;
   }
@@ -2895,7 +2934,7 @@ function settleBars(){
   Object.assign(UI.hpPrev,UI.hpNext); UI.hpNext={};
 }
 const D57={'0':'01110100011001110101110011000101110','1':'00100011000010000100001000010001110','2':'01110100010000100010001000100011111','3':'11110000010000101110000010000111110','4':'00010001100101010010111110001000010','5':'11111100001111000001000011000101110','6':'00110010001000011110100011000101110','7':'11111000010001000100010000100001000','8':'01110100011000101110100011000101110','9':'01110100011000101111000010001001100','+':'00000001000010011111001000010000000','-':'00000000000000011111000000000000000'};
-const POPCOL={dmg:['#fff2e6','#ff7a5a','#b8302a'],crit:['#fffbe0','#ffc23a','#c46a10'],heal:['#efffea','#5fe07a','#24803a'],sh:['#f0f7ff','#7ab0ff','#3a5ab8'],bar:['#f6efff','#b08cff','#5a3aa8'],miss:['#f0f0f0','#a0a4aa','#5a5e64']};
+const POPCOL={dot:['#f2ffe0','#9be05a','#2e6a14'],delay:['#fff0ff','#e080ff','#6a2aa0'],sub:['#f4f6ff','#a8b8e0','#4a5a80'],dmg:['#fff2e6','#ff7a5a','#b8302a'],crit:['#fffbe0','#ffc23a','#c46a10'],heal:['#efffea','#5fe07a','#24803a'],sh:['#f0f7ff','#7ab0ff','#3a5ab8'],bar:['#f6efff','#b08cff','#5a3aa8'],miss:['#f0f0f0','#a0a4aa','#5a5e64']};
 function dmgCanvas(str,kind){
   const c=document.createElement('canvas'); if(!c.getContext) return c;
   const W=str.length*7+3, H=10; c.width=W; c.height=H; const x=c.getContext('2d'); if(!x) return c;
@@ -2904,17 +2943,32 @@ function dmgCanvas(str,kind){
   x.fillStyle='#0a0606'; for(const [a,b] of on) x.fillRect(a-1,b-1,3,3);
   const col=POPCOL[kind]||POPCOL.dmg;
   for(const [a,b] of on){ x.fillStyle=b<=2?col[0]:b>=7?col[2]:col[1]; x.fillRect(a,b,1,1); }
-  c.className='pxnum'; c.style.width=(W*(kind==='crit'?5:4))+'px'; c.style.height=(H*(kind==='crit'?5:4))+'px';
+  const sc=kind==='crit'?5:(kind==='dot'||kind==='sub')?3:4; c.className='pxnum'; c.style.width=(W*sc)+'px'; c.style.height=(H*sc)+'px';
   return c;
 }
+function popLayer(){ let L=document.getElementById('popLayer'); if(!L&&document.body&&document.body.appendChild){ L=document.createElement('div'); L.id='popLayer'; document.body.appendChild(L); } return L; }
+function popHost(e){ const a=document.getElementById(e==='e'?'popE':'popP')||(e==='e'?(document.querySelector('.scene')||document.getElementById('enemyBox')):document.getElementById('hudBox')); const L=popLayer(); if(!a||!L||!a.getBoundingClientRect) return a;
+  const r=a.getBoundingClientRect(); const h=document.createElement('div'); h.className='pophost'; h.style.left=(r.left+r.width/2)+'px'; h.style.top=(r.top+(a.classList&&a.classList.contains('anc')?0:r.height*.26))+'px'; L.appendChild(h); setTimeout(()=>h.remove(),1600); return h; }
+function popEl(pp){ const el=document.createElement('span'); el.className='pop px2 '+pp.c; const mm=/^(.*?)([+-]?\d+)$/.exec(String(pp.t)); if(mm){ const lb=mm[1].trim(); if(lb){ const l=document.createElement('i'); l.textContent=lb; el.appendChild(l); } el.appendChild(dmgCanvas(mm[2],pp.c)); } else { const l=document.createElement('i'); l.className='big'; l.textContent=pp.t; el.appendChild(l); } return el; }
+function hitShake(e){ const f=document.querySelector(e==='e'?'.abox.en .fig':'.abox.hr .fig'); if(!f||!f.classList||f.classList.contains('dying')) return; f.classList.remove('hitk'); void f.offsetWidth; f.classList.add('hitk'); }
 function flushPops(){
-  for(const pp of pops){ SND.sfx(pp.c==='crit'?'crit':pp.c==='dmg'?(pp.e==='e'?'hit':'hurt'):pp.c==='heal'?'heal':pp.c==='sh'?'shield':pp.c==='bar'?'bar':pp.c==='miss'?'miss':'hit'); }
-  for(const pp of pops){
-    const host=document.getElementById(pp.e==='e'?'popE':'popP')||(pp.e==='e'?(document.querySelector('.scene')||document.getElementById('enemyBox')):document.getElementById('hudBox'));
-    if(!host||!host.appendChild) continue; const el=document.createElement('span'); el.className='pop px2 '+pp.c; const mm=/^(.*?)([+-]?\d+)$/.exec(String(pp.t)); if(mm){ const lb=mm[1].trim(); if(lb){ const l=document.createElement('i'); l.textContent=lb; el.appendChild(l); } el.appendChild(dmgCanvas(mm[2],pp.c)); } else { const l=document.createElement('i'); l.className='big'; l.textContent=pp.t; el.appendChild(l); }
-    el.style.marginLeft=(Math.random()*60-30)+'px'; host.appendChild(el); setTimeout(()=>el.remove(),1150);
-  }
-  pops=[];
+  const list=pops; pops=[]; if(!list.length) return;
+  const gap=spd()>1?70:120, cnt={e:0,p:0}, dmg={e:[],p:[]};
+  list.forEach(pp=>{
+    const isSt=/^st/.test(pp.c), oi=(cnt[pp.e+'o']=(cnt[pp.e+'o']||0)+1)-1, k=isSt?(cnt[pp.e+'s']=(cnt[pp.e+'s']||0)+1)-1:cnt[pp.e]++, delay=oi*gap;
+    if(pp.c==='dmg'||pp.c==='crit'){ const n=+(String(pp.t).match(/\d+/)||[0])[0]; dmg[pp.e].push(n); }
+    setTimeout(()=>{
+      SND.sfx(pp.c==='dot'?'dot':pp.c==='delay'?'crit':pp.c==='sub'?'hit':pp.c==='stb'?'buff':(pp.c==='std'||pp.c==='stp'||pp.c==='std2')?'debuff':pp.c==='crit'?'crit':pp.c==='dmg'?(pp.e==='e'?'hit':'hurt'):pp.c==='heal'?'heal':pp.c==='sh'?'shield':pp.c==='bar'?'bar':pp.c==='miss'?'miss':'hit');
+      const host=popHost(pp.e); if(!host||!host.appendChild) return;
+      const el=popEl(pp); const side=k%2?1:-1;
+      const XO=[0,-36,36,-18,18,-44,44]; if(isSt){ el.style.marginLeft='0px'; el.style.top=(44+Math.min(k,4)*22)+'px'; } else if(pp.c==='dot'||pp.c==='delay'){ el.style.marginLeft='64px'; el.style.top=(14-Math.min(k,4)*6)+'px'; } else if(pp.c==='sub'){ el.style.marginLeft='-64px'; el.style.top=(14-Math.min(k,4)*6)+'px'; } else { el.style.marginLeft=(XO[k%7]+Math.random()*6-3)+'px'; el.style.top=(-Math.min(k,6)*20)+'px'; }
+      host.appendChild(el); setTimeout(()=>el.remove(),1150);
+      if(pp.c==='dmg'||pp.c==='crit'||pp.c==='delay') hitShake(pp.e);
+    },delay);
+  });
+  for(const e of ['e','p']){ const d=dmg[e]; if(d.length>=2){ const gapN=(cnt[e+'o']||d.length); const tot=d.reduce((a,b)=>a+b,0);
+    setTimeout(()=>{ const host=popHost(e); if(!host||!host.appendChild) return; const el=document.createElement('span'); el.className='pop combo';
+      el.innerHTML=`<b>${d.length} HIT</b>`; el.appendChild(dmgCanvas(String(tot),'crit')); host.appendChild(el); setTimeout(()=>el.remove(),1400); }, gapN*gap+60); } }
 }
 const TUT={explore:['갈림길','두 방 중 하나를 고른다. 위쪽 점 지도를 누르면 층 보스까지 남은 거리가 보인다. 「적」 표시는 마물, 「!」 표시는 이벤트 방.'],
  combat:['전투','기술을 쓸 때마다 1턴이 지나고, 다른 기술의 대기가 1씩 줄어든다. 적 이름 아래 「다음 ▸」은 적이 할 행동. 금색 「처치」 표시가 뜬 기술은 이번에 쓰러뜨릴 수 있다. 상단 ×1·AUTO로 빠르게 넘길 수 있다.'],
@@ -2990,6 +3044,9 @@ const SND=(()=>{
     legend:t=>{ tone(41.2,t,2.6,{vol:.4,a:.01,r:2.4}); noise(t,1.6,{f:120,ft:'lowpass',vol:.35}); tone(110,t+.2,1.4,{type:'sawtooth',vol:.06,to:880,glide:1.4,lp:2400});
       [[69,73,76],[71,74,78],[73,76,81]].forEach((c,i)=>c.forEach(m=>{ tone(hz(m),t+1.2+i*.32,1.4,{type:'sawtooth',vol:.045,a:.08,lp:2200,det:i*3}); tone(hz(m+12),t+1.2+i*.32,1.2,{type:'triangle',vol:.04}); }));
       [93,96,100,105,108].forEach((m,i)=>tone(hz(m),t+2.2+i*.08,.8,{vol:.06})); },
+    dot:t=>{ tone(300,t,.12,{type:'triangle',vol:.09,to:170}); tone(420,t+.06,.1,{type:'triangle',vol:.06,to:240}); },
+    buff:t=>{ tone(600,t,.22,{type:'triangle',vol:.07,to:1150}); },
+    debuff:t=>{ tone(520,t,.25,{type:'square',vol:.045,to:190,lp:1300}); },
     door:t=>{ tone(70,t,.5,{type:'sawtooth',vol:.1,to:110,lp:400}); noise(t,.4,{f:180,ft:'lowpass',vol:.2}); },
   };
   function sfx(n){ if(!ctx||mode()==='off'||!FX[n]) return; const now=ctx.currentTime; if(last[n]&&now-last[n]<.045) return; last[n]=now; try{ FX[n](now+.005); }catch(e){} }
