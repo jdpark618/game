@@ -1659,7 +1659,7 @@ function drawGate(cv){
 }
 
 // ================= state =================
-const META_DEF={stones:0,unlocked:['warrior','mage','priest'],best:0,graves:[],sel:'warrior',parts:{},equip:{},maxFloor:{},contracts:CT_START.slice(),contract:null,codex:CODEX_SEED.slice(),speed:'normal',seenIntro:false,tab:'run'};
+const META_DEF={auto:true,spd:1,stones:0,unlocked:['warrior','mage','priest'],best:0,graves:[],sel:'warrior',parts:{},equip:{},maxFloor:{},contracts:CT_START.slice(),contract:null,codex:CODEX_SEED.slice(),speed:'normal',seenIntro:false,tab:'run'};
 let META=Object.assign({},META_DEF,load(META_KEY)||{});
 for(const k of ['parts','equip','maxFloor']) if(!META[k]||typeof META[k]!=='object') META[k]={};
 for(const k of ['contracts','codex','graves','unlocked']) if(!Array.isArray(META[k])) META[k]=META_DEF[k].slice();
