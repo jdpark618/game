@@ -950,6 +950,11 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .ppd{font-size:12.5px;line-height:1.4;color:#c8c0ad}.ppd b.up{color:#9be08a}
 .ppa{color:#ffd27a;font-size:14px}
 .tg.up{border-color:#4a6a3a;color:#9be08a}.tg.new{border-color:#6a5420;color:#ffd27a}
+.skrow .pti.ski{background:radial-gradient(circle,#1d2229,#0b0d10 75%);border-color:var(--gc)}.skrow .pti.ski canvas{width:28px!important;height:28px!important;image-rendering:pixelated}
+.skrow.static{cursor:default}.skrow.static:active{transform:none}
+.ppm{font-size:11px;color:var(--dim)}.skrow .mut{color:#d79cf0}.mutx{color:#d79cf0;font-size:11.5px}
+.badge.sg{font-size:10px;padding:0 5px}
+@media (max-width:899px){ .g-stage.event .scene{height:clamp(104px,21vh,180px)!important} }
 </style>
 
 <div id="app"></div>
@@ -1068,6 +1073,34 @@ const SK={
  quickdraw:{n:'빨리뽑기',cd:2,r:'A',t:1,a:[{k:'cdDown',n:1}]},
  shadowstep:{n:'그림자 걷기',cd:2,r:'A',t:1,a:[{k:'buff',st:'shadow',v:1,dur:1}]},
  bloodedge:{n:'피의 칼날',cd:1,r:'A',t:1,a:[{k:'buff',st:'str',v:100,dur:3},{k:'selfdmg',p:16}]},
+ groundsmash:{n:'대지 강타',cd:3,r:'B',a:[A(300,80,'str'),{k:'cdUp',n:1}]},
+ headbutt:{n:'박치기',cd:1,r:'C',a:[A(150,85,'str'),{k:'selfdmg',p:3}]},
+ berserkslash:{n:'광폭 베기',cd:2,r:'B',a:[A(120,90,'str',{hits:2}),{k:'selfst',st:'vuln',v:15,dur:2}]},
+ shieldbash:{n:'방패 치기',cd:2,r:'C',a:[A(100,100,'str'),{k:'buff',st:'dr',v:30,dur:1}]},
+ execution:{n:'처형',cd:4,r:'A',a:[A(420,90,'str',{crit:25})]},
+ rapidshot:{n:'연사',cd:0,r:'B',a:[A(55,85,'dex',{hits:3})]},
+ snipe:{n:'저격',cd:3,r:'A',a:[A(450,150,'dex',{crit:30})]},
+ vitalshot:{n:'급소 찌르기',cd:1,r:'C',a:[A(110,90,'dex',{crit:40})]},
+ bleedcut:{n:'출혈 베기',cd:1,r:'C',a:[A(80,90,'dex'),{k:'debuff',st:'dot',v:40,s:'dex',dur:4}]},
+ throwknife:{n:'투척 단검',cd:1,r:'C',t:1,a:[A(60,90,'dex')]},
+ smokebomb:{n:'연막탄',cd:3,r:'C',t:1,a:[{k:'debuff',st:'blind',v:40,dur:3},{k:'buff',st:'eva',v:30,dur:1}]},
+ arrowrain:{n:'화살비',cd:4,r:'A',a:[A(150,70,'dex',{hits:4})]},
+ pinarrow:{n:'발 묶기 화살',cd:2,r:'B',a:[A(90,110,'dex'),{k:'cdUp',n:2}]},
+ icelance:{n:'얼음창',cd:2,r:'B',a:[A(130,95,'mag'),{k:'cdUp',n:1}]},
+ thunder:{n:'낙뢰',cd:2,r:'B',a:[A(260,75,'mag')]},
+ chainlight:{n:'연쇄 번개',cd:1,r:'B',a:[A(60,90,'mag',{hits:3})]},
+ frostnova:{n:'서리 폭발',cd:3,r:'C',a:[A(100,90,'mag'),{k:'debuff',st:'weak',v:25,dur:3}]},
+ arcanebrand:{n:'비전 낙인',cd:2,r:'C',t:1,a:[{k:'debuff',st:'vuln',v:30,dur:3}]},
+ manaburst:{n:'마나 폭발',cd:5,r:'A',a:[A(600,80,'mag')]},
+ hellfire:{n:'지옥불',cd:2,r:'B',a:[{k:'debuff',st:'dot',v:100,s:'mag',dur:4}]},
+ holylight:{n:'성광',cd:1,r:'C',a:[A(110,95,'fai'),{k:'heal',p:5,s:'maxhp'}]},
+ exorcism:{n:'퇴마',cd:2,r:'B',a:[A(220,85,'fai')]},
+ holychain:{n:'신성 사슬',cd:2,r:'C',a:[A(80,100,'fai'),{k:'cdUp',n:1}]},
+ sanctuary:{n:'성역',cd:4,r:'B',a:[{k:'buff',st:'regen',v:8,s:'maxhp',dur:5},{k:'buff',st:'dr',v:30,dur:2}]},
+ divinewrath:{n:'신의 분노',cd:5,r:'A',a:[A(200,90,'fai',{hits:3})]},
+ prayer:{n:'기도',cd:3,r:'C',t:1,a:[{k:'heal',p:15,s:'maxhp'}]},
+ condemn:{n:'단죄',cd:1,r:'C',a:[A(100,90,'fai'),{k:'debuff',st:'weak',v:15,dur:3}]},
+ blessing:{n:'축복',cd:4,r:'B',t:1,a:[{k:'buff',st:'str',v:40,dur:4},{k:'buff',st:'accup',v:20,dur:4}]},
 };
 const CODEX_SEED=['pierce','shoot','windcut','punish','firstaid','barrier','backstep','eagle'];
 function actText(a){
@@ -2348,7 +2381,9 @@ function victoryNow(){
 function rollSkill(rare){
   const ids=Object.keys(SK);
   const w={D:10,C:10,B:rare?10:5,A:rare?6:1.6};
-  return wpick(ids.map(k=>[k,w[SK[k].r]]));
+  const c=G&&G.p&&CLASSES[G.p.cls], prim=c&&c.slots&&c.slots.weapon||[];
+  const fit=k=>SK[k].a.some(a=>a.s&&prim.includes(a.s));
+  return wpick(ids.map(k=>[k,w[SK[k].r]*(fit(k)?1.8:1)]));
 }
 function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; G.p.hp=G.p.cls==='skeleton'?D(G.p).maxhp:Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); G.p.vkUsed=0; newFloor(); G.mode='explore'; }
 function finishLoot(){ G.loot.shift(); if(!G.loot.length){ G.mode='explore'; if(G.pendingFloor) advanceFloor(); } render(); }
@@ -2721,6 +2756,11 @@ function skCard(id,lvl,label,btn,mut,anim,own){
   const up=own?`<div class="skup"><b>보유 중 · 강화</b><span>+${own-1} <i>→</i> <em>+${Math.min(8,own+1)-1}</em></span><small>위력 +10%${own+1===5?' · 대기 -1':''}${own>=8?' (최대)':''}</small></div>`:'';
   return `<div class="card skc g${d.r} ${own?'own':''} ${anim?'flipin':''}" style="--gc:${R[1]}"><div class="k">${label}<span class="skr" data-tip="<b>기술 등급</b><br>일반 &lt; 고급 &lt; 희귀 &lt; 영웅">${R[0]}</span></div>${up}<h4>${artC('icon:'+skIcon(d))}<span>${m?`<span class="mut">${m.n}</span> `:''}${esc(d.n)}${lvl>1?' +'+(lvl-1):''}</span></h4><div class="tx">${esc(skText(d))}</div>${m?`<div class="tx mut">${esc(m.d)}</div>`:''}<div style="font-size:11px;color:var(--dim)">대기 ${d.cd}턴${d.t?' · 턴 소모 없음':''}${d.f?' · 선제 발동':''}${d.b?' · 방벽 '+d.b+' 소모':''}</div>${btn||''}</div>`;
 }
+function skRow(id,lvl,tag,attr,mut,own){
+  const d=SK[id], m=mut&&MUT[mut], R=SKR[d.r]||[d.r,'#9aa0a6'], el=attr?'button':'div';
+  const up=own?`<span class="tg up">보유 +${own-1}→+${Math.min(8,own+1)-1}</span>`:'';
+  return `<${el} ${attr||''} class="pprow skrow flipin ${attr?'':'static'}" style="--gc:${R[1]}"><span class="pti ski">${artC('icon:'+skIcon(d))}</span><span class="ppt"><span class="ppn"><b>${m?`<span class="mut">${m.n}</span> `:''}${esc(d.n)}${lvl>1?' +'+(lvl-1):''}</b><span class="badge sg" style="border-color:${R[1]};color:${R[1]}">${R[0]}</span>${tag?`<span class="tg new">${tag}</span>`:''}${up}</span><span class="ppd">${esc(skText(d))}${m?`<br><span class="mutx">${esc(m.d)}</span>`:''}</span><span class="ppm">대기 ${d.cd}턴${d.t?' · 턴 소모 없음':''}${d.f?' · 선제':''}${d.b?' · 방벽 '+d.b+' 소모':''}${own?' · 강화 시 위력 +10%':''}</span></span>${attr?'<span class="ppa">▸</span>':''}</${el}>`;
+}
 function partCard(id,L,label,btn,anim,prev){
   const P=PARTS[id]; const df=prev&&prev<L?dTx(P.d(prev),P.d(L)):null;
   return `<div class="card ptc ${anim?'flipin':''}" style="--gc:${PGC[P.t]}"><div class="k">${label||''}<span class="badge ${PTYPE[P.t][1]}">${PTYPE[P.t][0]}</span></div><h4>${partIc(id)}<span class="pnm">${esc(P.n)}</span>${lvPips(L)}</h4><div class="tx">${df||esc(P.d(L))}</div>${btn||''}</div>`;
@@ -2758,11 +2798,11 @@ function renderLoot(){
   if(ex>=0) body=menuHtml([{a:'data-loot="learn" data-slot="-1"',l:`${esc(SK[o.id].n)} 강화`,s:`+${p.sk[ex].lvl-1} → +${p.sk[ex].lvl}${o.mut?' · 접두어 교체':''}`,pri:1},...sub]);
   else if(p.sk.length<4) body=menuHtml([{a:'data-loot="learn" data-slot="-1"',l:'빈 칸에 배운다',s:`${p.sk.length+1}번째 칸`,pri:1},...sub]);
   else body=`<div class="label">어느 기술을 잊을까 <span style="color:var(--dim)">· 강화와 접두어도 함께 사라진다</span></div><div class="slotg">${p.sk.map((s,i)=>{ const df=SK[s.id]; return `<button class="slt pxf btn-f" data-loot="learn" data-slot="${i}"><span class="k">${i+1}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${esc(skillName(s))}${s.lvl>1?` <b>+${s.lvl-1}</b>`:''}</span><span class="ds">${esc(skText(df).split(' / ')[0])} · 대기 ${df.cd}</span></button>`; }).join('')}</div>${menuHtml(sub)}`;
-  return `${head}${skCard(o.id,1,ex>=0?'같은 기술 발견':'새 기술','',o.mut,true,ex>=0?p.sk[ex].lvl:0)}${body}`;
+  return `${head}${skRow(o.id,1,ex>=0?'같은 기술':'새 기술','',o.mut,ex>=0?p.sk[ex].lvl:0)}${body}`;
 }
 function renderDraft(){
-  return `<div class="label">출정 준비 · 시작 기술</div><p class="story" style="font-size:14px">이 몸이 기억하는 기술 하나를 깨운다. 기술 도감에서 제시된다.</p>
-  <div class="cards3 picks">${G.draft.map(id=>pickCard(skCard(id,1,'도감','',null,true),`data-draft="${id}"`)).join('')}</div>
+  return `<div class="label">출정 준비 · 시작 기술</div><p class="story pphint">이 몸이 기억하는 기술 하나를 깨운다 · 기술 도감에서 제시</p>
+  <div class="pplist">${G.draft.map(id=>skRow(id,1,'',`data-draft="${id}"`)).join('')}</div>
   ${menuHtml([{a:'data-draft=""',l:'빈손으로 내려간다',s:'기술 없이 시작'}])}`;
 }
 function nextGoal(){
@@ -2951,8 +2991,8 @@ function renderGame(){
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
   fitStage();
 }
-function fitStage(){ const box=document.getElementById('stageBox'), f=box&&box.querySelector('.sfit'); if(!f) return; f.style.zoom=''; requestAnimationFrame(()=>{ if(!f.isConnected) return; const H=box.clientHeight-16, h=f.scrollHeight; if(h>H&&H>0){ f.style.zoom=Math.max(.7,Math.floor(H/h*100)/100); } }); }
-if(typeof window!=='undefined') window.addEventListener('resize',()=>{ if(G) fitStage(); });
+function fitStage(){ const box=document.getElementById('stageBox'), f=box&&box.querySelector&&box.querySelector('.sfit'); if(!f||!f.style||typeof requestAnimationFrame!=='function') return; f.style.zoom=''; requestAnimationFrame(()=>{ if(!f.isConnected) return; const H=box.clientHeight-16, h=f.scrollHeight; if(h>H&&H>0){ f.style.zoom=Math.max(.7,Math.floor(H/h*100)/100); } }); }
+if(typeof window!=='undefined'&&window.addEventListener) window.addEventListener('resize',()=>{ if(G) fitStage(); });
 
 // ================= rendering: lobby =================
 function renderHall(){
