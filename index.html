@@ -968,6 +968,11 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
   .g-stage.event .scene{flex:0 0 auto!important;height:clamp(120px,24vh,200px)!important;aspect-ratio:auto!important}
 }
 .vrow.scl{grid-template-columns:48px 1fr}.sclb{display:flex;flex-wrap:wrap;gap:4px}.sclb .btn{padding:3px 7px;font-size:11.5px}
+.saff{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:2px}
+.sa{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:3px 5px;background:#0b0d10;border:1px solid #2a3036;position:relative;min-width:0}
+.sa em{font-style:normal;font-size:10.5px;color:var(--mute)}.sa.pr{border-color:var(--sc)}.sa.pr em{color:var(--sc);font-weight:700}
+.sa i{display:flex;gap:2px}.sa i b,.sa i u{width:6px;height:6px}.sa i b{background:var(--sc);box-shadow:1px 1px 0 #000}.sa i u{background:#23282e}
+.sa small{position:absolute;top:2px;right:3px;font-size:8.5px;color:var(--sc)}
 </style>
 
 <div id="app"></div>
@@ -3052,6 +3057,7 @@ function renderPrep(){
       <div class="sn"><b>${c.n}</b><span class="rate">${c.rate}</span></div>
       <div class="sd">${c.desc}</div>
       <div class="spv"><b>${c.pv[0]}</b> · ${c.pv[1]}</div>
+      ${statAff(c)}
       <div class="sks">${sks}</div>
       <div class="sb">${META.maxFloor[sel]?`최고 기록 B${META.maxFloor[sel]}F`:'기록 없음'}${un?` · 개조 ${eq.length}/${slots}`:''}</div>
     </div></section>`;
@@ -3063,6 +3069,9 @@ function renderPrep(){
    <details class="ctpick"><summary><span>계약 · <b>${ctSel?CT[ctSel].n:'없음'}</b></span><span class="num stone">×${ctSel?CT[ctSel].m:'1.0'} ▾</span></summary><div class="ctlist">${ctList}</div></details>`:''}
    ${main}`;
 }
+function statAff(c){ const prim=(c.slots&&c.slots.weapon)||[], N={str:'근력',dex:'기교',mag:'마력',fai:'신앙'}, C={str:'#e0896a',dex:'#8fd08a',mag:'#7fb8e8',fai:'#f0d58a'};
+  return `<div class="saff">${['str','dex','mag','fai'].map(k=>{ const g=(c.grow&&c.grow[k])||0, n=Math.max(0,Math.min(5,Math.round(g/0.7))), pr=prim.includes(k);
+    return `<span class="sa ${pr?'pr':''}" style="--sc:${C[k]}" data-tip="<b>${N[k]}</b> 시작 ${(c.base&&c.base[k])||0} · 레벨당 +${g}${pr?'<br>주력 능력치: 이 능력치를 쓰는 기술이 더 잘 나온다':''}"><em>${N[k]}${pr?' ★':''}</em><i>${'<b></b>'.repeat(n)}${'<u></u>'.repeat(5-n)}</i></span>`; }).join('')}</div>`; }
 function renderModTab(){
   let cls=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior';
   const c=CLASSES[cls], slots=slotsFor(cls), eq=eqClean(cls), mf=META.maxFloor[cls]||0, nx=SLOT_FLOORS.find(f=>mf<f);
