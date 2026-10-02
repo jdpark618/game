@@ -1652,7 +1652,7 @@ const META_DEF={stones:0,unlocked:['warrior','mage','priest'],best:0,graves:[],s
 let META=Object.assign({},META_DEF,load(META_KEY)||{});
 for(const k of ['parts','equip','maxFloor']) if(!META[k]||typeof META[k]!=='object') META[k]={};
 for(const k of ['contracts','codex','graves','unlocked']) if(!Array.isArray(META[k])) META[k]=META_DEF[k].slice();
-if(!META.vol||typeof META.vol!=='object') META.vol={bgm:(META.snd==='sfx'||META.snd==='off')?0:.7,sfx:META.snd==='off'?0:.8};
+if(!META.vol||typeof META.vol!=='object'||META.volv!==2){ META.vol={bgm:(META.snd==='sfx'||META.snd==='off')?0:.45,sfx:META.snd==='off'?0:.75}; META.volv=2; }
 const saveMeta=()=>store(META_KEY,META);
 let G=load(RUN_KEY);
 let pops=[], shakeE=false, hurtP=false, lvFlag=false, critFlag=false, toastT=null;
@@ -3154,20 +3154,17 @@ const SND=(()=>{
   const W=typeof window!=='undefined'?window:{}; const AC=W.AudioContext||W.webkitAudioContext;
   let ctx=null, master=null, bgmBus=null, sfxBus=null, dly=null, mood=null, timer=null, nextT=0, step=0, seq=null, drone=null, last={};
   const mode=()=>META.snd||'all';
-  const vol=()=>META.vol||{bgm:.7,sfx:.8};
+  const vol=()=>META.vol||{bgm:.45,sfx:.75};
   const VB=()=>{ const v=vol().bgm; return .5*v*v; }, VS=()=>.77*Math.pow(vol().sfx,1.5);
   const TR={lobby:{src:'bgm_lobby.mp3'},dungeon:{src:'bgm_dungeon.mp3'}};
-  function play(T){ if(!T.el||!T.el.src) return; const pr=T.el.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
-  function lvEl(T){ if(T.direct&&T.el) T.el.volume=Math.max(0,Math.min(1,(T.tlv||0)*VB()*2)); }
-  function setLv(T,lv,tc){ T.tlv=lv; if(T.g&&ctx) T.g.gain.setTargetAtTime(lv,ctx.currentTime,tc); else lvEl(T); }
-  function route(T){ if(!ctx||T.g||T.direct) return; try{ const sN=ctx.createMediaElementSource(T.el); T.g=ctx.createGain(); T.g.gain.value=0; sN.connect(T.g); T.g.connect(bgmBus); }catch(e){ T.direct=true; } }
-  function mk(T,cors){ const a=new Audio(); a.loop=true; a.preload='auto'; if(cors) a.crossOrigin='anonymous'; a.src=T.src; return a; }
-  function trk(n){ const T=TR[n]; if(T.el) return T;
-    T.el=mk(T,true); route(T);
-    T.el.addEventListener('error',()=>{ if(T.fb) return; T.fb=1; const t0=T.el.currentTime||0; try{T.el.pause();}catch(e){} if(T.g){ try{T.g.disconnect();}catch(e){} T.g=null; } T.direct=true; T.el=mk(T,false); lvEl(T); if(T.want) play(T); });
-    return T; }
-  function prime(){ if(!ctx||prime.done) return; prime.done=1; try{ if(W.navigator&&W.navigator.audioSession) W.navigator.audioSession.type='playback'; }catch(e){}
-    for(const k in TR){ const T=trk(k); if(!T.want){ const pr=T.el.play(); if(pr&&pr.then) pr.then(()=>{ if(!T.want) T.el.pause(); }).catch(()=>{}); else if(!T.want) T.el.pause(); } } }
+  function play(T){ if(!T.el) return; if(VB()<=0){ T.el.pause(); return; } const pr=T.el.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
+  function tgtVol(T){ return Math.max(0,Math.min(1,(T.tlv||0)*VB()*2)); }
+  function lvEl(T){ if(!T.el) return; clearInterval(T.fi); const to=tgtVol(T); T.el.volume=to; if(T.want&&to>0&&T.el.paused) play(T); if(to<=0&&!T.want) T.el.pause(); }
+  function setLv(T,lv,tc){ T.tlv=lv; if(!T.el) return; clearInterval(T.fi); const from=T.el.volume, to=tgtVol(T), n=Math.max(1,Math.round(tc*2000/50)); let i=0;
+    T.fi=setInterval(()=>{ i++; try{ T.el.volume=Math.max(0,Math.min(1,from+(to-from)*i/n)); }catch(e){} if(i>=n) clearInterval(T.fi); },50); }
+  function trk(n){ const T=TR[n]; if(T.el) return T; const a=new Audio(); a.loop=true; a.preload='auto'; a.src=T.src; a.volume=0; T.el=a; T.direct=true; return T; }
+  function prime(){ if(!ctx) return;
+    for(const k in TR){ const T=trk(k); if(T.want){ if(T.el.paused) play(T); continue; } if(T.primed) continue; T.el.muted=true; const pr=T.el.play(); const done=()=>{ if(!T.want) T.el.pause(); T.el.muted=false; }; if(pr&&pr.then) pr.then(()=>{ T.primed=1; done(); }).catch(()=>{ T.el.muted=false; }); else done(); } }
   function init(){
     if(ctx||!AC) return; try{ ctx=new AC(); }catch(e){ ctx=null; return; }
     master=ctx.createGain(); master.gain.value=.7; master.connect(ctx.destination);
@@ -3260,8 +3257,8 @@ const SND=(()=>{
       nextT+=sp; step++;
     }
   }
-  function unlock(){ init(); if(ctx&&ctx.state==='suspended') ctx.resume(); prime(); }
-  if(W.document&&W.document.addEventListener){ const u=()=>unlock(); W.document.addEventListener('pointerdown',u,{capture:true}); W.document.addEventListener('keydown',u,{capture:true}); }
+  function unlock(){ init(); if(ctx&&ctx.state==='suspended') ctx.resume(); }
+  if(W.document&&W.document.addEventListener){ const u=e=>{ unlock(); if(e.type!=='pointerdown') prime(); }; for(const ev of ['pointerdown','pointerup','touchend','click','keydown']) W.document.addEventListener(ev,u,{capture:true}); }
   return {sfx,setMood,apply,unlock,dbg:()=>({mood,TR:Object.fromEntries(Object.entries(TR).map(([k,T])=>[k,T.el?{want:!!T.want,paused:T.el.paused,t:+T.el.currentTime.toFixed(1),direct:!!T.direct,lv:T.tlv,vol:T.el.volume,src:(T.el.src||'').slice(0,20)}:null]))})};
 })();
 if(typeof window!=='undefined') window.__snd=SND;
