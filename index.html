@@ -1271,6 +1271,13 @@ const SK={
  divinewrath:{n:'신의 분노',cd:5,r:'A',a:[A(200,90,'fai',{hits:3})]},
  prayer:{n:'기도',cd:3,r:'C',t:1,a:[{k:'heal',p:15,s:'maxhp'}]},
  condemn:{n:'단죄',cd:1,r:'C',a:[A(100,90,'fai'),{k:'debuff',st:'weak',v:15,dur:3}]},
+ rally:{n:'근위병 소집',cd:3,r:'C',t:1,a:[{k:'buff',st:'pursuit',v:40,s:'str',dur:5},{k:'shield',p:30,s:'str'}]},
+ banner:{n:'군기 게양',cd:4,r:'B',t:1,a:[{k:'buff',st:'str',v:30,dur:4},{k:'buff',st:'dr',v:20,dur:4}]},
+ bloodfist:{n:'피의 연타',cd:1,r:'B',a:[A(55,90,'str',{hits:3,drain:25})]},
+ kick:{n:'돌려차기',cd:1,r:'C',a:[A(140,85,'dex',{crit:20})]},
+ qiblast:{n:'장풍',cd:1,r:'C',a:[A(90,100,'fai'),{k:'debuff',st:'weak',v:15,dur:3}]},
+ thornvine:{n:'가시 덩굴',cd:1,r:'C',a:[A(70,90,'mag'),{k:'debuff',st:'dot',v:45,s:'mag',dur:3}]},
+ florasp:{n:'꽃의 정령',cd:3,r:'C',t:1,a:[{k:'buff',st:'pursuit',v:35,s:'mag',dur:5},{k:'buff',st:'regen',v:4,s:'maxhp',dur:5}]},
  blessing:{n:'축복',cd:4,r:'B',t:1,a:[{k:'buff',st:'str',v:40,dur:4},{k:'buff',st:'accup',v:20,dur:4}]},
 };
 const CODEX_SEED=['pierce','shoot','windcut','punish','firstaid','barrier','backstep','eagle'];
@@ -1314,10 +1321,10 @@ const CLASSES={
    base:{hp:220,str:18,dex:8,mag:6,fai:16,dr:10,crit:5},grow:{hp:19,str:2.6,dex:.8,mag:.5,fai:2.2},
    pv:['십자군','반사 피해 +50% · 피해감소 +10%'],skills:['smite','phalanx','revenge'],
    slots:{weapon:['str','fai'],armor:['maxhp','res'],acc:['maxhp','rest']},wn:'전투 망치'},
- bloodblade:{n:'광전사',cost:500,col:['#7d2e3a','#3a1219','#ff4d5e'],rate:'공5 방2 탐1',desc:'피를 흘릴수록 강해지는 쌍도끼 전사. 스스로의 생명을 깎아 힘을 끌어낸다.',
-   base:{hp:220,str:21,dex:8,mag:18,fai:6,crit:10},grow:{hp:18,str:3,dex:.8,mag:2.4,fai:.5},
-   pv:['혈류','HP를 소모할 때마다 25턴간 강화 +20% (누적)'],skills:['slash','drainlife','bloodedge'],
-   slots:{weapon:['str','mag'],armor:['maxhp'],acc:['maxhp','crit']},wn:'마검'},
+ bloodblade:{n:'피의 권투사',cost:500,col:['#7d2e3a','#3a1219','#ff4d5e'],rate:'공5 방2 탐1',desc:'맨주먹 하나로 지하 투기장을 제패한 격투가. 피를 흘릴수록 주먹이 빨라진다.',
+   base:{hp:220,str:23,dex:12,mag:4,fai:6,crit:10},grow:{hp:18,str:3.1,dex:1.2,mag:.3,fai:.5},
+   pv:['혈류','HP를 소모할 때마다 25턴간 강화 +20% (누적)'],skills:['jab','bloodfist','bloodedge'],
+   slots:{weapon:['str','dex'],armor:['maxhp'],acc:['maxhp','crit']},wn:'건틀릿'},
  dragoon:{n:'용기병',cost:500,col:['#5f8f6a','#2a4231','#ffd166'],rate:'공4 방4 탐2',desc:'용과 사람의 혼혈. 명예를 목숨보다 중히 여긴다.',
    base:{hp:240,str:20,dex:10,mag:6,fai:6,first:40,crit:5},grow:{hp:20,str:2.8,dex:1,mag:.4,fai:.4},
    pv:['강철 의지','HP가 가득 차 있지 않으면 디버프를 무시'],skills:['swing','fang','wrath'],
@@ -1432,48 +1439,48 @@ Object.assign(CLASSES,{
  necro:{n:'해적 선장',cost:750,rate:'공4 방2 탐3',desc:'바다를 잃고 지하로 흘러든 해적. 쓰러뜨린 적까지 선원으로 끌어들인다.',
    base:{hp:175,str:14,dex:18,mag:6,fai:6,shield:30,crit:8},grow:{hp:14,str:1.6,dex:2.6,mag:.4,fai:.4},
    pv:['선원 모집','적을 쓰러뜨릴 때마다 추격 피해가 쌓인다 (레벨×4까지)'],skills:['quick','friend','throwknife'],slots:{weapon:['dex','str'],armor:['shield','maxhp'],acc:['pursuit','luck']},wn:'세이버'},
- vampire:{n:'뱀파이어 헌터',cost:300,req:{tower:'spire',floor:6},rate:'공4 방3 탐2',desc:'흡혈귀의 피를 마시고 살아남은 저격수. 이제 피 말고는 무엇도 몸을 낫게 하지 못한다.',
+ vampire:{n:'뱀파이어 헌터',cost:300,req:{tower:'spire',floor:6},rate:'공4 방3 탐2',desc:'흡혈귀의 피를 마시고 살아남은 석궁 저격수. 이제 피 말고는 무엇도 몸을 낫게 하지 못한다.',
    base:{hp:190,str:8,dex:20,mag:14,fai:2,eva:10,crit:10},grow:{hp:15,str:.8,dex:2.6,mag:1.8,fai:.2},
-   pv:['흡혈 사냥꾼','모든 공격 흡혈 20% · 회복 기술 사용 불가'],skills:['shoot','drainlife','vitalshot'],slots:{weapon:['dex','mag'],armor:['maxhp','eva'],acc:['drain','crit']},wn:'장총'},
+   pv:['흡혈 사냥꾼','모든 공격 흡혈 20% · 회복 기술 사용 불가'],skills:['shoot','drainlife','vitalshot'],slots:{weapon:['dex','mag'],armor:['maxhp','eva'],acc:['drain','crit']},wn:'석궁'},
  juggler:{n:'곡예사',cost:300,req:{tower:'vault',floor:6},rate:'공? 방2 탐3',desc:'광대 곡예사. 오늘 칼이 몇 개 떨어질지는 본인도 모른다.',
    base:{hp:170,str:12,dex:20,mag:14,fai:6,crit:10,eva:8},grow:{hp:14,str:1.2,dex:2.8,mag:1.8,fai:.5},
    pv:['저글링','기술 위력이 매번 50~200% 사이에서 정해진다'],skills:['shuriken','torch','heatup'],slots:{weapon:['dex','mag'],armor:['eva'],acc:['luck','crit']},wn:'곤봉'},
  mimic:{n:'던전 요리사',cost:500,req:{tower:'vault',floor:10},noPart:1,rate:'공4 방4 탐1',desc:'무엇이든 요리해 먹는 던전 요리사. 장비조차 냄비에 넣는다.',
    base:{hp:260,str:22,dex:10,mag:10,fai:6,dr:10,crit:5},grow:{hp:20,str:2.8,dex:1,mag:1,fai:.5},
    pv:['잡식 요리','장비를 낄 수 없다 · 대신 장비를 요리해 먹어 수치의 50%를 영구 흡수 (레벨별 상한)'],skills:['smite','storepow','guard'],slots:{weapon:['str'],armor:['maxhp'],acc:['str']},wn:'프라이팬'},
- viking:{n:'바이킹',cost:400,rate:'공4 방3 탐1',desc:'얼어붙은 바다를 건너온 약탈자. 피를 흘릴수록 도끼가 무거워진다.',
-   base:{hp:235,str:22,dex:9,mag:4,fai:6,crit:6},grow:{hp:19,str:3,dex:.9,mag:.3,fai:.5},
-   pv:['광전','잃은 HP 10%마다 위력 +6%'],skills:['swing','warcry','smite'],slots:{weapon:['str'],armor:['maxhp','dr'],acc:['str','maxhp']},wn:'전투 도끼'},
+ viking:{n:'전장의 노왕',cost:400,rate:'공3 방4 탐2',desc:'백 번의 전쟁을 치른 늙은 왕. 그가 깃발을 들면 어디선가 근위병이 달려온다.',
+   base:{hp:225,str:20,dex:9,mag:4,fai:12,crit:5},grow:{hp:18,str:2.7,dex:.9,mag:.3,fai:1.4},
+   pv:['근위대','전투 시작 시 근위병 동반: 턴을 마칠 때마다 근력 30% 추격 피해'],skills:['smite','rally','banner'],slots:{weapon:['str','fai'],armor:['maxhp','dr'],acc:['pursuit','str']},wn:'왕검'},
  dancer:{n:'무희',cost:500,rate:'공4 방2 탐3',desc:'불꽃 칼을 들고 춤추던 무희. 한 번 휘두르면 두 번 벤다.',
    base:{hp:170,str:12,dex:21,mag:10,fai:6,eva:12,crit:8},grow:{hp:13,str:1.2,dex:3,mag:1.2,fai:.5},
    pv:['칼춤','연타 기술의 타수 +1'],skills:['double','barrage','dodgeslash'],slots:{weapon:['dex','str'],armor:['eva','maxhp'],acc:['crit','dex']},wn:'곡도'},
- onmyo:{n:'사슬 무도가',cost:500,rate:'공4 방2 탐3',desc:'사슬과 맨손으로 혈도를 끊는 무도가. 상대가 약해질수록 날카로워진다.',
+ onmyo:{n:'권법가',cost:500,rate:'공4 방2 탐3',desc:'발끝과 장풍으로 싸우는 권법의 달인. 경락을 짚인 상대는 점점 무너진다.',
    base:{hp:175,str:10,dex:21,mag:6,fai:10,crit:8},grow:{hp:14,str:1,dex:3,mag:.5,fai:1},
-   pv:['혈도 봉쇄','적에게 걸린 디버프 1종마다 주는 피해 +10%'],skills:['curse','blinding','sweep'],slots:{weapon:['dex','fai'],armor:['maxhp','res'],acc:['dex','res']},wn:'사슬'},
+   pv:['경락 타격','적에게 걸린 디버프 1종마다 주는 피해 +10%'],skills:['kick','qiblast','sweep'],slots:{weapon:['dex','fai'],armor:['maxhp','res'],acc:['dex','res']},wn:'권갑'},
  lwitch:{n:'꼬마 마녀',cost:400,rate:'공4 방2 탐2',desc:'솥을 젓던 견습 마녀. 그녀의 독은 시간이 갈수록 진해진다.',
    base:{hp:155,str:5,dex:10,mag:23,fai:8,barrier:1,crit:5},grow:{hp:12,str:.3,dex:1,mag:3.3,fai:.8},
    pv:['저주의 솥','적의 지속피해가 매 턴 20%씩 불어난다'],skills:['venom','katon','missile'],slots:{weapon:['mag'],armor:['shield','maxhp'],acc:['mag','barrier']},wn:'빗자루'},
  archmage:{n:'대마법사',cost:750,rate:'공5 방2 탐2',desc:'왕관을 쓴 늙은 대마법사. 오래 읊은 주문일수록 세상이 크게 흔들린다.',
    base:{hp:150,str:4,dex:8,mag:27,fai:12,shield:40,crit:5},grow:{hp:11,str:.3,dex:.8,mag:3.8,fai:1.2},
    pv:['대주문','대기 5턴 이상 기술의 위력 +50%'],skills:['meteor','forcefield','estrike'],slots:{weapon:['mag'],armor:['shield','maxhp'],acc:['mag','fai']},wn:'왕홀'},
- saint:{n:'성녀',cost:500,rate:'공2 방5 탐2',desc:'순례하던 성녀. 넘치는 은총은 몸을 감싸는 빛이 된다.',
-   base:{hp:185,str:8,dex:8,mag:10,fai:22,crit:5},grow:{hp:16,str:.8,dex:.8,mag:1,fai:3.1},
-   pv:['넘치는 은총','회복이 최대 HP를 넘치면 그만큼 보호막이 된다'],skills:['healing','holyarrow','sacred'],slots:{weapon:['fai'],armor:['maxhp','shield'],acc:['fai','rest']},wn:'도리깨'},
+ saint:{n:'꽃의 정령술사',cost:500,rate:'공4 방2 탐3',desc:'꽃의 정령과 계약한 귀부인. 꽃가루가 스민 상처는 피어날수록 깊어진다.',
+   base:{hp:165,str:6,dex:10,mag:22,fai:12,crit:6},grow:{hp:13,str:.5,dex:1,mag:3.2,fai:1.4},
+   pv:['만개','지속피해에 걸린 적에게 주는 피해 +25%'],skills:['venom','thornvine','florasp'],slots:{weapon:['mag','fai'],armor:['maxhp','shield'],acc:['mag','res']},wn:'꽃 지팡이'},
  templar:{n:'템플러',cost:600,rate:'공3 방5 탐1',desc:'성지를 지키던 기사. 그의 방벽은 막는 동시에 되받아친다.',
    base:{hp:220,str:16,dex:8,mag:6,fai:18,barrier:2,dr:5,crit:5},grow:{hp:18,str:2,dex:.8,mag:.5,fai:2.4},
    pv:['신앙의 방패','전투 시작 방벽 +2 · 방벽이 공격을 막으면 신앙으로 반격'],skills:['barrier','spellshield','judgement'],slots:{weapon:['fai','str'],armor:['maxhp','dr'],acc:['barrier','fai']},wn:'장검'},
- celestial:{n:'천녀',cost:600,rate:'공3 방3 탐3',desc:'하늘에서 내려온 선녀. 날개옷 자락을 스치는 공격은 그대로 되돌아간다.',
-   base:{hp:170,str:8,dex:20,mag:14,fai:10,eva:15,crit:8},grow:{hp:13,str:.8,dex:2.8,mag:1.8,fai:1},
-   pv:['우의','회피 +15% · 회피에 성공하면 반격'],skills:['backstep','flip','windcut'],slots:{weapon:['dex','mag'],armor:['eva'],acc:['eva','dex']},wn:'비단 끈'},
+ celestial:{n:'견습 천사',cost:600,rate:'공3 방3 탐3',desc:'하늘에서 떨어진 꼬마 천사. 빛의 활을 쏘며, 날갯짓 한 번에 상처가 아문다.',
+   base:{hp:170,str:6,dex:14,mag:8,fai:20,eva:10,crit:6},grow:{hp:13,str:.5,dex:1.8,mag:.8,fai:2.8},
+   pv:['날개','회피 +10% · 회피에 성공하면 HP 6% 회복'],skills:['holyarrow','holyshot','backstep'],slots:{weapon:['fai','dex'],armor:['eva'],acc:['eva','fai']},wn:'빛의 활'},
  minotaur:{n:'도끼 투사',cost:500,req:{tower:'spire',floor:10},rate:'공5 방4 탐0',desc:'첫 일격에 모든 것을 거는 투사. 그 일격은 성벽도 무너뜨린다. 그 뒤는 덜 우아하다.',
    base:{hp:260,str:25,dex:6,mag:2,fai:2,crit:5},grow:{hp:21,str:3.3,dex:.5,mag:.2,fai:.2},
    pv:['돌진','전투 첫 공격 피해 2배 · 명중 -10'],skills:['tackle','swing','attack'],slots:{weapon:['str'],armor:['maxhp','dr'],acc:['str','first']},wn:'양날 도끼'},
  satyr:{n:'도박사',cost:666,req:{contracts:6},rate:'공4 방3 탐2',desc:'쌍권총을 든 떠돌이 도박사. 판돈이 클수록 눈이 빛난다.',
    base:{hp:190,str:10,dex:20,mag:10,fai:4,crit:10},grow:{hp:15,str:1,dex:2.6,mag:1,fai:.3},
    pv:['한탕','계약의 마석·점수 배율 효과 1.5배'],skills:['rapidshot','desperado','trick'],slots:{weapon:['dex'],armor:['maxhp','eva'],acc:['luck','crit']},wn:'쌍권총'},
- skeleton:{n:'빙설의 전사',cost:500,req:{tower:'abyss',floor:15},noPart:1,rate:'공4 방3 탐1',desc:'얼음 속에 갇혀 백 년을 버틴 전사. 상처는 얼어붙어 낫지 않지만, 좀처럼 쓰러지지도 않는다.',
-   base:{hp:200,str:21,dex:12,mag:4,fai:4,dr:10,crit:6},grow:{hp:16,str:2.9,dex:1.2,mag:.3,fai:.3},
-   pv:['동결 육체','회복 불가 · 층마다 HP 완전 회복 · 한 번 되살아난다'],skills:['attack','phalanx','swordaura'],slots:{weapon:['str'],armor:['maxhp','dr'],acc:['str','crit']},wn:'대도끼'},
+ skeleton:{n:'설원 사냥꾼',cost:500,req:{tower:'abyss',floor:15},rate:'공4 방2 탐3',desc:'눈보라 속에서 짐승을 쫓던 사냥꾼. 얼음 화살은 맞은 것의 움직임까지 얼려 버린다.',
+   base:{hp:175,str:8,dex:22,mag:8,fai:4,eva:8,crit:8},grow:{hp:13,str:.7,dex:3,mag:.9,fai:.3},
+   pv:['빙결 화살','공격이 명중하면 25% 확률로 적의 기술 하나 대기 +1'],skills:['shoot','pinarrow','eagle'],slots:{weapon:['dex'],armor:['maxhp','eva'],acc:['dex','crit']},wn:'장궁'},
 });
 function reqMet(k){ const r=CLASSES[k].req; if(!r) return true; if(r.contracts) return (META.contracts||[]).length>=r.contracts; return ((META.tbest||{})[r.tower]||0)>=r.floor; }
 function reqTx(k){ const r=CLASSES[k].req; if(!r) return ''; if(r.contracts) return `계약 ${r.contracts}종 보유`; return `${TOWERS[r.tower].no} B${r.floor}F 도달`; }
@@ -2210,7 +2217,6 @@ function hurt(src,tgt,amt,o={}){
     }
   }
   tgt.hp-=amt;
-  if(isP(tgt)&&tgt.cls==='skeleton'&&tgt.hp<=0&&!tgt.revived){ tgt.revived=1; tgt.hp=Math.round(maxHp(tgt)*.5); log('동결 육체: 얼어붙은 몸이 다시 일어섰다! (1회)','gold'); }
   if(isP(tgt)&&tgt.hp<=0&&!tgt.petRev&&tgt.pet&&PETS[tgt.pet.id]&&PETS[tgt.pet.id].e.revive){ tgt.petRev=1; tgt.hp=Math.round(maxHp(tgt)*.5); log(`${PETS[tgt.pet.id].n}의 불꽃이 당신을 되살렸다!`,'gold'); }
   const tot=s+amt;
   if(tgt.isE&&tot>0) shakeE=true;
@@ -2234,7 +2240,6 @@ function hurt(src,tgt,amt,o={}){
   return tot;
 }
 function healU(u,amt,label){
-  if(isP(u)&&u.cls==='skeleton'){ log('얼어붙은 몸은 회복되지 않는다.','mute'); return 0; }
   if(G&&G.C&&(fx('hot')||ctIs('hellfire'))){ log(fx('hot')?'고온 탓에 회복되지 않는다.':'업화: 회복할 수 없다.','mute'); return 0; }
   let m=1+(isP(u)?petE('heal')/100:0); if(isColor('yellow')) m+=.15; if(isP(u)&&pv(u,'priest')) m+=.5;
   amt=Math.round(amt*m); const mx=maxHp(u); const real=Math.max(0,Math.min(amt,mx-u.hp));
@@ -2263,7 +2268,7 @@ function dmgMult(src,tgt,a){
   let mult=1+(sum(src,'str')+sum(src,'blood')-sum(src,'weak'))/100;
   if(P&&pv(src,'warrior')&&a.ac<=60) mult+=.3;
   if(P){ const sy=synergy(src)[a.s||'str']; if(sy) mult+=SYN_ATK[sy]; }
-  if(P&&pv(src,'viking')) mult+=Math.floor((1-src.hp/maxHp(src))*10)*.06;
+  if(P&&tgt&&pv(src,'saint')&&tgt.st.some(x=>x.id==='dot')) mult+=.25;
   if(P&&tgt&&pv(src,'onmyo')) mult+=new Set(tgt.st.filter(x=>!ST[x.id].buff).map(x=>x.id)).size*.10;
   if(P&&ctIs('hellfire')) mult+=.5;
   if(isColor('red')) mult+=.15;
@@ -2282,7 +2287,7 @@ function attack(src,tgt,a,lm,opt={}){
     if(fx('wide')) acc-=40;
     if(R()*100>=Math.min(100,acc)){ pop(tgt,'빗나감','miss'); log(`${nm(src)}의 공격이 빗나갔다.`,'mute'); return 0; }
     const eva=(P&&sd.flags.autoaim)?0:Math.min(95,(tgt.isE?tgt.eva:D(tgt).eva)+sum(tgt,'eva'));
-    if(R()*100<eva){ pop(tgt,'회피','miss'); log(`${nm(tgt)}이(가) 공격을 피했다.`,'mute'); if(isP(tgt)&&pv(tgt,'celestial')&&src.hp>0) hurt(tgt,src,D(tgt).dex*.9,{label:'우의 반격',kind:'sub',tag:'반격'}); return 0; }
+    if(R()*100<eva){ pop(tgt,'회피','miss'); log(`${nm(tgt)}이(가) 공격을 피했다.`,'mute'); if(isP(tgt)&&pv(tgt,'celestial')&&tgt.hp<maxHp(tgt)) healU(tgt,maxHp(tgt)*.06,'날개'); return 0; }
   }
   const base=statOf(src,a.s||'str')*a.p/100*lm*(opt.pow||1);
   const pierce=P&&sd.flags.pierce&&R()<[0,.15,.25,.35][fl(sd,'pierce')];
@@ -2297,6 +2302,7 @@ function attack(src,tgt,a,lm,opt={}){
   const dr=(a.drain||0)+(P?sd.drain:0)+(opt.drain||0);
   if(dr&&dealt>0) healU(src,dealt*dr/100,'흡혈');
   if(dealt>0&&tgt.hp>0){
+    if(P&&tgt.isE&&pv(src,'skeleton')&&R()<.25){ const fs=pick(tgt.sk); fs.cd+=1; log(`빙결 화살: 적의 [${hidden()?'???':fs.def.n}] 대기 +1`,'good'); }
     if(src.poison) addSt(src,tgt,{id:'dot',v:src.atk*.25,dur:3});
     if(P){
       if(sd.flags.addpoison) addSt(src,tgt,{id:'dot',v:tgt.maxhp*(fl(sd,'addpoison')+1)/100,dur:3},false,true);
@@ -2344,6 +2350,7 @@ function startCombat(e,o={}){
   p.barrier=Math.min(9,d.barrier*(d.uniq.sprout?2:1));
   if(fx('seal')) e.shield=Math.round(e.shield*.25);
   G.C={e,turn:'p',round:1,used:[],busy:false};
+  if(pv(p,'viking')){ addSt(p,p,{id:'pursuit',v:statOf(p,'str')*.3,dur:99},true,true); log('근위대: 근위병이 곁에서 함께 싸운다.','good'); }
   { const cu=petE('cdUp'); if(cu){ const s=pick(e.sk); s.cd+=cu; log(`${PETS[p.pet.id].n}: 적의 [${hidden()?'???':s.def.n}] 대기 +${cu}`,'good'); } }
   G.mode='combat';
   log(`${e.boss?'층의 주인 ':''}${nm(e)}${e.prefix&&!hidden()?'('+e.prefix+')':''} Lv.${e.lvl}이(가) 나타났다!`,e.boss?'bad':'hit');
@@ -2498,7 +2505,6 @@ function flee(){
 }
 function usePotion(){
   const p=G.p; if(p.potions<=0) return;
-  if(p.cls==='skeleton'){ toast('빙설의 전사는 물약을 마실 수 없다'); return; }
   if(G.mode==='combat'&&(G.C.busy||G.C.turn!=='p')) return;
   if(p.hp>=D(p).maxhp){ toast('HP가 가득 차 있다'); return; }
   if(G.mode==='combat'&&(fx('hot')||ctIs('hellfire'))){ toast('지금은 회복할 수 없다'); return; }
@@ -2579,7 +2585,7 @@ function rollSkill(rare){
   const fit=k=>SK[k].a.some(a=>a.s&&prim.includes(a.s));
   return wpick(ids.map(k=>[k,w[SK[k].r]*(fit(k)?1.8:1)]));
 }
-function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; G.p.hp=G.p.cls==='skeleton'?D(G.p).maxhp:Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); G.p.vkUsed=0; newFloor(); G.mode='explore'; }
+function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; G.p.hp=Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); G.p.vkUsed=0; newFloor(); G.mode='explore'; }
 function finishLoot(){ G.loot.shift(); if(!G.loot.length){ G.mode='explore'; if(G.pendingFloor) advanceFloor(); } render(); }
 function rerollCost(o){ return o.rr===0?0:3+G.floor*2; }
 function reroll(){
