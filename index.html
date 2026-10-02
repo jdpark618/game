@@ -939,6 +939,7 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .vrow input[type=range]::-moz-range-thumb{width:14px;height:20px;background:#e2b553;border:2px solid #000;border-radius:0;cursor:pointer}
 .sndn{margin:0;font-size:11px;color:var(--dim)}
 .sndrow.vbox{flex-direction:column;align-items:stretch;gap:8px}.sndrow.vbox>span{font-size:12px}
+.sfit{display:flex;flex-direction:column;gap:8px;flex:0 0 auto;min-height:0}
 </style>
 
 <div id="app"></div>
@@ -2932,12 +2933,15 @@ function renderGame(){
   app.classList.add('wide');
   app.innerHTML=`<div class="game">
    <header class="top g-top"><div class="toprow"><span class="floor num" data-tip="${TW().no} ${TW().n} · ${stepsTxt}">B${G.floor}F${TW().floors?`<small>/${TW().floors}</small>`:''}</span>${G.mode!=='dead'?progHtml():'<span style="flex:1"></span>'}<span class="meta"><span>마석 <b class="stone num">${p.stones}</b></span>${G.tower==='abyss'?`<span>점수 <b class="num">${score()}</b></span>`:''}${sndBtn()}</span></div>${ct?`<div class="toprow">${ct}</div>`:''}</header>
-   <section class="stage plate riveted g-stage ${G.mode} ${critFlag?'quake':''}" id="stageBox">${stage}</section>
+   <section class="stage plate riveted g-stage ${G.mode} ${critFlag?'quake':''}" id="stageBox">${['event','loot','draft'].includes(G.mode)?`<div class="sfit">${stage}</div>`:stage}</section>
    ${renderHud()}
-   ${G.mode==='dead'||G.mode==='clear'?'':(G.mode==='loot'&&G.loot[0]&&G.loot[0].kind==='sk'&&G.p.sk.length>=4&&!G.p.sk.some(x=>x.id===G.loot[0].id)?'':renderSkills().replace('class="skills g-skills','class="skills g-skills mini'))+renderActions()}
+   ${G.mode==='dead'||G.mode==='clear'?'':(['event','loot','draft'].includes(G.mode)?'':renderSkills().replace('class="skills g-skills','class="skills g-skills mini'))+renderActions()}
    ${renderLog()}</div>${mapHtml()}`;
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
+  fitStage();
 }
+function fitStage(){ const box=document.getElementById('stageBox'), f=box&&box.querySelector('.sfit'); if(!f) return; f.style.zoom=''; requestAnimationFrame(()=>{ if(!f.isConnected) return; const H=box.clientHeight-16, h=f.scrollHeight; if(h>H&&H>0){ f.style.zoom=Math.max(.7,Math.floor(H/h*100)/100); } }); }
+if(typeof window!=='undefined') window.addEventListener('resize',()=>{ if(G) fitStage(); });
 
 // ================= rendering: lobby =================
 function renderHall(){
