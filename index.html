@@ -2329,8 +2329,8 @@ function resolveRoom(n){
   switch(n.t){
     case 'mon': startCombat(mkEnemy(n.m,monLevel(),{mutate:fx('mutate'),elite:n.elite}),{ambush:fx('door')}); break;
     case 'boss': startCombat(mkEnemy(n.m,monLevel()+1,{boss:true})); break;
-    case 'rest': { const h=Math.round(D(p).maxhp*.4); healU(p,h); for(const s of p.sk) s.cd=0; log('비파 악사의 노래에 몸이 풀렸다. 기술 대기가 초기화되었다.','good'); break; }
-    case 'empty': log('아무것도 없는 방이다.','mute'); break;
+    case 'rest': { const b=p.hp, h=Math.round(D(p).maxhp*.4); healU(p,h); for(const s of p.sk) s.cd=0; const got=p.hp-b; const out=`비파 악사의 노래에 몸이 풀렸다.\nHP +${got}${got<h?' (최대치까지)':''} · 모든 기술 대기 초기화`; log(out.replace('\n',' '),'good'); G.ev={t:'rest',stage:'done',out}; G.mode='event'; break; }
+    case 'empty': log('아무것도 없는 방이다.','mute'); toast('빈 방 — 아무 일도 없었다'); break;
     case 'corpse': log('쓰러진 모험가가 남긴 갑옷 더미에서 장비를 발견했다.','good'); G.loot=[{kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,D(p).luck),rr:0}]; G.mode='loot'; break;
     default: G.ev={t:n.t,stage:'ask',v:n.v|0}; if(n.t==='npc'){ G.ev.k=NPCE[n.k]?n.k:pick(npcPool()); seeN(G.ev.k); } G.mode='event';
   }
@@ -2788,7 +2788,7 @@ function rollSkill(rare){
   const fit=k=>SK[k].a.some(a=>a.s&&prim.includes(a.s));
   return wpick(ids.map(k=>[k,w[SK[k].r]*(fit(k)?1.8:1)*(SK_CLS[k]?3:1)]));
 }
-function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; G.p.hp=Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); G.p.vkUsed=0; newFloor(); G.mode='explore'; }
+function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; { const b=G.p.hp; G.p.hp=Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); const g=G.p.hp-b; log(`계단에서 숨을 돌렸다. HP +${g}`,'good'); toast(`다음 층으로 · HP +${g} 회복`); } G.p.vkUsed=0; newFloor(); G.mode='explore'; }
 function finishLoot(){ G.loot.shift(); if(!G.loot.length){ G.mode='explore'; if(G.pendingFloor) advanceFloor(); } render(); }
 function rerollCost(o){ return o.rr===0?0:3+G.floor*2; }
 function reroll(){
@@ -2831,6 +2831,7 @@ const EVT={
  spring:{title:'빛나는 샘',text:'푸른 수정 무더기 사이로 맑은 물이 고여 희미하게 빛난다. 물에서 온기가 느껴진다.',act:'물을 마신다'},
  statue:{title:'기억의 석상',text:'두 손을 모은 성녀의 석상이다. 손끝에 이마를 대면, 몸에 새긴 기술의 기억이 또렷해진다고 한다.',act:'기도한다'},
  traveler:{title:'떠돌이 나그네',text:'',act:null},
+ rest:{title:'비파 악사의 쉼터',text:'',act:null},
 };
 const NPCV=[
  {title:'산양 현자',text:'산양 머리의 현자가 지팡이 장식을 흔들며 눈을 가늘게 뜬다. "산 자도 죽은 자도 아닌 자여, 무엇이 필요한가?"'},
@@ -3471,7 +3472,7 @@ function renderNpcEv(ev,E,sc){
   }
   return `${head}<p class="story">${E.text}</p>${menuHtml(npcChoices(ev).map(c=>({a:`data-ev="${c.a}"`,l:c.l,s:c.s,dis:c.dis,pri:c.pri})))}${miniLog()}`;
 }
-function evIcon(ev){ const o=ev.out||''; if(/피해|폭발|저주|약화|실명|독|잃었/.test(o)) return '💥'; return {chest:'💰',tomb:'🔮',spring:'💧',statue:'✨',traveler:'📜'}[ev.t]||'✦'; }
+function evIcon(ev){ const o=ev.out||''; if(/피해|폭발|저주|약화|실명|독|잃었/.test(o)) return '💥'; return {chest:'💰',tomb:'🔮',spring:'💧',statue:'✨',traveler:'📜',rest:'🎵'}[ev.t]||'✦'; }
 function renderEvent(){
   const ev=G.ev, E=ev.t==='traveler'?npcOf(ev):ev.t==='npc'?{title:NPCE[ev.k].n,text:esc(NPCE[ev.k].text)}:EVT[ev.t];
   const nk=ev.t==='traveler'?'o_traveler'+((ev.v|0)%NPCV.length):ev.t==='rest'?'o_rest':ev.t==='npc'?'npc_'+ev.k:'';
@@ -3482,7 +3483,7 @@ function renderEvent(){
   if(ev.stage==='done'&&!ev.fxShown) setTimeout(()=>{ if(G&&G.ev===ev) ev.fxShown=1; },1200);
   if(ev.t==='npc') return renderNpcEv(ev,E,sc);
   if(ev.stage==='charge') return `${sc}<div class="label">${E.title}</div><p class="story chg">${{chest:'자물쇠를 비트는 손끝이 떨린다…',tomb:'장치가 덜컥거리며 돌아간다…',spring:'두 손으로 물을 떠 올린다…',statue:'석상의 손끝에 이마를 댄다…',traveler:'나그네가 지팡이를 들어 올린다…'}[ev.t]||'…'}</p>${miniLog()}`;
-  if(ev.stage==='done') return `${sc}<div class="label">${E.title}</div><p class="story">${esc(ev.out||'')}</p>${menuHtml([{a:'data-ev="leave2"',l:'계속 나아간다',pri:1}])}${miniLog()}`;
+  if(ev.stage==='done') return `${sc}<div class="label">${E.title}</div><p class="story">${esc(ev.out||'').replace(/\n/g,'<br>')}</p>${menuHtml([{a:'data-ev="leave2"',l:'계속 나아간다',pri:1}])}${miniLog()}`;
   const hasEq=['weapon','armor','acc'].some(s=>G.p.eq[s]&&G.p.eq[s].mods.some(m=>m.k!=='x'));
   const items=ev.t==='traveler'?[{a:'data-ev="skill"',l:'기술을 배운다',s:'희귀 기술 하나',pri:1},hasEq&&{a:'data-ev="forge"',l:'장비를 손봐 달라',s:'능력치 하나 ×1.5'},{a:'data-ev="leave"',l:'지나친다'}]
     :ev.t==='statue'?[{a:'data-ev="go"',l:'기도한다',s:'보유 기술 무작위 강화',pri:1},{a:'data-ev="blood"',l:'피를 바친다',s:'HP 20% · 기술 2개 강화'},{a:'data-ev="leave"',l:'지나친다'}]
