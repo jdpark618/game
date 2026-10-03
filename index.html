@@ -1669,7 +1669,7 @@ const COLORS={
 };
 const TCOL={mon:'#9a3a32',boss:'#7b2a22',chest:'#b08a2a',tomb:'#6a7480',spring:'#3a8ab8',statue:'#9a9488',rest:'#4f9a5e',traveler:'#7a5ab0',npc:'#b07a3a',corpse:'#6a5a4a',empty:'#3a3e46'};
 const EVT_T=new Set(['chest','tomb','spring','statue','rest','traveler','corpse','npc']);
-const RTYPE={mon:'마물',corpse:'쓰러진 모험가',chest:'보물상자',tomb:'묘비',spring:'빛나는 샘',statue:'조각상',rest:'비파 악사의 쉼터',traveler:'떠돌이 나그네',npc:'낯선 자',empty:'빈 방',boss:'층의 주인'};
+const RTYPE={mon:'마물',corpse:'쓰러진 모험가',chest:'보물상자',tomb:'묘비',spring:'빛나는 샘',statue:'기억의 석상',rest:'비파 악사의 쉼터',traveler:'떠돌이 나그네',npc:'낯선 자',empty:'빈 방',boss:'층의 주인'};
 // ---------- 장비 특수 옵션 (중복 부가 효과) ----------
 const SPECIAL={
  observe:{n:'관찰',d:L=>'적의 다음 행동이 보인다'},
@@ -2048,7 +2048,7 @@ function genEq(slot,lvl,cls,luck=0,minRar){
 const TOWERS={
  crypt:{no:'제1탑',n:'그림자 숲',lv:1,floors:10,art:'tyrant',em:1,sm:1,final:'tyrant',bosses:['gravekeeper','necro'],tags:['10층','숲·독','입문'],first:300,firstTx:'마석 300 · 제2~4탑 개방'},
  spire:{no:'제2탑',n:'용의 첨탑',lv:3,floors:10,art:'balrog',need:'crypt',em:1.35,sm:2,loot:.2,elite:.2,final:'balrog',bosses:['greater','samael'],tags:['10층','용·환수','정예·보상×2'],first:1500,firstTx:'마석 1500'},
- vault:{no:'제3탑',n:'가라앉은 보물고',lv:2,floors:10,art:'goldeater',need:'crypt',fee:100,em:1.2,sm:3,final:'goldeater',bosses:['pharaoh','sphinx'],rooms:[['mon',27],['corpse',9],['chest',20],['tomb',7],['spring',6],['statue',3],['rest',5],['traveler',4],['npc',12],['empty',3]],tags:['10층','보물·수중','마석×3'],first:800,firstTx:'마석 800'},
+ vault:{no:'제3탑',n:'가라앉은 보물고',lv:2,floors:10,art:'goldeater',need:'crypt',fee:100,em:1.2,sm:3,final:'goldeater',bosses:['pharaoh','sphinx'],rooms:[['mon',27],['corpse',8],['chest',19],['tomb',7],['spring',6],['statue',6],['rest',5],['traveler',4],['npc',12],['empty',1]],tags:['10층','보물·수중','마석×3'],first:800,firstTx:'마석 800'},
  abyss:{no:'제4탑',n:'끝없는 심연',lv:0,floors:0,art:'t_abyss',need:'crypt',em:1,sm:1,final:null,bosses:null,tags:['무한','모든 몬스터']},
 };
 const PET_G={common:{n:'일반',c:'#c9c2ad',w:55},magic:{n:'고급',c:'#7fb8e8',w:27},rare:{n:'희귀',c:'#e0cf62',w:12},epic:{n:'영웅',c:'#c99cf0',w:5},leg:{n:'전설',c:'#ff9a3a',w:1}};
@@ -2166,7 +2166,7 @@ function newFloor(){
 }
 function bossNode(){ return {t:'boss',color:'black',fx:null,m:G.bossId}; }
 function genRoom(){
-  let t=wpick(TW().rooms||[['mon',41],['corpse',9],['chest',9],['tomb',7],['spring',6],['statue',3],['rest',5],['traveler',3],['npc',12],['empty',4]]);
+  let t=wpick(TW().rooms||[['mon',41],['corpse',7],['chest',9],['tomb',7],['spring',6],['statue',7],['rest',5],['traveler',3],['npc',12],['empty',2]]);
   if(t==='rest'&&ctIs('march')) t='empty';
   const r={t,color:'black',fx:null};
   if(t==='traveler') r.v=Math.floor(R()*NPCV.length);
@@ -2230,7 +2230,7 @@ function resolveRoom(n){
     case 'boss': startCombat(mkEnemy(n.m,monLevel()+1,{boss:true})); break;
     case 'rest': { const h=Math.round(D(p).maxhp*.4); healU(p,h); for(const s of p.sk) s.cd=0; log('비파 악사의 노래에 몸이 풀렸다. 기술 대기가 초기화되었다.','good'); break; }
     case 'empty': log('아무것도 없는 방이다.','mute'); break;
-    case 'corpse': log('쓰러진 모험가의 시신에서 장비를 발견했다.','good'); G.loot=[{kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,D(p).luck),rr:0}]; G.mode='loot'; break;
+    case 'corpse': if(R()<.3){ log('쓰러진 모험가의 품에서 낡은 비망록을 찾았다.','good'); upSkill(1); break; } log('쓰러진 모험가의 시신에서 장비를 발견했다.','good'); G.loot=[{kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,D(p).luck),rr:0}]; G.mode='loot'; break;
     default: G.ev={t:n.t,stage:'ask',v:n.v|0}; if(n.t==='npc') G.ev.k=NPCE[n.k]?n.k:pick(npcPool()); G.mode='event';
   }
 }
@@ -2600,6 +2600,10 @@ function partOffer(){
   return out;
 }
 const rollMut=()=>pick(Object.keys(MUT));
+function upSkill(n,o){ n=n||1; o=o||{}; const p=G.p, res=[];
+  for(let i=0;i<n;i++){ const c=p.sk.filter(s=>s.lvl<8); if(!c.length) break; const s=o.low?c.slice().sort((a,b)=>a.lvl-b.lvl)[0]:pick(c); const b=s.lvl; s.lvl=Math.min(8,s.lvl+(o.by||1)); res.push(`[${skillName(s)}] +${b-1}→+${s.lvl-1}${b<5&&s.lvl>=5?' (대기 -1!)':''}`); }
+  if(!res.length){ const st=gainStones(12*G.floor); const t=`모든 기술이 이미 최대 강화다. 대신 마석 ${st}개를 얻었다.`; log(t,'gold'); return t; }
+  const t='기술 강화 — '+res.join(', '); log(t,'gold'); SND.sfx('lvup'); return t; }
 function skillLoot(rare,forceMut){ const o={kind:'sk',id:rollSkill(rare),rr:0}; if(forceMut||R()<(rare?.3:.15)) o.mut=rollMut(); return o; }
 let dyT=null, dyRendered=false;
 function victory(){
@@ -2697,7 +2701,7 @@ const EVT={
  chest:{title:'보물상자',text:'방 구석에 낡은 보물상자가 방치되어 있다. 보물이 들어 있을 수도, 함정이 걸려 있을 수도 있다.',act:'연다'},
  tomb:{title:'묘비',text:'평범한 묘비처럼 보였지만, 각도를 바꾸자 장치가 움직이는 스위치라는 것을 알아차렸다.',act:'장치를 돌린다'},
  spring:{title:'빛나는 샘',text:'푸른 수정 무더기 사이로 맑은 물이 고여 희미하게 빛난다. 물에서 온기가 느껴진다.',act:'물을 마신다'},
- statue:{title:'조각상',text:'두 손을 모은 성녀의 조각상이다. 오래되었지만 손끝만은 이상하리만치 깨끗하다.',act:'기도한다'},
+ statue:{title:'기억의 석상',text:'두 손을 모은 성녀의 석상이다. 손끝에 이마를 대면, 몸에 새긴 기술의 기억이 또렷해진다고 한다.',act:'기도한다'},
  traveler:{title:'떠돌이 나그네',text:'',act:null},
 };
 const NPCV=[
@@ -2729,7 +2733,7 @@ const NPCE={
 };
 function npcPool(){ const tk=(G&&G.tower)||'abyss'; return Object.keys(NPCE).filter(k=>!NPCE[k].tw||NPCE[k].tw.includes(tk)); }
 const WHEEL=[{l:'×2',m:2,c:'#3c6e4a'},{l:'꽝',m:0,c:'#3a2a2a'},{l:'×3',m:3,c:'#c9953e'},{l:'💀',f:1,c:'#6a1f1f'},{l:'×2',m:2,c:'#3c6e4a'},{l:'꽝',m:0,c:'#3a2a2a'},{l:'×½',m:.5,c:'#4a4f5a'},{l:'🎁',g:1,c:'#5a3f8a'}];
-const TAROT=[{k:'sun',n:'태양',t:'HP 완전 회복 · 기술 대기 초기화'},{k:'star',n:'별',t:'행운 +6 (영구)'},{k:'tower',n:'탑',t:'정예 마물 출현 · 이기면 희귀 장비'},{k:'death',n:'죽음',t:'25턴 동안 피해증가 +40%'},{k:'wheel',n:'수레바퀴',t:'마석 한 줌'},{k:'magus',n:'마법사',t:'희귀 기술 하나'},{k:'moon',n:'달',t:'25턴 동안 실명 30%'},{k:'force',n:'힘',t:'능력치 +4% (영구)'}];
+const TAROT=[{k:'sun',n:'태양',t:'HP 완전 회복 · 기술 대기 초기화'},{k:'star',n:'별',t:'행운 +6 (영구)'},{k:'tower',n:'탑',t:'정예 마물 출현 · 이기면 희귀 장비'},{k:'death',n:'죽음',t:'25턴 동안 피해증가 +40%'},{k:'wheel',n:'수레바퀴',t:'마석 한 줌'},{k:'magus',n:'마법사',t:'보유 기술 하나 +2 강화'},{k:'moon',n:'달',t:'25턴 동안 실명 30%'},{k:'force',n:'힘',t:'능력치 +4% (영구)'}];
 function npcBet(ev){ return Math.max(10,G.floor*12); }
 function npcChoices(ev){
   const p=G.p, F=G.floor, k=ev.k, st=p.stones;
@@ -2739,18 +2743,18 @@ function npcChoices(ev){
     case 'cupboy': { const b=npcBet(ev); return [{a:'play',l:'한 판 한다',s:`판돈 마석 ${b} · 맞히면 ×3`,dis:st<b,pri:1},{a:'grab',l:'속임수를 추궁한다',s:'전투'},L]; }
     case 'seer': return [{a:'draw',l:'카드를 고른다',s:'무작위 운명',pri:1},L];
     case 'brawler': return [{a:'duel',l:'결투를 받아들인다',s:'전투 · 마석+능력치',pri:1},{a:'arm',l:'주먹 내기만 하자',s:'가위바위보 3판'},L];
-    case 'oldsword': return [{a:'learn',l:'가르침을 청한다',s:'HP 20% · 타이밍 수련',pri:1},{a:'test',l:'시험 결투',s:'강적 · 희귀 기술+장비'},L];
+    case 'oldsword': return [{a:'learn',l:'가르침을 청한다',s:'HP 20% · 성공 시 기술 강화',pri:1},{a:'test',l:'시험 결투',s:'강적 · 희귀 기술+장비'},L];
     case 'redhood': return [{a:'flower',l:'꽃을 받는다',s:'HP 20% 소모 · 무작위',pri:1},{a:'slay',l:'마녀를 베어 낸다',s:'전투'},L];
     case 'merc': { const c=F*18; return [{a:'hire',l:'고용한다',s:`마석 ${c} · 40턴 강화`,dis:st<c,pri:1},{a:'spar',l:'실력을 시험한다',s:'전투 · 희귀 장비'},L]; }
     case 'horn': return [{a:'duel',l:'결투한다',s:'강적 · 희귀 장비+기술',pri:1},{a:'blood',l:'피의 맹세',s:'최대 HP -10% → 능력치 +7%'},L];
-    case 'shaman': { const c=F*15; return [{a:'ritual',l:'정령의 리듬을 따라 한다',s:'기억력 시험',pri:1},{a:'offer',l:'제물을 바친다',s:`마석 ${c} · 최대 HP +10%`,dis:st<c},L]; }
+    case 'shaman': { const c=F*15; return [{a:'ritual',l:'정령의 리듬을 따라 한다',s:'성공 시 기술 강화',pri:1},{a:'offer',l:'제물을 바친다',s:`마석 ${c} · 최대 HP +10%`,dis:st<c},L]; }
     case 'vamp': return [{a:'give',l:'피를 준다',s:'HP 35% 소모 · 희귀 장비',pri:1},{a:'hunt',l:'사냥한다',s:'전투 · 마석+물약'},L];
     case 'ranger': return [{a:'hunt',l:'사냥에 동행한다',s:'정예 마물 · 희귀 장비',pri:1},{a:'path',l:'지름길을 묻는다',s:'30턴 정찰'},L];
     case 'nun': { const c=F*12; return [{a:'bless',l:'축복을 받는다',s:'정화 · 회복',pri:1},{a:'donate',l:'헌금한다',s:`마석 ${c} · 방벽+물약`,dis:st<c},L]; }
     case 'ogre': return [{a:'free',l:'자물쇠를 풀어 준다',s:'짝 맞추기',pri:1},{a:'kill',l:'묶여 있을 때 처치한다',s:'전투 · 적 HP 60%'},L];
     case 'skelk': return [{a:'duel',l:'도전한다',s:'강적 · 장비 2개',pri:1},{a:'bow',l:'예를 갖춘다',s:'무사 통과?'},L];
     case 'ghoul': return [{a:'help',l:'다가가 돕는다',s:'…정말 사람일까?',pri:1},{a:'stab',l:'먼저 검을 겨눈다',s:'전투'},L];
-    case 'knight': return [{a:'help',l:'돕는다',s:'정예 마물 · 최대 HP+희귀 장비',pri:1},{a:'info',l:'정보만 묻는다',s:'20턴 정찰'},L];
+    case 'knight': return [{a:'help',l:'돕는다',s:'정예 마물 · 최대 HP+희귀 장비',pri:1},{a:'train',l:'검술 훈련을 청한다',s:'HP 15% · 기술 강화'},L];
   }
   return [L];
 }
@@ -2842,16 +2846,16 @@ function mgEnd(ev,auto){ mgClear(); const m=ev.mg; if(!m||m.done||G.ev!==ev) ret
   if(m.g==='arm'){ if(m.pos>=50){ grantR([['perm','power',2],['st',8]]); out=`팔씨름 승리! "제법인데?" 투사가 웃으며 비결과 판돈을 건넨다.`; cls='gold'; }
     else { const v=npcHurt(15); out=`팔이 꺾였다. HP ${v} 피해. "다음에 또 붙자고!"`; cls='bad'; } }
   if(m.g==='simon'){ const c=m.clear;
-    if(c>=2){ p.hp=D(p).maxhp; for(const s of p.sk) s.cd=0; grantR([['perm','luck',5]]); out='두 번의 리듬을 모두 따라 했다! 정령들이 춤추며 축복한다. HP 완전 회복, 기술 대기 초기화.'; cls='gold'; }
-    else if(c===1){ grantR([['heal',50]]); out='첫 리듬은 따라 했지만 두 번째에서 엇나갔다. 온화한 정령이 상처를 어루만진다.'; }
+    if(c>=2){ out='두 번의 리듬을 모두 따라 했다! 정령이 기술에 깃든다. '+upSkill(1,{by:2}); cls='gold'; }
+    else if(c===1){ out='첫 리듬은 따라 했지만 두 번째에서 엇나갔다. 작은 정령 하나가 기술에 깃든다. '+upSkill(1); }
     else { ev.fight={id:'$elite',rw:[['eq',20,'rare']]}; out='리듬이 엇나가자 성난 정령이 마물에 깃들어 울부짖는다!'; cls='bad'; } }
   if(m.g==='rps'){ if(m.win>=2||m.win>m.lose){ grantR([['perm','power',2],['st',8]]); out=`주먹 내기 승리! (${m.win}승 ${m.lose}패) "제법인데?" 투사가 웃으며 비결과 판돈을 건넨다.`; cls='gold'; }
     else { const v=npcHurt(15); out=`주먹 내기 패배 (${m.win}승 ${m.lose}패). 벌칙으로 꿀밤을 맞았다. HP ${v} 피해.`; cls='bad'; } }
   if(m.g==='pairs'){ if(m.got.length>=6){ ev.loot=grantR([['eq',25,'rare'],['perm','power',2]]); out='찰칵, 찰칵, 찰칵! 자물쇠가 모두 풀렸다. 거한이 고개를 숙인다. "은혜는 갚는다."'; cls='gold'; }
     else { ev.fight={id:'npc_ogre',rw:[['st',20]]}; out='열쇠가 엉켜 자물쇠가 걸려 버렸다. 참다못한 거한이 사슬을 뜯어내며 광기에 휩싸였다!'; cls='bad'; } }
   if(m.g==='timing'){ const h=m.hits;
-    if(h>=3){ grantR([['perm','power',4]]); out='세 번 모두 완벽한 일섬! 노검객이 처음으로 웃었다.'; cls='gold'; }
-    else if(h===2){ grantR([['perm','power',3]]); out='두 번 제대로 베었다. "나쁘지 않군."'; }
+    if(h>=3){ out='세 번 모두 완벽한 일섬! 노검객이 처음으로 웃었다. '+upSkill(2); cls='gold'; }
+    else if(h===2){ out='두 번 제대로 베었다. "나쁘지 않군." '+upSkill(1); }
     else if(h===1){ grantR([['perm','power',1]]); out='한 번 겨우 맞혔다. "아직 멀었다."'; }
     else { p.st.push({id:'weak',v:30,dur:20}); out='한 번도 맞히지 못했다. 혹독한 꾸중에 기가 꺾였다. 20턴 동안 약화 30%.'; cls='bad'; } }
   log(out,cls); ev.stage='done'; ev.out=out; if(!auto) render(); }
@@ -2903,7 +2907,7 @@ function npcAct(choice){
     if(c==='tower'){ ev.fight={id:'$elite',rw:[['eq',30,'rare']]}; return done('【탑】 카드가 불타오르더니 그림자 속에서 마물이 걸어 나온다!','bad'); }
     if(c==='death'){ p.st.push({id:'vuln',v:40,dur:25}); return done('【죽음】 차가운 손이 어깨를 스쳤다. 25턴 동안 피해증가 +40%.','bad'); }
     if(c==='wheel'){ const n=gainStones(ri(12,25)*F); return done(`【수레바퀴】 카드 뒤에서 마석 ${n}개가 쏟아졌다.`,'gold'); }
-    if(c==='magus'){ ev.loot=[skillLoot(true)]; return done('【마법사】 카드에 새겨진 기술이 머릿속으로 흘러든다.','gold'); }
+    if(c==='magus'){ return done('【마법사】 카드의 문양이 손등에 새겨진다. '+upSkill(1,{by:2}),'gold'); }
     if(c==='moon'){ p.st.push({id:'blind',v:30,dur:25}); return done('【달】 시야가 흐려진다. 25턴 동안 실명 30%.','bad'); }
     if(c==='force'){ grantR([['perm','power',3]]); return done('【힘】 몸 깊은 곳에서 힘이 차오른다.','gold'); }
   }
@@ -2938,7 +2942,7 @@ function npcAct(choice){
     case 'ghoul:help': if(R()<.35) return withLoot('진짜 모험가였다! 고맙다며 가진 것을 나눠 준다.',[['pot',1],['st',12]]); { const v=npcHurt(15); log(`"크르르…!" 시체가 목덜미를 물어뜯었다! HP ${v} 피해.`,'bad'); } return npcFight('npc_ghoul',[['eq',10]]);
     case 'ghoul:stab': return npcFight('npc_ghoul',[['st',10]],{lv:0});
     case 'knight:help': return (log('여기사와 함께 습격자에게 달려들었다!','good'), npcFight('$elite',[['perm','maxhpPct',10],['eq',20,'rare']]));
-    case 'knight:info': addSt(p,p,{id:'scout',v:1,dur:20},true); return done('여기사가 이 근방의 지형을 알려 준다. 20턴 동안 정찰.');
+    case 'knight:train': { const v=npcHurt(15); return done(`여기사와 칼을 맞대며 몸을 풀었다. (HP ${v}) `+upSkill(1)); }
   }
 }
 function evAuto(ev){
@@ -2965,7 +2969,8 @@ function evAct(choice){
   let out='';
   const fight=(id)=>{ G.ev=null; startCombat(mkEnemy(id,monLevel()+1)); render(); };
   if(ev.t==='chest'){
-    const r=wpick([['stone',44],['potion',13],['eq',13],['contract',hasLeft?8:0],['boom',12],['mimic',10]]);
+    const r=wpick([['stone',38],['potion',12],['eq',12],['tome',12],['contract',hasLeft?8:0],['boom',12],['mimic',10]]);
+    if(r==='tome'){ out='상자 안에 손때 묻은 기술서가 있었다. '+upSkill(1); }
     if(r==='stone'){ const n=gainStones(ri(4,14)*G.floor); out=`상자 안에는 마석 ${n}개가 들어 있었다.`; log(out,'gold'); }
     if(r==='potion'){ p.potions=Math.min(5,p.potions+1); out='회복 물약을 발견했다.'; log(out,'good'); }
     if(r==='eq'){ G.ev=null; G.loot=[{kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,d.luck+15),rr:0}]; G.mode='loot'; log('상자 안에 장비가 있었다.','good'); return render(); }
@@ -2998,15 +3003,11 @@ function evAct(choice){
     if(r==='lurker'){ log('샘에서 거대한 괴물이 솟아올랐다!','bad'); return fight('lurker'); }
   }
   if(ev.t==='statue'){
-    const r=wpick([['hpb',25],['bar',20],['heal',30],['power',15],['none',10]]);
-    if(r==='hpb'){ p.perm.maxhpPct=(p.perm.maxhpPct||0)+20; out='누군가의 가호가 깃들었다. 최대 HP +20% (영구).'; log(out,'gold'); }
-    if(r==='bar'){ p.perm.barrier=(p.perm.barrier||0)+1; out='보이지 않는 방벽이 몸을 감싼다. 방벽 +1 (영구).'; log(out,'gold'); }
-    if(r==='heal'){ p.hp=d.maxhp; out='HP가 모두 회복되었다.'; log(out,'good'); }
-    if(r==='power'){ p.perm.power=(p.perm.power||0)+5; out='능력치가 5% 상승했다 (영구).'; log(out,'gold'); }
-    if(r==='none'){ out='아무 일도 일어나지 않았다.'; log(out,'mute'); }
+    if(choice==='blood'){ const v=Math.max(1,Math.round(d.maxhp*.2)); p.hp=Math.max(1,p.hp-v); hurtP=true; out=`손끝에 피를 묻히자 석상이 붉게 빛난다. (HP ${v}) `+upSkill(2); }
+    else { const r=R(); out=r<.15?'석상의 눈이 번쩍 뜨였다! '+upSkill(1,{by:2}):r<.3?'두 갈래의 기억이 동시에 깨어난다. '+upSkill(2):'오래된 기억 하나가 선명해진다. '+upSkill(1); }
   }
   if(ev.t==='traveler'){
-    if(choice==='skill'){ G.ev=null; G.loot=[skillLoot(true)]; G.mode='loot'; log('"이 기술을 가져가게."','good'); return render(); }
+    if(choice==='skill'){ out='"검 쥐는 법부터 다시 보세." 나그네의 지도를 받았다. '+upSkill(R()<.3?2:1); }
     if(choice==='forge'){ const slots=['weapon','armor','acc'].filter(s=>p.eq[s]&&p.eq[s].mods.some(m=>m.k!=='x')); if(!slots.length){ ev.stage='done'; ev.out='나그네는 손볼 장비가 없다며 고개를 저었다.'; log(ev.out,'mute'); return render(); } const s=pick(slots); const m=pick(p.eq[s].mods.filter(m=>m.k!=='x')); const old=m.v; if(m.k!=='barrier') m.v=Math.round(m.v*1.5)+1; else m.v+=1; out=`나그네가 ${p.eq[s].name}을(를) 손봤다. ${MODN[m.k]} ${old} → ${m.v}`; log(out,'gold'); }
     if(choice==='mutate'){ const s=pick(p.sk); const before=skillName(s); s.mut=rollMut(); out=`나그네가 손끝으로 기술을 비틀었다. [${before}] → [${skillName(s)}] — ${MUT[s.mut].d}`; log(out,'gold'); }
   }
@@ -3323,7 +3324,8 @@ function renderEvent(){
   if(ev.t==='npc') return renderNpcEv(ev,E,sc);
   if(ev.stage==='done') return `${sc}<div class="label">${E.title}</div><p class="story">${esc(ev.out||'')}</p>${menuHtml([{a:'data-ev="leave2"',l:'계속 나아간다',pri:1}])}${miniLog()}`;
   const hasEq=['weapon','armor','acc'].some(s=>G.p.eq[s]&&G.p.eq[s].mods.some(m=>m.k!=='x'));
-  const items=ev.t==='traveler'?[{a:'data-ev="skill"',l:'기술을 배운다',s:'희귀 기술 하나',pri:1},hasEq&&{a:'data-ev="forge"',l:'장비를 손봐 달라',s:'능력치 하나 ×1.5'},{a:'data-ev="mutate"',l:'기술에 변화를 준다',s:'무작위 접두어'},{a:'data-ev="leave"',l:'지나친다'}]
+  const items=ev.t==='traveler'?[{a:'data-ev="skill"',l:'기술을 단련받는다',s:'보유 기술 무작위 강화',pri:1},hasEq&&{a:'data-ev="forge"',l:'장비를 손봐 달라',s:'능력치 하나 ×1.5'},{a:'data-ev="mutate"',l:'기술에 변화를 준다',s:'무작위 접두어'},{a:'data-ev="leave"',l:'지나친다'}]
+    :ev.t==='statue'?[{a:'data-ev="go"',l:'기도한다',s:'보유 기술 무작위 강화',pri:1},{a:'data-ev="blood"',l:'피를 바친다',s:'HP 20% · 기술 2개 강화'},{a:'data-ev="leave"',l:'지나친다'}]
     :[{a:'data-ev="go"',l:E.act,pri:1},{a:'data-ev="leave"',l:'지나친다'}];
   return `${sc}<div class="label">${E.title}${D(G.p).trap&&(ev.t==='chest'||ev.t==='tomb')?' · 함정 회피':''}</div><p class="story">${E.text}</p>${menuHtml(items)}${miniLog()}`;
 }
