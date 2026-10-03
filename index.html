@@ -1995,6 +1995,7 @@ if(!META.vol||typeof META.vol!=='object'||META.volv!==3){ META.vol={bgm:.45,sfx:
 const saveMeta=()=>store(META_KEY,META);
 META.unlocked=META.unlocked.filter(k=>CLASSES[k]); if(!CLASSES[META.sel]) META.sel='warrior'; for(const k in META.equip) if(!CLASSES[k]) delete META.equip[k]; if(META.lastRun&&!CLASSES[META.lastRun.cls]) META.lastRun=null; for(const k in META.parts) if(k.startsWith('c_')&&!CLASSES[k.slice(2)]) delete META.parts[k];
 if(META.sclv!==2){ META.scale='auto'; META.sclv=2; }
+if(Array.isArray(META.graves)&&META.graves.length>10) META.graves=META.graves.slice(0,10);
 if((META.skin||'anime')==='anime') Object.assign(ILL,ILL_AN);
 let G=load(RUN_KEY);
 let pops=[], shakeE=false, hurtP=false, lvFlag=false, critFlag=false, toastT=null;
@@ -3124,7 +3125,7 @@ function die(cause){
   META.stones+=p.stones; META.best=Math.max(META.best,sc);
   runEnd(false);
   META.graves.unshift({cls:p.cls,lvl:p.lvl,floor:G.floor,score:sc,cause,stones:p.stones,ct:p.contract||null});
-  META.graves=META.graves.slice(0,12);
+  META.graves=META.graves.slice(0,10);
   saveMeta();
 }
 function clearRun(){
@@ -3138,7 +3139,7 @@ function clearRun(){
   META.stones+=p.stones+bonus; META.best=Math.max(META.best,sc);
   runEnd(true);
   META.graves.unshift({cls:p.cls,lvl:p.lvl,floor:G.floor,score:sc,cause:`${T.no} 답파`,stones:p.stones,ct:p.contract||null,clear:1});
-  META.graves=META.graves.slice(0,12);
+  META.graves=META.graves.slice(0,10);
   saveMeta();
 }
 function renderClear(){
