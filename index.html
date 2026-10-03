@@ -1400,7 +1400,12 @@ function actText(a){
   }
   return '';
 }
-const skText=d=>d.a.map(actText).join(' / ');
+function skText(d){ const at=d.a.filter(x=>x.k==='atk'), rest=d.a.filter(x=>x.k!=='atk'); if(!at.length) return d.a.map(actText).join(' / ');
+  const f=at[0], same=at.every(x=>x.p===f.p&&x.ac===f.ac&&(x.drain||0)===(f.drain||0)&&(x.crit||0)===(f.crit||0));
+  if(!same) return d.a.map(actText).join(' / ');
+  const hits=at.reduce((n,x)=>n+(x.hits||1),0), stats=[...new Set(at.map(x=>x.s?STN[x.s]:'공격력'))].join('·');
+  const multi=stats.includes('·'); const main=`${hits>1?hits+'연타 · ':''}위력 ${f.p}${hits>1?'씩':''} · ${multi?stats+' 각 1회':stats} · 명중 ${f.ac}${f.drain?' · 흡수':''}${f.crit?' · 치명 +'+f.crit:''}`;
+  return [main,...rest.map(actText)].join(' / '); }
 
 const CLASSES={
  warrior:{n:'전사',cost:0,col:['#b9a27a','#6e5a3d','#e8d070'],rate:'공3 방3 탐2',desc:'자신의 육체와 단련된 무구로 싸우는 전사.',
