@@ -1026,9 +1026,17 @@ html,body{height:100%}
 .lgo:active{transform:translateY(1px)}.lgo.dis{filter:grayscale(1) brightness(.6);cursor:default}
 .lob .mgrid{grid-template-columns:1fr!important;grid-auto-rows:max-content;align-content:start}.mgrid>.prow{min-height:0}.mgrid>.prow>.pti{align-self:center}
 .lmain.mod .mgrid{flex:1 1 0;max-height:none;min-height:220px}
-img.npcic{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 0 0 2px #e8c37a88,0 2px 6px #000}
+img.npcic{width:100%;height:100%;object-fit:cover;border-radius:6px;box-shadow:none}
+.npcbw{display:flex;justify-content:center;align-items:flex-end;width:100%;height:104px;margin-top:10px;overflow:hidden;pointer-events:none}.npcbw .npcbody{height:100%;width:auto;max-width:100%;object-fit:contain;object-position:50% 0;-webkit-mask-image:linear-gradient(#000 68%,transparent);mask-image:linear-gradient(#000 68%,transparent);filter:drop-shadow(0 4px 8px #000)}
 .scene img.actor.npc{aspect-ratio:auto;width:auto;height:86%;bottom:0;object-fit:contain;image-rendering:auto;-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent);filter:drop-shadow(0 0 10px #000a)}
 /* npc minigames */
+.dicew{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0 12px;flex-wrap:wrap}
+.die{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:10px;width:76px;height:76px;border-radius:14px;background:linear-gradient(145deg,#f7efd9,#d8c8a0);box-shadow:inset -3px -4px 0 #b8a478,0 6px 14px #000a}
+.die i{border-radius:50%}.die i.on{background:radial-gradient(circle at 35% 35%,#6a1a1a,#2a0808)}
+.die.sm{width:40px;height:40px;padding:5px;gap:2px;border-radius:8px;opacity:.6}
+.die.roll{animation:droll .65s cubic-bezier(.2,.8,.3,1)}@keyframes droll{0%{transform:translate(-60px,-30px) rotate(-540deg) scale(.6);opacity:0}60%{transform:translate(4px,6px) rotate(20deg) scale(1.08);opacity:1}100%{transform:none}}
+.dprev{display:flex;flex-direction:column;align-items:center;gap:2px}.dprev em{font-style:normal;font-size:12px;color:#ffd27a}
+.dstk{display:flex;flex-direction:column;gap:4px}.dstk b{font-size:11px;padding:2px 8px;border-radius:8px;border:1px solid #3a3f48;color:#7d776a}.dstk b.on{border-color:#c9953e;color:#ffe2a6;background:#2a2410}
 .runes{display:grid;grid-template-columns:repeat(2,84px);gap:12px;pointer-events:none;opacity:.85}.runes.on{pointer-events:auto;opacity:1}
 .rune{height:84px;border-radius:16px;border:3px solid #3a3f48;font-size:38px;cursor:pointer;background:#1a1c22;transition:transform .1s,box-shadow .1s,background .1s;touch-action:manipulation}
 .rune.r0{border-color:#a8442a}.rune.r1{border-color:#3a74a8}.rune.r2{border-color:#3a8a4a}.rune.r3{border-color:#b89a2a}
@@ -1128,6 +1136,19 @@ img.npcic{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0
 .cxb{position:relative;height:7px;border-radius:4px;background:#1d2026;overflow:visible}.cxb u{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7a5ab0,#c99cf0)}.cxb i{position:absolute;top:-2px;width:1px;height:11px;background:#fff6}
 .cxc{display:flex;gap:6px;flex-wrap:wrap;font-size:10.5px;color:#7d776a}.cxc .d{color:#8fd08a}
 .mstl{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mstl>div{display:grid;grid-template-columns:1fr auto;gap:3px;font-size:11.5px;padding:6px 8px;background:#14171b;border:1px solid #2a3036;border-radius:6px;cursor:help}.mstl .cxb{grid-column:1/-1;height:5px}.mstl span{color:#c99cf0}
+/* minimap A */
+.mapsheet.m2{display:flex;flex-direction:column;gap:4px}
+.m2prog{display:flex;align-items:center;margin:8px 2px 2px}.m2prog i{flex:1;height:3px;background:#2a2f36;min-width:4px}.m2prog b{width:10px;height:10px;border-radius:50%;background:#2a2f36;flex:0 0 10px}
+.m2prog b.on{background:#c9953e}.m2prog b.on+i{background:#c9953e}.m2prog b.cur{width:15px;height:15px;flex-basis:15px;background:#fff;box-shadow:0 0 0 3px #c9953e,0 0 10px #ffd27a}.m2prog b.bs{width:20px;height:20px;flex-basis:20px;background:#2a0e0e;border:2px solid #ff3b3b}.m2prog b.gap{background:none;width:auto;color:#6a707a;font-size:11px}
+.m2plab{display:flex;justify-content:space-between;font-size:10.5px;color:#9a927f}.m2plab b{color:#ffd27a}
+.m2sec{font-size:10.5px;color:#9a927f;letter-spacing:1px;margin:10px 0 4px}
+.m2fork{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px}
+.m2fc{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px;border:1px solid #2c3138;border-top:3px solid var(--c);border-radius:10px;background:#14171c;text-align:center}
+.m2fc .mi{width:58px!important;height:58px!important;display:flex;align-items:center;justify-content:center}.m2fc .mi img,.m2fc .mi canvas{width:100%!important;height:100%!important;object-fit:contain}
+.m2fc b{font-size:12.5px}.m2fc>span{font-size:10.5px;color:#9a927f}
+.m2then{display:flex;gap:5px;margin-top:2px}.m2then i{width:16px;height:16px;border-radius:50%;border:1.5px dashed var(--c);font-style:normal;font-size:9px;color:#6a707a;display:flex;align-items:center;justify-content:center}
+.m2boss{display:flex;gap:10px;align-items:center;padding:8px;border:1px solid #5a1f1f;border-radius:10px;background:linear-gradient(90deg,#2a0e0e,#14171c)}.m2boss .mi{width:52px!important;height:52px!important}.m2boss .mi img,.m2boss .mi canvas{width:100%!important;height:100%!important;object-fit:contain}.m2boss b{color:#ff8a7a;font-size:13px}.m2boss small{display:block;color:#9a927f;font-size:10.5px}
+.m2hist{display:flex;flex-wrap:wrap;gap:5px}.m2h{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:#9a927f;padding:2px 7px;border-radius:8px;background:#14171c;border:1px solid #2c3138}.m2h i{width:7px;height:7px;border-radius:50%;background:var(--c)}.m2h.cur{color:#ffe2a6;border-color:#c9953e}
 /* event fx */
 .scene .actor.charge{animation:chg .85s ease-in forwards}.scene .actor.ch-chest{animation:chshake .85s linear}
 @keyframes chg{0%{filter:brightness(1)}60%{filter:brightness(1.6) drop-shadow(0 0 18px #ffe2a6)}100%{filter:brightness(2.2) drop-shadow(0 0 30px #fff)}}
@@ -2812,13 +2833,14 @@ const NPCV=[
  {title:'쥐 행상',text:'등에 물약병을 주렁주렁 매단 쥐 행상이 수염을 씰룩인다. "찍찍, 어서 오시게! 기술이든 장비든 다 봐 드리지."'},
  {title:'두건의 방랑자',text:'두건을 깊게 눌러쓴 방랑자가 벽에 기대 칼날을 닦고 있다. "…길이 험해 보이는군. 무얼 원하지?"'}];
 const npcOf=ev=>Object.assign({},EVT.traveler,NPCV[(ev&&ev.v|0)%NPCV.length]);
+function npcBodyKey(n){ const k=n.t==='npc'?'npc_'+n.k:n.t==='traveler'?'o_traveler'+((n.v|0)%NPCV.length):n.t==='rest'&&ILL['oi_rest']?'o_rest':''; return k&&ILL[k]?k:''; }
 function objArt(n,cls){ const k=n.t==='traveler'?'traveler'+((n.v|0)%NPCV.length):n.t==='npc'?'npc_'+n.k:n.t;
   if(ILL['oi_'+k]) return `<img class="ill-s npcic ${cls||''}" src="${ILL['oi_'+k]}" alt="" draggable="false">`;
   return artC('obj:'+(n.t==='npc'?'traveler':n.t),cls); }
 // ================= NPC 이벤트 =================
 const NPCE={
  dealer:{n:'가면의 딜러',tw:['vault','abyss'],g:'roulette',text:'검은 드레스의 여인이 은빛 원판을 손끝으로 굴린다. "운을 시험해 보시겠어요? 판돈은 마석이랍니다."'},
- cupboy:{n:'컵 도박꾼 소년',tw:['crypt','abyss'],g:'cups',text:'뾰족귀 소년이 엎어 둔 컵 세 개를 톡톡 두드린다. "구슬 하나, 컵 셋! 맞히면 세 배야. 한 판 어때?"'},
+ cupboy:{n:'주사위꾼 소년',tw:['crypt','abyss'],g:'dice',text:'뾰족귀 소년이 뼈 주사위를 손안에서 달그락거린다. "다음 눈이 높을까, 낮을까? 연달아 맞히면 판돈이 불어나!"'},
  seer:{n:'백발의 점술가',tw:['spire','abyss'],g:'cards',text:'창백한 엘프가 카드 세 장을 엎어 늘어놓는다. "운명은 한 장만 고를 수 있어요. 무엇이 나와도 받아들이세요."'},
  brawler:{n:'맨주먹 투사',text:'근육질의 은발 청년이 주먹을 우두둑 꺾는다. "심심하던 참이야. 한 판 붙자!"'},
  oldsword:{n:'은퇴한 검성',tw:['crypt','spire','abyss'],text:'백발의 노검객이 검집에 기대어 서 있다. "검 쥔 손이 떨리는군. 가르쳐 줄까, 시험해 볼까?"'},
@@ -2843,7 +2865,7 @@ function npcChoices(ev){
   const L={a:'leave',l:'지나친다'};
   switch(k){
     case 'dealer': { const b1=Math.max(10,Math.round(st*.25)), b2=Math.max(10,Math.round(st*.5)), sb=slotBet(); return [{a:'slot',l:'슬롯머신을 돌린다',s:`마석 ${sb} · 직접 멈춤`,dis:st<sb,pri:1},{a:'bet:25',l:'룰렛 — 조금 건다',s:`마석 ${b1}`,dis:st<b1},{a:'bet:50',l:'룰렛 — 크게 건다',s:`마석 ${b2}`,dis:st<b2},L]; }
-    case 'cupboy': { const b=npcBet(ev); return [{a:'play',l:'한 판 한다',s:`판돈 마석 ${b} · 맞히면 ×3`,dis:st<b,pri:1},{a:'grab',l:'속임수를 추궁한다',s:'전투'},L]; }
+    case 'cupboy': { const b=npcBet(ev); return [{a:'play',l:'주사위 내기',s:`판돈 마석 ${b} · 3연속 적중 ×4.5`,dis:st<b,pri:1},{a:'grab',l:'속임수를 추궁한다',s:'전투'},L]; }
     case 'seer': return [{a:'draw',l:'카드를 고른다',s:'무작위 운명',pri:1},L];
     case 'brawler': return [{a:'duel',l:'결투를 받아들인다',s:'전투 · 마석+능력치',pri:1},{a:'arm',l:'주먹 내기만 하자',s:'가위바위보 3판'},L];
     case 'oldsword': return [{a:'learn',l:'가르침을 청한다',s:'HP 20% · 치명타 수련',pri:1},{a:'test',l:'시험 결투',s:'강적 · 희귀 기술+장비'},L];
@@ -2889,6 +2911,7 @@ function npcFight(id,rw,o={}){
 // ---- 실시간 미니게임 (슬롯·연타·타이밍)
 const SLOTS=['💎','⭐','🔔','🍒','🎁','💀'], SLOT_P=[96,82,110];
 const SLOT_ORD=[[0,3,1,5,2,4],[2,0,4,3,5,1],[1,4,3,0,5,2]];
+const DICEM=[0,1.6,2.6,4.5];
 function slotBet(){ return Math.max(15,G.floor*15); }
 const MG={drum:{ms:5000},arm:{ms:8000},chain:{ms:4000},timing:{tries:3}};
 let mgTimer=null, mgTick=null;
@@ -2998,7 +3021,13 @@ function npcAct(choice){
     else { const win=Math.round(amt*W.m); p.stones+=win; ev.out=W.m===0?`꽝! 마석 ${amt}을(를) 잃었다.`:W.m<1?`${W.l} — 마석 ${win}만 돌려받았다.`:`${W.l} 당첨! 마석 ${win}을(를) 받았다. (+${win-amt})`; log(ev.out,W.m>=1?'gold':'bad'); }
     SND.sfx('gold'); return render();
   }
-  if(k==='cupboy'&&choice==='play'){ const b=npcBet(ev); if(p.stones<b) return; p.stones-=b; ev.bet=b; ev.ball=Math.floor(R()*3); ev.stage='cups'; return render(); }
+  if(k==='cupboy'&&choice==='play'){ const b=npcBet(ev); if(p.stones<b) return; p.stones-=b; ev.bet=b; ev.dice={cur:ri(2,5),st:0,last:null,roll:Date.now()}; ev.stage='dice'; return render(); }
+  if(k==='cupboy'&&(choice==='hi'||choice==='lo')){ const D0=ev.dice; let r=ri(1,6); if(r===D0.cur) r=ri(1,6); const ok=r===D0.cur?null:(choice==='hi'?r>D0.cur:r<D0.cur); D0.last=D0.cur; D0.cur=r; D0.roll=Date.now(); D0.pick=choice; SND.sfx('hit');
+    if(ok===null){ D0.msg=`${r} — 같은 눈! 무효, 다시 고른다.`; return render(); }
+    if(!ok){ D0.msg=null; return done(`${D0.last} → ${r}. 빗나갔다! 마석 ${ev.bet}을(를) 잃었다.`,'bad'); }
+    D0.st++; if(D0.st>=3){ const w=Math.round(ev.bet*DICEM[3]); p.stones+=w; grantR([['pot',1]]); return done(`${D0.last} → ${r}. 3연속 적중! 마석 ${w} (×${DICEM[3]})과 물약을 받았다.`,'gold'); }
+    D0.msg=`${D0.last} → ${r}. 적중! (${D0.st}연속 · 지금 그만두면 ×${DICEM[D0.st]})`; return render(); }
+  if(k==='cupboy'&&choice==='cash'){ const D0=ev.dice, w=Math.round(ev.bet*DICEM[D0.st]); p.stones+=w; return done(`${D0.st}연속에서 멈췄다. 마석 ${w}을(를) 받았다. (×${DICEM[D0.st]})`,'gold'); }
   if(k==='cupboy'&&choice.startsWith('cup:')){ const i=+choice.slice(4); ev.pick=i;
     if(i===ev.ball){ p.stones+=ev.bet*3; return done(`구슬이 나왔다! 마석 ${ev.bet*3}을(를) 받았다.`,'gold'); }
     if(R()<.25){ ev.fight={id:'npc_cupboy',rw:[['raw',ev.bet*2],['pot',1]]}; return done('빈 컵… 그런데 소년의 소매에서 구슬이 굴러떨어졌다! "쳇, 들켰네!"','bad'); }
@@ -3053,6 +3082,7 @@ function evAuto(ev){
   if(ev.stage==='spin'){ ev.stage='done'; }
   if(ev.stage==='done') return ev.fight?'fightgo':ev.loot?'lootgo':'leave2';
   if(ev.stage==='cups') return 'cup:'+Math.floor(Math.random()*3);
+  if(ev.stage==='dice') return ev.dice.st>=1&&Math.random()<.5?'cash':(ev.dice.cur<=3?'hi':'lo');
   if(ev.stage==='mg') return 'mgauto';
   if(ev.stage==='slot') return 'sauto';
   if(ev.stage==='cards') return 'card:'+Math.floor(Math.random()*3);
@@ -3273,6 +3303,7 @@ function tileHtml(n,size,i,vis){
   if(n.t==='boss'){ const b=BOSS[n.m]; icon=`<span style="width:${S?52:30}px;height:${S?52:30}px;display:block">${artC(monSpec(n.m,true),'',monPal(n.m)).replace(/^<(canvas|img)/,'<$1 style="width:100%;height:100%"')}</span>`; label=S?b.n:'층의 주인'; }
   else if(!vis||hiddenT){ icon='<span class="q">?</span>'; label=hiddenT?'닫힌 문':'보이지 않는다'; }
   else if(n.t==='mon'){ const m=MON[n.m]; const dk=fxv&&n.fx==='dark'||ctIs('catcoin'); icon=dk?'<span class="q">?</span>':`<span style="width:${S?50:28}px;height:${S?50:28}px;display:block">${artC(monSpec(n.m),'',monPal(n.m)).replace(/^<(canvas|img)/,'<$1 style="width:100%;height:100%"')}</span>`; label=dk?'어둠 속의 기척':(n.elite?'정예 ':'')+m.n; }
+  else if(S&&npcBodyKey(n)){ icon=`<span class="npcbw"><img class="ill-s npcbody" src="${ILL[npcBodyKey(n)]}" alt="" draggable="false"></span>`; label=n.t==='npc'&&NPCE[n.k]?NPCE[n.k].n:n.t==='traveler'?NPCV[(n.v|0)%NPCV.length].title:RTYPE[n.t]; }
   else { icon=ILL['o_'+n.t]||ILL['oi_'+n.t]||n.t==='npc'?`<span style="width:${S?54:30}px;height:${S?54:30}px;display:block">${objArt(n).replace(/^<(canvas|img)/,'<$1 style="width:100%;height:100%"')}</span>`:`<canvas class="px" data-spr="${n.t}" style="width:${S?34:20}px;height:${S?34:20}px"></canvas>`; label=n.t==='npc'&&NPCE[n.k]?NPCE[n.k].n:RTYPE[n.t]; }
   const tb=vis&&!hiddenT?(n.t==='mon'||n.t==='boss'?'<span class="tbd m">적</span>':EVT_T.has(n.t)?'<span class="tbd e">!</span>':''):'';
   const tag=fxv&&(vis||S)?`<span class="fx" data-tip="${fxTip(n.fx)}">${FX[n.fx].n}</span>`:'';
@@ -3304,27 +3335,29 @@ function mLabel(n,vis){
   if(n.fx&&!kings()&&n.fx==='door') return '닫힌 문';
   if(n.t==='mon'){ const dk=n.fx&&!kings()&&n.fx==='dark'||ctIs('catcoin'); return dk?'어둠 속의 기척':(n.elite?'정예 ':'')+MON[n.m].n; }
   if(n.t==='boss') return BOSS[n.m].n;
+  if(n.t==='npc'&&NPCE[n.k]) return NPCE[n.k].n;
+  if(n.t==='traveler') return NPCV[(n.v|0)%NPCV.length].title;
   return RTYPE[n.t];
 }
 function mNode(n,vis,extra){ const col=(vis&&n&&!(n.fx==='door'&&!kings())&&TCOL[n.t])||'#3a3e46'; return `<div class="mn ${n&&n.elite?'elite':''} ${extra||''}" style="--c:${col}">${mIcon(n,vis)}<span class="ml">${esc(mLabel(n,vis))}</span></div>`; }
 function mapHtml(){
   if(!UI.mapOpen||!G||G.mode==='dead'||G.mode==='clear') return '';
-  const T=TW(), scout=has(G.p,'scout')||D(G.p).scout, atBoss=G.choices.length===1&&G.choices[0].t==='boss';
-  const dist=atBoss?1:G.steps+1, bossN=bossNode();
-  const fog=Math.max(0,G.steps-(scout?2:2));
+  const T=TW(), scout=has(G.p,'scout')||D(G.p).scout, atBoss=G.choices.length===1&&G.choices[0].t==='boss', fog=ctIs('thorns');
+  const dist=atBoss?1:G.steps+1;
   const path=G.floorPath&&G.floorPath.length===G.floorLog.length?G.floorPath:G.floorLog.map(c=>({c,t:null}));
-  let rows='';
-  rows+=`<div class="mrow top"><div class="mn boss"><span class="mi big">${artC('mon:'+G.bossId)}</span><span class="ml"><b>층의 주인</b> ${scout||dist<=2?esc(BOSS[G.bossId].n):'???'}</span></div><span class="mdist">${dist===1?'바로 앞':`${dist}방 뒤`}</span></div>`;
-  if(!atBoss){
-    if(fog>0) rows+=`<div class="mfog"><span>${'<i></i>'.repeat(Math.min(fog,6))}</span><em>안개 · ${fog}방</em></div>`;
-    if(G.steps>=2) rows+=`<div class="mrow"><div class="mlane four">${G.choices.map(n=>(n.kids||[]).map(k=>mNode(k,scout,'sm')).join('')).join('')}</div><span class="mdist">2방</span></div>`;
-    rows+=`<div class="mrow"><div class="mlane two">${G.choices.map(n=>mNode(n,true)).join('')}</div><span class="mdist">다음</span></div>`;
-  }
-  const cur=G.room?`<div class="mrow"><div class="mn cur" style="--c:${(TCOL[G.room.t]||'#5b6167')}">${mIcon(G.room,true)}<span class="ml"><b>현재 위치</b> ${esc(mLabel(G.room,true))}</span></div></div>`:'';
-  const past=path.slice(0,-1).reverse().map(x=>`<div class="mpast" style="--c:${(TCOL[x.t]||'#5b6167')}"><i></i>${x.t?esc(x.t==='mon'&&x.m&&MON[x.m]?(x.e?'정예 ':'')+MON[x.m].n:RTYPE[x.t]||''):''}</div>`).join('');
-  rows+=cur+(past?`<div class="mpastcol">${past}</div>`:'')+`<div class="mrow"><div class="mn start"><span class="mi q">▲</span><span class="ml">계단 · 층 입구</span></div></div>`;
-  return `<div class="mapwrap" data-act="mapclose"><div class="mapsheet pxf panel-f"><div class="mhead"><span><b>지하 ${G.floor}층</b>${T.floors?`<small>/${T.floors}</small>`:''} · ${T.no} ${T.n}</span><button class="pxf btn-f mx" data-act="mapclose">✕</button></div>
-    <div class="msum">층 보스까지 <b>${dist}방</b>${atBoss?'':` · 지나온 방 ${path.length}`}</div><div class="mcol">${rows}</div></div></div>`;
+  const done=Math.max(0,path.length-(G.room?1:0)), fut=Math.max(0,dist-1);
+  let dots=[]; for(let k=0;k<done;k++) dots.push('<b class="on"></b>'); if(G.room) dots.push('<b class="cur"></b>'); for(let k=0;k<fut;k++) dots.push('<b></b>'); dots.push('<b class="bs"></b>');
+  if(dots.length>16){ const keep=dots.slice(-12); dots=[dots[0],'<b class="gap">…</b>',...keep]; }
+  const bar=`<div class="m2prog">${dots.join('<i></i>')}</div><div class="m2plab"><span>입구</span><span>보스까지 <b>${dist}방</b></span><span>층의 주인</span></div>`;
+  const typ=n=>!n?'':n.t==='mon'?(n.elite?'정예 마물':'마물'):n.t==='npc'?'낯선 자':n.t==='boss'?'층의 주인':n.t==='empty'?'빈 방':'이벤트';
+  const card=n=>{ const v=!fog; const col=(v&&TCOL[n.t])||'#4a505a'; const kids=(n.kids||[]).map(k=>`<i style="--c:${(scout&&!fog&&TCOL[k.t])||'#4a505a'}" title="${scout&&!fog?esc(mLabel(k,true)):'?'}">${scout&&!fog?'':'?'}</i>`).join('');
+    return `<div class="m2fc" style="--c:${col}">${mIcon(n,v)}<b>${esc(mLabel(n,v))}</b><span>${v?typ(n):'미확인'}</span>${G.steps>=2&&kids?`<div class="m2then">${kids}</div>`:''}</div>`; };
+  const fork=atBoss?'':`<div class="m2sec">다음 갈림길 — 하나를 고른다</div><div class="m2fork">${G.choices.map(card).join('')}</div>`;
+  const boss=`<div class="m2sec">층의 주인</div><div class="m2boss"><span class="mi">${artC('mon:'+G.bossId)}</span><div><b>${scout||dist<=2?esc(BOSS[G.bossId].n):'???'}</b><small>${dist===1?'바로 앞':`${dist}방 뒤`}${gimOn({boss:1,id:G.bossId})&&(scout||dist<=2)?' · '+BGIM[G.bossId].n:' · 정체는 가까이 가면 드러난다'}</small></div></div>`;
+  const past=path.slice(0,G.room?-1:undefined).map(x=>`<span class="m2h" style="--c:${(TCOL[x.t]||'#5b6167')}"><i></i>${x.t?esc(x.t==='mon'&&x.m&&MON[x.m]?MON[x.m].n:RTYPE[x.t]||''):'…'}</span>`).join('');
+  const cur=G.room?`<span class="m2h cur" style="--c:${TCOL[G.room.t]||'#5b6167'}"><i></i>${esc(mLabel(G.room,true))} (현재)</span>`:'';
+  return `<div class="mapwrap" data-act="mapclose"><div class="mapsheet m2 pxf panel-f"><div class="mhead"><span><b>지하 ${G.floor}층</b>${T.floors?`<small>/${T.floors}</small>`:''} · ${T.n}</span><button class="pxf btn-f mx" data-act="mapclose">✕</button></div>
+    ${bar}${fork}${boss}<div class="m2sec">지나온 방</div><div class="m2hist">${past}${cur}${!past&&!cur?'<span class="m2h">아직 없음</span>':''}</div></div></div>`;
 }
 
 // ================= rendering: game =================
@@ -3383,6 +3416,10 @@ function wheelHtml(ev,anim){
   const to=ev.spin?ev.spin.rot:0;
   return `<div class="wheelw"><i class="wptr">▼</i><div class="wheel ${anim?'go':''}" style="--to:${to}deg;background:conic-gradient(${bg});${anim?'':`transform:rotate(${to}deg)`}">${lab}<b class="whub"></b></div></div>`;
 }
+const PIPS={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
+function dieFace(n,cls){ return `<span class="die ${cls||''}">${[1,2,3,4,5,6,7,8,9].map(i=>`<i class="${PIPS[n].includes(i)?'on':''}"></i>`).join('')}</span>`; }
+function diceHtml(ev,fin){ const D0=ev.dice, fresh=Date.now()-(D0.roll||0)<300;
+  return `<div class="dicew">${D0.last?`<div class="dprev">${dieFace(D0.last,'sm')}<em>${D0.pick==='hi'?'▲':'▼'}</em></div>`:''}${dieFace(D0.cur,fresh?'roll':'')}<div class="dstk">${[1,2,3].map(i=>`<b class="${D0.st>=i?'on':''}">×${DICEM[i]}</b>`).join('')}</div></div>`; }
 function cupsHtml(ev,reveal){
   return `<div class="cups ${reveal?'rv':'mix'}">${[0,1,2].map(i=>{ const up=reveal&&(i===ev.pick||i===ev.ball); return `<button class="cupb c${i} ${up?'up':''} ${reveal&&i===ev.pick?'me':''}" ${reveal?'disabled':`data-ev="cup:${i}"`}><i class="cupi"></i>${reveal&&i===ev.ball?'<b class="ball"></b>':''}</button>`; }).join('')}</div>`;
 }
@@ -3416,10 +3453,11 @@ function renderNpcEv(ev,E,sc){
   }
   if(ev.stage==='slot') return `${head}<p class="story">릴이 돌아간다! [멈춤]으로 하나씩 세우자. (판돈 ${ev.bet})</p>${slotHtml(ev)}${menuHtml([{a:'data-ev="sstop"',l:`멈춤 (${ev.sl.stop.length+1}/3)`,pri:1}])}${miniLog()}`;
   if(ev.stage==='mg') return `${head}${mgHtml(ev)}${miniLog()}`;
+  if(ev.stage==='dice'){ const D0=ev.dice; return `${head}<p class="story">${D0.msg?esc(D0.msg):'첫 눈이 굴러 나왔다. 다음 눈은 높을까, 낮을까?'}</p>${diceHtml(ev)}${menuHtml([{a:'data-ev="hi"',l:'높다 ▲',s:`${6-D0.cur}/5 확률`,pri:D0.cur<=3},{a:'data-ev="lo"',l:'낮다 ▼',s:`${D0.cur-1}/5 확률`,pri:D0.cur>3},...(D0.st>=1?[{a:'data-ev="cash"',l:'그만두고 받는다',s:`마석 ${Math.round(ev.bet*DICEM[D0.st])}`}]:[])])}${miniLog()}`; }
   if(ev.stage==='cups') return `${head}<p class="story">소년이 컵을 눈부시게 섞는다. 구슬은 어디에?</p>${cupsHtml(ev,false)}${miniLog()}`;
   if(ev.stage==='cards') return `${head}<p class="story">카드 세 장. 한 장을 고르세요.</p>${cardsHtml(ev,false)}${miniLog()}`;
   if(ev.stage==='done'){
-    const game=ev.sl&&ev.sl.stop.length===3&&ev.k==='dealer'&&!ev.spinLast?slotHtml(ev):ev.mg&&ev.mg.done?mgResHtml(ev):ev.spin&&ev.k==='dealer'?wheelHtml(ev,false):ev.ball!=null&&ev.pick!=null&&ev.k==='cupboy'?cupsHtml(ev,true):ev.cards&&ev.pick!=null?cardsHtml(ev,true):'';
+    const game=ev.sl&&ev.sl.stop.length===3&&ev.k==='dealer'&&!ev.spinLast?slotHtml(ev):ev.mg&&ev.mg.done?mgResHtml(ev):ev.spin&&ev.k==='dealer'?wheelHtml(ev,false):ev.dice&&ev.k==='cupboy'?diceHtml(ev,true):ev.ball!=null&&ev.pick!=null&&ev.k==='cupboy'?cupsHtml(ev,true):ev.cards&&ev.pick!=null?cardsHtml(ev,true):'';
     const items=ev.fight?[{a:'data-ev="fightgo"',l:'맞서 싸운다',s:'전투',pri:1}]:ev.loot?[{a:'data-ev="lootgo"',l:'보상을 확인한다',pri:1}]:[];
     if(!ev.fight&&!ev.loot&&ev.k==='dealer'&&(ev.n||0)<3) for(const c of npcChoices(ev)) if(c.a!=='leave') items.push({a:`data-ev="${c.a}"`,l:'한 번 더 — '+c.l,s:c.s,dis:c.dis});
     if(!ev.fight&&!ev.loot) items.push({a:'data-ev="leave2"',l:'계속 나아간다',pri:!items.length});
