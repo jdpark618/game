@@ -1308,6 +1308,7 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
 .hfig.spx{width:auto!important;max-width:92%;height:auto!important;max-height:92%;aspect-ratio:340/380;border:2px solid #b88cff;border-radius:46% 46% 8px 8px/30% 30% 8px 8px;box-shadow:0 0 26px #b88cff66;filter:none}
 :root{--gem:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='a' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23c8fff2'/><stop offset='.55' stop-color='%233fd8b4'/><stop offset='1' stop-color='%23128a72'/></linearGradient></defs><path d='M8 4h16l6 8-14 17L2 12z' fill='url%28%23a%29' stroke='%2306362c' stroke-width='1.6' stroke-linejoin='round'/><path d='M2 12h28M8 4l4 8 4-8 4 8 4-8M12 12l4 17 4-17' fill='none' stroke='%2306362c' stroke-opacity='.5' stroke-width='1'/><path d='M9.5 5.5h4.5l-2.3 5z' fill='%23fff' fill-opacity='.75'/><path d='M20 13l-3 11' stroke='%23fff' stroke-opacity='.35' stroke-width='1.2'/></svg>")}.stone.num::before{background:var(--gem) center/contain no-repeat!important;-webkit-mask:none!important;mask:none!important;width:1.05em!important;height:1.05em!important;vertical-align:-.17em!important;filter:drop-shadow(0 1px 0 #000)}.gg.x-gems{background:var(--gem) center/contain no-repeat!important;-webkit-mask:none!important;mask:none!important}
 .pgacha .ml,.pgacha .ms{white-space:nowrap}.pgacha .ms{font-size:11px}
+.rosw{max-height:min(46vh,330px);min-height:min(36vh,220px);flex-shrink:0;overflow-y:auto;padding:2px;scrollbar-width:thin;border:2px solid #23282e;background:#0b0d10}.rosw .roster{max-height:none!important;overflow:visible!important;border:0!important;background:none!important;padding:0!important}.rosw .spg{margin:10px 2px 6px}
 </style>
 <div id="boot"><div class="bt-in"><div class="bt-t">언더크립트</div><div class="bt-s">무덤 아래로 내려가는 중…</div><div class="bt-bar"><i id="btbar"></i></div><div class="bt-p" id="btp">0%</div><div class="bt-tip" id="bttip"></div></div></div>
 <style>#boot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1c1712,#07080a 70%);color:#e9e2cf;font-family:'Gowun Batang',serif;transition:opacity .45s}
@@ -4116,7 +4117,7 @@ function renderPrep(){
   const main=un?`<button class="mbtn pxf btn-on-f go" data-tab="battle"><span class="cur">▸</span><span class="ml">이 직업으로 전투 준비</span><span class="ms">${c.n}</span></button>`
     :!reqMet(sel)?`<button class="mbtn pxf btn-f go" disabled><span class="cur">▸</span><span class="ml">해금 조건: ${reqTx(sel)}</span><span class="ms">${c.grp?'업적 달성 시 해금':'달성 후 마석 '+c.cost}</span></button>`:`<button class="mbtn pxf btn-on-f go" data-act="unlock" ${META.stones<c.cost?'disabled':''}><span class="cur">▸</span><span class="ml">${c.n}을(를) 깨운다</span><span class="ms">마석 <span class="stone num">${c.cost}</span> / 보유 ${META.stones}</span></button>`;
   const nK=Object.keys(CLASSES).filter(k=>!CLASSES[k].grp), sK=Object.keys(CLASSES).filter(k=>CLASSES[k].grp);
-  return `${show}<div class="label rlab">직업 ${nK.filter(k=>META.unlocked.includes(k)).length}/${nK.length} · 눌러서 정보 보기</div><div class="roster">${roster}</div><div class="spg"><b>✦ 특수 · 이방인</b><span>${sK.filter(k=>META.unlocked.includes(k)).length}/${sK.length}</span><i></i></div><div class="roster sroster">${sroster}</div>
+  return `${show}<div class="label rlab">직업 ${nK.filter(k=>META.unlocked.includes(k)).length}/${nK.length} · 눌러서 정보 보기</div><div class="rosw"><div class="roster">${roster}</div><div class="spg"><b>✦ 특수 · 이방인</b><span>${sK.filter(k=>META.unlocked.includes(k)).length}/${sK.length}</span><i></i></div><div class="roster sroster">${sroster}</div></div>
    ${un?`<div class="partsline"><span class="k">개조</span>${partsTxt}<button class="iconbtn" data-tab="mod">바꾸기</button></div>
 `:''}
    ${main}`;
@@ -4277,7 +4278,7 @@ function tutHtml(){ if(!G||G.tower!=='crypt') return ''; const m=G.mode, T=TUT[m
 function render(){ applyScale();
   if(G&&G.mode==='loot'&&META.autoEq&&G.p.cls!=='mimic'){ const o=G.loot[0]; if(o&&o.kind==='eq'&&!o.seen&&eqVerdict(o.item)===1){ o.seen=1; toast('더 좋은 장비 — 자동 장착'); return equip(); } }
   hideTip(); SND.setMood(sndMood());
-  if(!G){ { const mg=document.querySelector('.mgrid'); if(mg&&UI.mgTop!==0) UI.mgTop=mg.scrollTop; } renderHall(); paintSprites(app); renderSheet(); { const rb=document.querySelector('.roster'); if(rb&&UI.rosterTop) rb.scrollTop=UI.rosterTop; const gb=document.querySelector('.plist'); if(gb&&UI.petTop) gb.scrollTop=UI.petTop; const mg=document.querySelector('.mgrid'); if(mg){ mg.scrollTop=UI.mgTop||0; UI.mgTop=mg.scrollTop; } } return; }
+  if(!G){ { const mg=document.querySelector('.mgrid'); if(mg&&UI.mgTop!==0) UI.mgTop=mg.scrollTop; } renderHall(); paintSprites(app); renderSheet(); { const rb=document.querySelector('.rosw'); if(rb&&UI.rosterTop) rb.scrollTop=UI.rosterTop; const gb=document.querySelector('.plist'); if(gb&&UI.petTop) gb.scrollTop=UI.petTop; const mg=document.querySelector('.mgrid'); if(mg){ mg.scrollTop=UI.mgTop||0; UI.mgTop=mg.scrollTop; } } return; }
   renderGame(); { const th=tutHtml(); if(th&&app.insertAdjacentHTML) app.insertAdjacentHTML('beforeend',th); } paintSprites(app);
   const lb=document.getElementById('logBox'); if(lb) lb.scrollTop=lb.scrollHeight;
   flushPops(); settleBars(); renderSheet();
@@ -4431,7 +4432,7 @@ document.addEventListener('click',ev=>{
   if(t.dataset.loot){ const v=t.dataset.loot; if(v==='equip') return equip(); if(v==='skip'){ log('두고 떠났다.','mute'); return finishLoot(); } if(v==='reroll') return reroll(); if(v==='learn'){ const s=+t.dataset.slot; return takeSkill(s<0?null:s); } }
   if(t.dataset.part) return takePart(t.dataset.part);
   if(t.dataset.draft!=null) return pickDraft(t.dataset.draft||null);
-  if(t.dataset.cls){ const rb=document.querySelector('.roster'); UI.rosterTop=rb?rb.scrollTop:0; META.sel=t.dataset.cls; saveMeta(); return render(); }
+  if(t.dataset.cls){ const rb=document.querySelector('.rosw'); UI.rosterTop=rb?rb.scrollTop:0; META.sel=t.dataset.cls; saveMeta(); return render(); }
   if(t.dataset.tab){ META.tab=t.dataset.tab; if(t.dataset.tab==='mod') UI.modCls=META.unlocked.includes(META.sel)?META.sel:'warrior'; saveMeta(); return render(); }
   if(t.dataset.ct!=null){ META.contract=t.dataset.ct||null; saveMeta(); return render(); }
   if(t.dataset.modcls){ META.sel=t.dataset.modcls; UI.modPick=false; UI.mgTop=0; saveMeta(); return render(); }
