@@ -1716,34 +1716,34 @@ function ach(k,n){ if(typeof META==='undefined'||!META) return; META.ach=META.ac
 for(const k of ['secretary','okami','veil','ceo','nurse','mummy','madame','empress','cheer','attendant']) if(ILL['h_'+k]&&!ILL['hp_'+k]) ILL['hp_'+k]=ILL['h_'+k];
 const SPCL=['secretary','okami','veil','ceo','nurse','mummy','madame','empress','cheer','attendant'];
 Object.assign(CLASSES,{
- secretary:{n:'비서실장',grp:1,cost:0,req:{ach:'free'},col:['#9ad0ff','#2a3a58','#d8ecff'],rate:'공4 방2 탐3',desc:'서류 더미째 지하로 떨어진 비서실장. 일정을 쪼개고 몰아서 처리하는 데는 따라올 자가 없다.',
+ secretary:{n:'야근의 비서',grp:1,cost:0,req:{ach:'free'},col:['#9ad0ff','#2a3a58','#d8ecff'],rate:'공4 방2 탐3',desc:'서류 더미째 지하로 떨어진 비서. 일정을 쪼개고 몰아서 처리하는 데는 따라올 자가 없다.',
    base:{hp:175,str:8,dex:22,mag:14,fai:8,crit:6},grow:{hp:13,str:.6,dex:3,mag:1.6,fai:.6},
    pv:['결재 보류','턴 소모 없는 기술을 쓸 때마다 결재 +1(최대 3). 턴을 마치는 기술은 결재 1당 위력 +30%로 발동하고 결재를 비운다'],skills:['sec_stamp','sec_memo','sec_resch'],slots:{weapon:['dex','first'],armor:['eva','maxhp'],acc:['dex','mag']},wn:'만년필'},
- okami:{n:'여관 안주인',grp:1,cost:0,req:{ach:'rest'},col:['#5fc0a0','#1d3a33','#c8f0e0'],rate:'공2 방4 탐3',desc:'지하에서도 손님은 손님. 칼을 드는 대신 상을 차려 적을 “손님”으로 만든다.',
+ okami:{n:'다도의 안주인',grp:1,cost:0,req:{ach:'rest'},col:['#5fc0a0','#1d3a33','#c8f0e0'],rate:'공2 방4 탐3',desc:'지하에서도 손님은 손님. 칼을 드는 대신 상을 차려 적을 “손님”으로 만든다.',
    base:{hp:215,str:8,dex:10,mag:10,fai:24},grow:{hp:17,str:.6,dex:.8,mag:1.2,fai:3.3},
    pv:['극진한 대접','대접 3중첩이면 적이 만족해 1턴 쉰다 · 대접한 적 처치 시 마석 +50% · 휴식 회복 2배'],skills:['ok_bill','ok_tea','ok_feast'],slots:{weapon:['fai','rest'],armor:['maxhp','dr'],acc:['fai','luck']},wn:'은 쟁반'},
- veil:{n:'베일 무희',grp:1,cost:0,req:{ach:'rot4'},col:['#40d0c0','#163a3a','#b8fff4'],rate:'공4 방2 탐2',desc:'사막의 연회에서 흘러들어온 무희. 같은 동작을 두 번 하는 법이 없다.',
+ veil:{n:'사막의 무희',grp:1,cost:0,req:{ach:'rot4'},col:['#40d0c0','#163a3a','#b8fff4'],rate:'공4 방2 탐2',desc:'사막의 연회에서 흘러들어온 무희. 같은 동작을 두 번 하는 법이 없다.',
    base:{hp:190,str:6,dex:21,mag:20,fai:8,eva:14},grow:{hp:14,str:.5,dex:2.8,mag:2.6,fai:.6},
    pv:['박자','직전과 다른 계열(근력·기교·마력·신앙·보조) 기술을 쓰면 리듬 +1(위력 +15%씩, 최대 5). 같은 계열이면 리듬 0'],skills:['vl_spin','vl_moon','vl_veil'],slots:{weapon:['dex','mag'],armor:['eva'],acc:['dex','mag']},wn:'비단 베일'},
- ceo:{n:'대표이사',grp:1,cost:0,req:{ach:'stones'},col:['#e0c070','#3a3018','#fff0b8'],rate:'공5 방2 탐2',desc:'회장실에서 그대로 떨어진 대표이사. 돈으로 해결되지 않는 일은 아직 못 봤다.',
+ ceo:{n:'황금의 사장',grp:1,cost:0,req:{ach:'stones'},col:['#e0c070','#3a3018','#fff0b8'],rate:'공5 방2 탐2',desc:'회장실에서 그대로 떨어진 사장. 돈으로 해결되지 않는 일은 아직 못 봤다.',
    base:{hp:185,str:6,dex:10,mag:25,fai:8},grow:{hp:15,str:.5,dex:1,mag:3.5,fai:.6},
    pv:['돈의 힘','이번 런에 가진 마석 100당 주는 피해 +5%(최대 +40%) · 마석을 쓰는 전용 기술'],skills:['ceo_check','ceo_merc','ceo_cut'],slots:{weapon:['mag','luck'],armor:['maxhp','shield'],acc:['mag','luck']},wn:'금장 만년필'},
- nurse:{n:'수간호사',grp:1,cost:0,req:{ach:'heal'},col:['#ff9fb8','#4a2030','#ffe0ea'],rate:'공3 방4 탐2',desc:'야간 근무 중 지하로 떨어진 수간호사. 공격 기술은 거의 없다. 살리는 것이 곧 딜.',
+ nurse:{n:'백의의 간호사',grp:1,cost:0,req:{ach:'heal'},col:['#ff9fb8','#4a2030','#ffe0ea'],rate:'공3 방4 탐2',desc:'야간 근무 중 지하로 떨어진 간호사. 공격 기술은 거의 없다. 살리는 것이 곧 딜.',
    base:{hp:190,str:6,dex:10,mag:8,fai:24},grow:{hp:15,str:.5,dex:1,mag:.6,fai:3.4},
    pv:['과잉 치료','회복이 최대 HP를 넘으면 넘친 양의 150%를 적에게 「주사」 피해로 준다'],skills:['ns_scalpel','ns_shot','ns_iv'],slots:{weapon:['fai','acc'],armor:['maxhp','res'],acc:['fai','maxhp']},wn:'메스'},
- mummy:{n:'붕대의 여인',grp:1,cost:0,req:{ach:'lowwin'},col:['#e8e0c8','#3a3428','#fffbe8'],rate:'공4 방4 탐1',desc:'천 년 잠에서 깨어난 여인. 상처는 붕대 속에 미뤄 두고, 갚을 때는 한꺼번에.',
+ mummy:{n:'천년의 미라',grp:1,cost:0,req:{ach:'lowwin'},col:['#e8e0c8','#3a3428','#fffbe8'],rate:'공4 방4 탐1',desc:'천 년 잠에서 깨어난 붕대 감은 여인. 상처는 붕대 속에 미뤄 두고, 갚을 때는 한꺼번에.',
    base:{hp:230,str:22,dex:8,mag:6,fai:6},grow:{hp:19,str:3,dex:.6,mag:.5,fai:.5},
    pv:['붕대 감기','받는 직접 피해의 40%를 3턴 뒤로 미룬다(전투가 끝나면 사라짐) · 지속피해 면역'],skills:['mm_strike','mm_tighten','mm_unwrap'],slots:{weapon:['str','drain'],armor:['maxhp','dr'],acc:['str','maxhp']},wn:'붕대'},
- madame:{n:'사교계의 마담',grp:1,cost:0,req:{ach:'pets'},col:['#d8b8a0','#3a2c24','#fff0e0'],rate:'공3 방3 탐4',desc:'살롱의 여주인. 싸울지 말지는 찻잔을 내려놓고 정한다.',
+ madame:{n:'살롱의 마담',grp:1,cost:0,req:{ach:'pets'},col:['#d8b8a0','#3a2c24','#fff0e0'],rate:'공3 방3 탐4',desc:'살롱의 여주인. 싸울지 말지는 찻잔을 내려놓고 정한다.',
    base:{hp:195,str:6,dex:8,mag:24,fai:12},grow:{hp:15,str:.5,dex:.8,mag:3.3,fai:1.2},
    pv:['살롱','일반 적과는 첫 턴부터 「대화」로 전투 없이 지나갈 수 있다(경험치 50%) · 펫 효과 1.5배'],skills:['md_fan','md_tea','md_intro'],slots:{weapon:['mag','luck'],armor:['maxhp','eva'],acc:['mag','luck']},wn:'깃털 부채'},
  empress:{n:'보랏빛 여제',grp:1,cost:0,req:{ach:'elite'},col:['#b88cff','#2c1a44','#ecdcff'],rate:'공5 방3 탐1',desc:'무릎 꿇은 자는 거두고, 버티는 자는 짓밟는다. 쓰러뜨린 적이 다음 싸움의 하수인이 된다.',
    base:{hp:220,str:24,dex:8,mag:10,fai:6,crit:6},grow:{hp:18,str:3.2,dex:.6,mag:1,fai:.5},
    pv:['군림','쓰러뜨린 적을 하수인으로 거느린다: 매 턴 그 적 공격력 35%로 추격 (가장 최근 1마리)'],skills:['em_heel','em_gaze','em_oath'],slots:{weapon:['str','crit'],armor:['maxhp','dr'],acc:['str','first']},wn:'채찍'},
- cheer:{n:'치어리더',grp:1,cost:0,req:{ach:'crit'},col:['#5aa8ff','#16284a','#d8ecff'],rate:'공4 방2 탐2',desc:'경기장 대신 지하묘지에 선 치어리더. 응원이 쌓이면 모든 게 처음부터 다시 시작된다.',
+ cheer:{n:'열혈 치어리더',grp:1,cost:0,req:{ach:'crit'},col:['#5aa8ff','#16284a','#d8ecff'],rate:'공4 방2 탐2',desc:'경기장 대신 지하묘지에 선 치어리더. 응원이 쌓이면 모든 게 처음부터 다시 시작된다.',
    base:{hp:205,str:12,dex:23,mag:6,fai:8,eva:14,crit:8},grow:{hp:15,str:1.4,dex:3.3,mag:.5,fai:.6},
    pv:['함성','공격이 맞을 때마다 함성 +1. 10이 되면 모든 기술 대기 초기화'],skills:['ch_clap','ch_go','ch_pyr'],slots:{weapon:['dex','crit'],armor:['eva'],acc:['dex','acc']},wn:'응원봉'},
- attendant:{n:'승무원',grp:1,cost:0,req:{ach:'floor'},col:['#4a90c0','#162a3a','#d0ecff'],rate:'공3 방3 탐5',desc:'추락한 비행기에서 혼자 걸어 나온 승무원. 비상 착륙 절차는 몸이 기억한다.',
+ attendant:{n:'하늘의 승무원',grp:1,cost:0,req:{ach:'floor'},col:['#4a90c0','#162a3a','#d0ecff'],rate:'공3 방3 탐5',desc:'추락한 비행기에서 혼자 걸어 나온 승무원. 비상 착륙 절차는 몸이 기억한다.',
    base:{hp:200,str:8,dex:14,mag:8,fai:20},grow:{hp:16,str:.6,dex:1.6,mag:.6,fai:2.8},
    pv:['비상 착륙','런당 1회, 쓰러지면 HP 50%로 되살아난다 · 정찰(두 방 앞이 보인다)'],skills:['at_turb','at_belt','at_serv'],slots:{weapon:['fai','dex'],armor:['maxhp','eva'],acc:['fai','res']},wn:'서비스 카트'}
 });
@@ -2353,7 +2353,7 @@ function runEnd(clear){ const p=G.p; META.mast=META.mast||{}; const before=mastL
   if(after>before){ log(`${CLASSES[p.cls].n} 숙련 Lv.${after} 달성 — ${MAST_P[after]}`,'gold'); toast(`숙련 Lv.${after}: ${MAST_P[after]}`); }
   if(G.daily&&G.daily===dayKey()){ const d=dailyState(); d.best=Math.max(d.best||0,G.floor); if(!d.rew){ const r=G.floor*25+(clear?300:0); d.rew=r; META.stones+=r; log(`오늘의 도전 보상: 마석 ${r}`,'gold'); toast(`오늘의 도전 보상 마석 ${r}`); } META.daily=d; }
 }
-function newRun(cls,o){ o=o||{}; const _tw=META.tower, _ct=META.contract;
+function newRun(cls,o){ o=o||{}; if(!o.daily&&!(META.unlocked||[]).includes(cls)){ toast('아직 해금되지 않은 직업이다'); META.tab='cls'; return render(); } const _tw=META.tower, _ct=META.contract;
   if(o.daily){ const D0=dailyCfg(); META.tower=D0.tower; if(D0.ct){ if(!META.contracts.includes(D0.ct)) META._tmpCt=D0.ct; } META.contract=D0.ct; }
   const r=newRun0(cls,o);
   if(o.daily){ META.tower=_tw; META.contract=_ct; delete META._tmpCt; if(G){ G.daily=dayKey(); log(`오늘의 도전 — ${CLASSES[cls].n} · ${TW().n}${G.p.contract?' · 계약 '+CT[G.p.contract].n:''}`,'gold'); saveMeta(); render(); } }
@@ -4038,7 +4038,7 @@ function renderHome(){
   <div class="hinfo"><div class="hk">${META.maxFloor[sel]?`최고 B${META.maxFloor[sel]}F`:'기록 없음'}</div><div class="hn">${c.n}</div>
    <div class="hchips"><span class="lchip">${prim.join('·')} ★</span>${tabOpen('mod')?`<span class="lchip">개조 ${eq.length}/${slots}</span>`:''}</div>
    <div class="hlinks"><button class="hlink" data-act="cpop">ⓘ 직업 정보</button><button class="hlink" data-tab="cls">직업 변경 ▸</button></div></div>
-  <button class="lgo" data-tab="battle"><b>전 투</b><small>탑 선택 →</small></button>`;
+  ${META.unlocked.includes(sel)?'<button class="lgo" data-tab="battle"><b>전 투</b><small>탑 선택 →</small></button>':`<button class="lgo dis" data-tab="cls"><b>잠긴 직업</b><small>${c.n} — 직업 탭에서 해금하거나 바꾸기 ▸</small></button>`}`;
 }
 function renderBattle(){
   const ks=Object.keys(TOWERS), k=TOWERS[META.tower]?META.tower:'crypt', t=TOWERS[k], open=towerOpen(k), i=ks.indexOf(k);
@@ -4059,7 +4059,7 @@ function renderBattle(){
   ${k==='abyss'?`<div class="bpan abym"><span>돌파 보상</span>${ABY_M.map(([f,r])=>`<i class="${(META.abm||{})[f]?'ok':''}">B${f}F<b>${(META.abm||{})[f]?'✓':r}</b></i>`).join('')}</div>`:''}
   ${tabOpen('ct')?`<details class="bpan bct"><summary><span>${gg('scroll-quill')}계약 <b>${ctSel?CT[ctSel].n:'없음'}</b> <i>×${ctSel?CT[ctSel].m:'1.0'}</i></span><span class="gd">${ctSel?'변경':'선택'} ▸</span></summary><div class="ctlist">${ctList}</div></details>`:''}
   <button class="bpan bch" data-tab="cls"><span class="bpic">${illImg('hp_'+sel,'')||artC('hero:'+sel)}</span><span class="bci"><b>${c.n}</b> <em class="mlv">숙련 ${mastLv(sel)}</em>${tabOpen('mod')?` · 개조 ${eq.length}/${slots}`:''}<br><i>${META.maxFloor[sel]?`최고 B${META.maxFloor[sel]}F`:'기록 없음'}${pet}</i></span><span class="gd">변경 ▸</span></button>
-  ${open?`<button class="lgo" data-act="start"><b>출 정</b><small>${t.n}${t.fee?` · 입장료 ${t.fee}`:''}${ctSel?` · 계약 ×${CT[ctSel].m}`:''}</small></button>`:`<button class="lgo dis" disabled><b>잠김</b><small>${TOWERS[t.need].no}을(를) 답파하면 열린다</small></button>`}`;
+  ${!META.unlocked.includes(sel)?`<button class="lgo dis" data-tab="cls"><b>잠긴 직업</b><small>${c.n} — 해금 후 출정할 수 있다 · 직업 변경 ▸</small></button>`:open?`<button class="lgo" data-act="start"><b>출 정</b><small>${t.n}${t.fee?` · 입장료 ${t.fee}`:''}${ctSel?` · 계약 ×${CT[ctSel].m}`:''}</small></button>`:`<button class="lgo dis" disabled><b>잠김</b><small>${TOWERS[t.need].no}을(를) 답파하면 열린다</small></button>`}`;
 }
 function dailyCard(){ if(!(META.graves||[]).length) return ''; const D0=dailyCfg(), st=dailyState(), c=CLASSES[D0.cls];
   return `<button class="bpan bdaily" data-act="daily"><span class="bpic">${illImg('hp_'+D0.cls,'')||artC('hero:'+D0.cls)}</span><span class="bci"><b>${gg('sunrise')}오늘의 도전</b> <em>${st.rew?`보상 완료 · 최고 B${st.best}F`:'첫 도전 보상: 층×25 (+답파 300)'}</em><br><i>${c.n} · ${TOWERS[D0.tower].n}${D0.ct?` · 계약 ${CT[D0.ct].n}`:''}</i></span><span class="gd">도전 ▸</span></button>`; }
@@ -4094,7 +4094,7 @@ function clsCard(sel,extra){ const c=CLASSES[sel], un=META.unlocked.includes(sel
 function clsPop(){ if(!UI.clsPop) return ''; const sel=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior';
   return `<div class="cpopw" data-act="cpopx"><div class="cpop">${clsCard(sel,'inpop')}<div class="cpopb"><button class="mbtn pxf btn-f" data-act="cpopx"><span class="ml">닫기</span></button><button class="mbtn pxf btn-on-f" data-tab="cls"><span class="cur">▸</span><span class="ml">직업 변경</span></button></div></div></div>`; }
 function renderPrep(){
-  const sel=META.sel&&CLASSES[META.sel]?META.sel:'warrior';
+  const sel=UI.viewCls&&CLASSES[UI.viewCls]?UI.viewCls:META.sel&&CLASSES[META.sel]?META.sel:'warrior';
   const rosB=([k,c])=>{ const un=META.unlocked.includes(k);
     return `<button class="ros pxf ${sel===k?'btn-on-f':'btn-f'} ${un?'':'locked'}" data-cls="${k}" aria-label="${c.n}"><span class="pic">${artC('hero:'+k)}</span><span class="rn">${c.n}</span>${BEGIN.includes(k)?'<span class="beg">입문</span>':''}${un?'':(reqMet(k)?`<span class="lk">잠김<br><span class="stone num">${c.cost}</span></span>`:`<span class="lk req">${c.grp?`✦ ${ACH[c.req.ach][2]}<br>${Math.min(achV(c.req.ach),ACH[c.req.ach][1])}/${ACH[c.req.ach][1]}`:reqTx(k).replace(' ','<br>')}</span>`)}</button>`.replace('class="ros ',c.grp?'class="ros sx ':'class="ros '); };
   const roster=Object.entries(CLASSES).filter(([k,c])=>!c.grp).map(rosB).join(''), sroster=Object.entries(CLASSES).filter(([k,c])=>c.grp).map(rosB).join('');
@@ -4432,8 +4432,8 @@ document.addEventListener('click',ev=>{
   if(t.dataset.loot){ const v=t.dataset.loot; if(v==='equip') return equip(); if(v==='skip'){ log('두고 떠났다.','mute'); return finishLoot(); } if(v==='reroll') return reroll(); if(v==='learn'){ const s=+t.dataset.slot; return takeSkill(s<0?null:s); } }
   if(t.dataset.part) return takePart(t.dataset.part);
   if(t.dataset.draft!=null) return pickDraft(t.dataset.draft||null);
-  if(t.dataset.cls){ const rb=document.querySelector('.rosw'); UI.rosterTop=rb?rb.scrollTop:0; META.sel=t.dataset.cls; saveMeta(); return render(); }
-  if(t.dataset.tab){ META.tab=t.dataset.tab; if(t.dataset.tab==='mod') UI.modCls=META.unlocked.includes(META.sel)?META.sel:'warrior'; saveMeta(); return render(); }
+  if(t.dataset.cls){ const rb=document.querySelector('.rosw'); UI.rosterTop=rb?rb.scrollTop:0; UI.viewCls=t.dataset.cls; if(META.unlocked.includes(t.dataset.cls)) META.sel=t.dataset.cls; saveMeta(); return render(); }
+  if(t.dataset.tab){ META.tab=t.dataset.tab; if(t.dataset.tab!=='cls') UI.viewCls=null; if(t.dataset.tab==='mod') UI.modCls=META.unlocked.includes(META.sel)?META.sel:'warrior'; saveMeta(); return render(); }
   if(t.dataset.ct!=null){ META.contract=t.dataset.ct||null; saveMeta(); return render(); }
   if(t.dataset.modcls){ META.sel=t.dataset.modcls; UI.modPick=false; UI.mgTop=0; saveMeta(); return render(); }
   if(t.dataset.equip) return equipPart(META.sel,t.dataset.equip);
@@ -4472,10 +4472,10 @@ document.addEventListener('click',ev=>{
   if(a==='btw'){ META.tower=Object.keys(TOWERS)[+t.dataset.v]; saveMeta(); return render(); }
   if(a==='towers'){ UI.step='tower'; return render(); }
   if(a==='quick'){ const lr=META.lastRun; META.tower=lr.tower; META.sel=lr.cls; saveMeta(); return newRun(lr.cls); }
-  if(a==='start') return newRun(META.sel);
+  if(a==='start') return newRun(META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior');
   if(a==='daily') return newRun(dailyCfg().cls,{daily:1});
   if(a==='cxclaim'){ const [c,i]=t.dataset.v.split(':'); META.cxr=META.cxr||{}; const r=cxProg(c).r; if(r>=CX_MS[+i][0]&&!META.cxr[c+i]){ META.cxr[c+i]=1; META.stones+=CX_MS[+i][1]; saveMeta(); toast(`도감 보상 마석 +${CX_MS[+i][1]}`); } return render(); }
-  if(a==='unlock') return unlock(META.sel);
+  if(a==='unlock') return unlock(UI.viewCls&&CLASSES[UI.viewCls]?UI.viewCls:META.sel);
   if(a==='intro'){ META.seenIntro=true; saveMeta(); return render(); }
   if(a==='hall') return toHall();
   if(a==='gclaim'){ const g=GOALS.find(x=>x.id===t.dataset.v); META.gdone=META.gdone||{}; if(g&&g.ok()&&!META.gdone[g.id]){ META.gdone[g.id]=1; META.stones+=g.r; saveMeta(); SND.sfx('gold'); toast(`목표 보상 마석 +${g.r}`); } return render(); }
