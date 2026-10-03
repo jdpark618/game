@@ -1027,7 +1027,7 @@ html,body{height:100%}
 .lob .mgrid{grid-template-columns:1fr!important;grid-auto-rows:max-content;align-content:start}.mgrid>.prow{min-height:0}.mgrid>.prow>.pti{align-self:center}
 .lmain.mod .mgrid{flex:1 1 0;max-height:none;min-height:220px}
 img.npcic{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0 0 0 2px #e8c37a88,0 2px 6px #000}
-.scene img.actor.npc{aspect-ratio:auto;width:auto;height:96%;bottom:0;object-fit:contain;image-rendering:auto;-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent);filter:drop-shadow(0 0 10px #000a)}
+.scene img.actor.npc{aspect-ratio:auto;width:auto;height:86%;bottom:0;object-fit:contain;image-rendering:auto;-webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent);filter:drop-shadow(0 0 10px #000a)}
 /* npc minigames */
 .runes{display:grid;grid-template-columns:repeat(2,84px);gap:12px;pointer-events:none;opacity:.85}.runes.on{pointer-events:auto;opacity:1}
 .rune{height:84px;border-radius:16px;border:3px solid #3a3f48;font-size:38px;cursor:pointer;background:#1a1c22;transition:transform .1s,box-shadow .1s,background .1s;touch-action:manipulation}
@@ -3479,7 +3479,7 @@ function eqSummary(item){
   const nm2=m=>m.k==='x'?SPECIAL[m.s].n:MODN[m.k], key=m=>m.k==='x'?'x:'+m.s:m.k;
   const newK=item.mods.filter(m=>!(cur&&cur.mods.some(x=>key(x)===key(m)))).map(nm2); const lostK=cur?cur.mods.filter(m=>!item.mods.some(x=>key(x)===key(m))).map(nm2):[];
   if(newK.length) ex.push(`<span class="up">새 옵션: ${newK.join(', ')}</span>`); if(lostK.length) ex.push(`<span class="down">사라지는 옵션: ${lostK.join(', ')}</span>`);
-  const v=G.p.cls==='mimic'?2:eqVerdict(item), vb=v===1?'<div class="verdict up">추천 · 전반적으로 더 좋다</div>':v===-1?'<div class="verdict down">비추천 · 지금 장비가 더 낫다</div>':v===0?'<div class="verdict mid">장단점이 있다 · 아래 비교를 확인</div>':'';
+  const v=G.p.cls==='mimic'?2:eqVerdict(item), vb='';
   return `${vb}<div class="summary">${rows.map(r=>`<div>${r}</div>`).join('')}${ex.map(r=>`<div>${r}</div>`).join('')}</div>`;
 }
 function renderLoot(){
@@ -3700,8 +3700,8 @@ function renderArena(){
     return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}">${kill?'<span class="kb">처치</span>':''}<span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${esc(df.n)}</span>${s.lvl>1?`<span class="sklv ${s.lvl>=5?'m':''}">+${s.lvl-1}</span>`:''}<span class="est">${esc(/≈/.test(est.main)?est.main:est.main.slice(0,8))}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}</button>`; }).join('');
   const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴<br>종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
   app.classList.add('arena-mode'); app.classList.remove('wide'); app.classList.remove('lobbyv');
-  const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut"><div class="bcb"><small>층의 주인</small><b>${esc(nm(e))}</b>${gimOn(e)&&!hidden()?`<em>${BGIM[e.id].n} · ${BGIM[e.id].d}</em>`:''}</div></div>`:'');
-  if(G.C.cut&&!G.C.cutT){ G.C.cutT=1; setTimeout(()=>{ if(G&&G.C) G.C.cut=0; },1600); }
+  const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><div class="bcb" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><small>층의 주인</small><b>${esc(nm(e))}</b>${gimOn(e)&&!hidden()?`<em>${BGIM[e.id].n} · ${BGIM[e.id].d}</em>`:''}</div></div>`:'');
+  if(G.C.cut&&!G.C.cutT){ G.C.cutT=1; G.C.cutAt=Date.now(); G.C.busy=true; setTimeout(()=>{ if(G&&G.C){ G.C.cut=0; if(G.C.turn==='p') G.C.busy=false; render(); } },1700); }
   app.innerHTML=`<div class="arena v2 ${critFlag?'quake':''} ${dying?'dying':''}">${top}${sceneHtml(actors+fxo,room,npE+stE+npP+stP,'field')}${dialogHtml()}<nav class="dock g-skills">${dock}${util}</nav></div>${mapHtml()}`;
   const db=document.getElementById('dlgBody'); if(db) db.scrollTop=db.scrollHeight;
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
@@ -3731,7 +3731,7 @@ function renderGame(){
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
   fitStage();
 }
-function fitStage(){ const box=document.getElementById('stageBox'), f=box&&box.querySelector&&box.querySelector('.sfit'); if(!f||!f.style||typeof requestAnimationFrame!=='function') return; f.style.zoom=''; requestAnimationFrame(()=>{ if(!f.isConnected) return; const H=box.clientHeight-16, h=f.scrollHeight; if(h>H&&H>0){ f.style.zoom=Math.max(.7,Math.floor(H/h*100)/100); } }); }
+function fitStage(){ const box=document.getElementById('stageBox'), f=box&&box.querySelector&&box.querySelector('.sfit'); if(!f||!f.style||typeof requestAnimationFrame!=='function') return; const kids=[...f.children].filter(c=>!(c.classList&&c.classList.contains('scene'))); kids.forEach(c=>c.style.zoom=''); requestAnimationFrame(()=>{ if(!f.isConnected) return; const sc=f.querySelector(':scope > .scene'), H=box.clientHeight-16-(sc?sc.offsetHeight+8:0), h=kids.reduce((a,c)=>a+c.offsetHeight+8,0); if(h>H&&H>0){ const z=Math.max(.72,Math.floor(H/h*100)/100); kids.forEach(c=>c.style.zoom=z); } }); }
 if(typeof window!=='undefined'&&window.addEventListener) window.addEventListener('resize',()=>{ if(G) fitStage(); });
 
 // ================= rendering: lobby =================
