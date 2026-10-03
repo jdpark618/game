@@ -3726,7 +3726,7 @@ function renderGame(){
    <header class="top g-top"><div class="toprow"><span class="floor num" data-tip="${TW().no} ${TW().n} · ${stepsTxt}">B${G.floor}F${TW().floors?`<small>/${TW().floors}</small>`:''}</span>${G.mode!=='dead'?progHtml():'<span style="flex:1"></span>'}<span class="meta"><span data-tip="<b>획득 마석</b><br>이번 출정에서 모은 마석. 쓰러지거나 답파하면 보관소로 옮겨진다.">획득 마석 <b class="stone num">${p.stones}</b></span>${G.tower==='abyss'?`<span>점수 <b class="num">${score()}</b></span>`:''}${sndBtn()}</span></div>${ct?`<div class="toprow">${ct}</div>`:''}</header>
    <section class="stage plate riveted g-stage ${G.mode} ${critFlag?'quake':''}" id="stageBox">${['event','loot','draft','dead','clear'].includes(G.mode)?`<div class="sfit">${stage}</div>`:stage}</section>
    ${renderHud()}
-   ${G.mode==='dead'||G.mode==='clear'?'':(['event','loot','draft'].includes(G.mode)?'':renderSkills().replace('class="skills g-skills','class="skills g-skills mini'))+renderActions()}
+   ${G.mode==='dead'||G.mode==='clear'?'':renderSkills().replace('class="skills g-skills','class="skills g-skills mini')+renderActions()}
    ${renderLog()}</div>${mapHtml()}`;
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
   fitStage();
