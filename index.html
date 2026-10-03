@@ -1103,6 +1103,23 @@ img.npcic{width:100%;height:100%;object-fit:cover;border-radius:50%;box-shadow:0
 .lmain.pet .mstick{position:relative}
 .btn.sm.pri{border-color:#c9953e;color:#ffe2a6}
 @media (min-width:900px){html:has(#app.lobbyv),html:has(#app.wide),html:has(#app.arena-mode){overflow:hidden}body:has(#app.lobbyv),body:has(#app.wide),body:has(#app.arena-mode){overflow:hidden}}
+/* combat fx v60 */
+.critfx{position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(circle at 70% 30%,rgba(255,230,150,.55),transparent 55%);animation:critf .45s ease-out forwards}
+@keyframes critf{0%{opacity:1}100%{opacity:0}}
+.hurtfx{position:absolute;inset:0;z-index:6;pointer-events:none;box-shadow:inset 0 0 70px 12px rgba(220,30,30,.7);animation:critf .5s ease-out forwards}
+.killfx{position:absolute;right:22%;top:28%;width:0;height:0;z-index:6;pointer-events:none}
+.killfx i{position:absolute;width:7px;height:7px;border-radius:2px;background:#ffd27a;box-shadow:0 0 8px #ff9a3a;animation:kfx .9s ease-out forwards}
+.killfx i:nth-child(1){--a:0deg;--d:60px}.killfx i:nth-child(2){--a:25deg;--d:97px}.killfx i:nth-child(3){--a:51deg;--d:64px}.killfx i:nth-child(4){--a:77deg;--d:101px}.killfx i:nth-child(5){--a:102deg;--d:68px}.killfx i:nth-child(6){--a:128deg;--d:105px}.killfx i:nth-child(7){--a:154deg;--d:72px}.killfx i:nth-child(8){--a:180deg;--d:109px}.killfx i:nth-child(9){--a:205deg;--d:76px}.killfx i:nth-child(10){--a:231deg;--d:113px}.killfx i:nth-child(11){--a:257deg;--d:80px}.killfx i:nth-child(12){--a:282deg;--d:117px}.killfx i:nth-child(13){--a:308deg;--d:84px}.killfx i:nth-child(14){--a:334deg;--d:121px}
+@keyframes kfx{from{transform:rotate(var(--a)) translateY(0) scale(1.4);opacity:1}to{transform:rotate(var(--a)) translateY(calc(var(--d)*-1)) scale(.2) rotate(180deg);opacity:0}}
+.bosscut{position:absolute;inset:0;z-index:20;pointer-events:none;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);animation:bcf 1.6s ease forwards}
+.bcb{width:100%;padding:14px 0;text-align:center;background:linear-gradient(90deg,transparent,rgba(120,20,20,.92) 20%,rgba(120,20,20,.92) 80%,transparent);border-top:2px solid #ffb04a;border-bottom:2px solid #ffb04a;animation:bcs 1.6s cubic-bezier(.2,.9,.2,1) forwards}
+.bcb small{display:block;font-size:12px;letter-spacing:6px;color:#ffd27a}.bcb b{font-size:28px;font-weight:900;letter-spacing:4px;color:#fff;text-shadow:0 0 14px #ff4a2a}
+@keyframes bcf{0%{opacity:0}12%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes bcs{0%{transform:scaleX(0)}18%{transform:scaleX(1.05)}26%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+.arena.quake .field{animation:quake2 .32s}@keyframes quake2{0%,100%{transform:none}20%{transform:translate(-5px,3px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(3px,2px)}}
+.sk .sklv{position:absolute;left:3px;bottom:2px;font-size:10px;font-weight:900;color:#2a1a04;background:linear-gradient(#ffe2a6,#c9953e);border-radius:6px;padding:0 4px;line-height:15px;box-shadow:0 1px 0 #000}
+.sk .sklv.m{background:linear-gradient(#ffd0ff,#a86ae0);color:#200830}
+#tip .tterms{margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,.12);font-size:10.5px;color:#a9a294;line-height:1.4}#tip .tterms b{color:#cfe6ff;margin-right:4px}
 /* event fx */
 .scene .actor.charge{animation:chg .85s ease-in forwards}.scene .actor.ch-chest{animation:chshake .85s linear}
 @keyframes chg{0%{filter:brightness(1)}60%{filter:brightness(1.6) drop-shadow(0 0 18px #ffe2a6)}100%{filter:brightness(2.2) drop-shadow(0 0 30px #fff)}}
@@ -2437,7 +2454,7 @@ function startCombat(e,o={}){
   p.shield=Math.round(d.shield*(isColorIn('blue')?1.15:1)*(fx('seal')?.25:1));
   p.barrier=Math.min(9,d.barrier*(d.uniq.sprout?2:1));
   if(fx('seal')) e.shield=Math.round(e.shield*.25);
-  G.C={e,turn:'p',round:1,used:[],busy:false};
+  G.C={e,turn:'p',round:1,used:[],busy:false,cut:e.boss?1:0};
   if(pv(p,'viking')){ addSt(p,p,{id:'pursuit',v:statOf(p,'str')*.2,dur:99},true,true); log('근위대: 근위병이 곁에서 함께 싸운다.','good'); }
   { const cu=petE('cdUp'); if(cu){ const s=pick(e.sk); s.cd+=cu; log(`${PETS[p.pet.id].n}: 적의 [${hidden()?'???':s.def.n}] 대기 +${cu}`,'good'); } }
   G.mode='combat';
@@ -2457,15 +2474,16 @@ let autoT=null;
 function autoPick(){
   const p=G.p, e=G.C.e, d=D(p); let best=-1, bi=-1;
   const hpR=p.hp/d.maxhp;
-  { const th=META.apot==null?.25:META.apot; if(th>0&&hpR<th&&p.potions>0&&!fx('hot')&&p.cls!=='skeleton') return 'potion'; }
+  { const th=META.apot==null?.25:META.apot; if(th>0&&hpR<th&&p.potions>0&&!fx('hot')) return 'potion'; }
+  const danger=p.hp+p.shield<(e.atk||10)*2.6, tough=e.boss||e.elite||e.hp>d.maxhp*.6;
   p.sk.forEach((s,i)=>{ if(!canUse(s)) return; const def=SK[s.id], a=def.a, T=def.t||isTurnFree(def,s.mut); let sc=0;
     const r=estimate(p,def,effLv(s),e,s.mut);
-    if(r.hits) sc=r.total*Math.min(1,r.acc)*(r.total>=e.hp+e.shield?3:1);
+    if(r.hits){ const kill=r.total*Math.min(1,r.acc)>=e.hp+e.shield; sc=kill?2e6-def.cd*5e4:r.total*Math.min(1,r.acc); if(!kill&&def.cd>=4&&!tough) sc*=.45; }
     for(const x of a){
-      if(x.k==='heal') sc=Math.max(sc, hpR<.5?9e5*(1-hpR):(hpR<.8?1:0));
-      if(x.k==='shield') sc=Math.max(sc, p.shield<=0?(hpR<.7?5e5:40):1);
+      if(x.k==='heal') sc=Math.max(sc, (hpR<.5||danger)?9e5*(1.2-hpR):(hpR<.8?1:0));
+      if(x.k==='shield') sc=Math.max(sc, p.shield<=0?((hpR<.7||danger)?5e5:(tough?200:40)):1);
       if(x.k==='bar') sc=Math.max(sc, p.barrier<2?3e5:2);
-      if(x.k==='buff'&&!r.hits){ const act=p.st.some(t=>t.id===x.st); sc=Math.max(sc, act?0:(T?8e5:(x.st==='dr'||x.st==='eva'?(hpR<.5?60:3):(x.st==='str'?120:50)))); }
+      if(x.k==='buff'&&!r.hits){ const act=p.st.some(t=>t.id===x.st); sc=Math.max(sc, act?0:(T?8e5:(x.st==='dr'||x.st==='eva'?(hpR<.5?60:3):(x.st==='str'?(tough?4e5:120):50)))); }
       if(x.k==='debuff'&&!r.hits){ const act=e.st.some(t=>t.id===x.st); sc=Math.max(sc, act?0:(T?7e5:80)); }
       if(x.k==='cdUp'||x.k==='cdDown'||x.k==='cleanse') sc=Math.max(sc, T?6e5:30);
       if(x.k==='selfdmg'&&hpR<.4) sc=0;
@@ -3140,15 +3158,21 @@ function monPal(id){ return MON_PAL[id]||{}; }
 
 // ================= tips =================
 let tipEl=null;
+let TERMS=null;
+function termMap(){ if(TERMS) return TERMS; TERMS={}; for(const k in ST) TERMS[ST[k].n]=ST[k].d; for(const [k,v] of GLOSS) for(const t of k.split(' / ')) if(!TERMS[t]) TERMS[t]=v;
+  Object.assign(TERMS,{'방벽':TERMS['방벽']||'직접 공격 1회를 통째로 막는다.','흡혈':'입힌 피해의 일부만큼 HP를 회복한다.','관찰':'적의 다음 행동이 보인다.','T':'턴을 소모하지 않는 기술. 쓰고 나서 다른 기술을 또 쓸 수 있다.','대기':'기술을 다시 쓰기까지 기다려야 하는 차례 수.'}); delete TERMS['T']; return TERMS; }
+function withTerms(html){ const T=termMap(), txt=String(html).replace(/<[^>]+>/g,' '); const hit=[]; for(const k of Object.keys(T).sort((a,b)=>b.length-a.length)){ if(k.length<2||(k==='강화'&&/강화 \+/.test(txt))) continue; if(txt.includes(k)&&!hit.some(h=>h.includes(k))) hit.push(k); if(hit.length>=3) break; }
+  return hit.length?html+`<div class="tterms">${hit.map(k=>`<div><b>${k}</b> ${T[k]}</div>`).join('')}</div>`:html; }
 function showTip(html,anchor){
   hideTip(); if(typeof document.createElement!=='function') return;
-  tipEl=document.createElement('div'); tipEl.id='tip'; tipEl.innerHTML=html; document.body.appendChild(tipEl);
-  const r=anchor.getBoundingClientRect(), w=tipEl.offsetWidth, h=tipEl.offsetHeight;
-  let x=clamp(r.left+r.width/2-w/2,8,window.innerWidth-w-8), y=r.bottom+6; if(y+h>window.innerHeight-8) y=Math.max(8,r.top-h-6);
+  tipEl=document.createElement('div'); tipEl.id='tip'; tipEl.innerHTML=withTerms(html); document.body.appendChild(tipEl);
+  const z=(document.documentElement&&document.documentElement.style&&parseFloat(document.documentElement.style.zoom))||1, r0=anchor.getBoundingClientRect(), r={left:r0.left/z,top:r0.top/z,width:r0.width/z,bottom:r0.bottom/z}, w=tipEl.offsetWidth, h=tipEl.offsetHeight, VW=window.innerWidth/z, VH=window.innerHeight/z;
+  let x=clamp(r.left+r.width/2-w/2,8,VW-w-8), y=r.bottom+6; if(y+h>VH-8) y=Math.max(8,r.top-h-6);
   tipEl.style.left=x+'px'; tipEl.style.top=y+'px';
 }
 function hideTip(){ if(tipEl){ tipEl.remove(); tipEl=null; } }
-function skillTip(s){ const d=SK[s.id], m=s.mut&&MUT[s.mut]; return `<b>${esc(skillName(s))}${s.lvl>1?' +'+(s.lvl-1):''}</b> · 등급 ${d.r}<br>${esc(skText(d))}${m?`<br><span style="color:#d79cff">${esc(m.n)}: ${esc(m.d)}</span>`:''}<br><span style="color:var(--mute)">대기 ${d.cd}턴${d.t?' · 턴을 소모하지 않음(T)':''}${d.f?' · 전투 시작 시 자동 발동(F)':''}${d.b?' · 방벽 '+d.b+'개 소모(B)':''}${s.lvl>1?` · 위력 +${(s.lvl-1)*10}%`:''}${s.lvl>=5?' · 대기 -1':''}</span>`; }
+function lvLine(s){ const L=s.lvl-1; return `<span style='color:#ffd27a'>강화 +${L}/7 · 위력 +${L*10}%${s.lvl>=5?' · 대기 -1 적용':` · +4에서 대기 -1 (${4-L}단계 남음)`}</span>`; }
+function skillTip(s){ const d=SK[s.id], m=s.mut&&MUT[s.mut]; return `<b>${esc(skillName(s))}${s.lvl>1?' +'+(s.lvl-1):''}</b> · 등급 ${d.r}<br>${lvLine(s)}<br>${esc(skText(d))}${m?`<br><span style="color:#d79cff">${esc(m.n)}: ${esc(m.d)}</span>`:''}<br><span style="color:var(--mute)">대기 ${d.cd}턴${d.t?' · 턴을 소모하지 않음(T)':''}${d.f?' · 전투 시작 시 자동 발동(F)':''}${d.b?' · 방벽 '+d.b+'개 소모(B)':''}${s.lvl>1?` · 위력 +${(s.lvl-1)*10}%`:''}${s.lvl>=5?' · 대기 -1':''}</span>`; }
 
 // ================= rendering: shared =================
 const app=document.getElementById('app');
@@ -3610,12 +3634,14 @@ function renderArena(){
     +`<i id="popE" class="anc en"></i><i id="popP" class="anc hr"></i>`;
   const dock=[0,1,2,3].map(i=>{ const s=p.sk[i]; if(!s) return `<div class="sk pxf btn-f empty"></div>`;
     const df=SK[s.id], dis=!myTurn||s.cd>0||(df.b&&p.barrier<df.b)||healBlock(p,df), T=df.t||isTurnFree(df,s.mut), est=estLine(p,s,e);
-    const tip=`<b>${esc(skillName(s))}</b><br>${esc(est.main)} · ${esc(est.sub)}`;
+    const tip=`<b>${esc(skillName(s))}</b><br>${esc(est.main)} · ${esc(est.sub)}<br>${lvLine(s)}`;
     const kr=!dark&&!dis?estimate(p,df,effLv(s),e,s.mut):null, kill=kr&&kr.hits&&kr.total>=e.hp+e.shield;
-    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}">${kill?'<span class="kb">처치</span>':''}<span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${esc(df.n)}${s.lvl>1?`<span class="lvl">+${s.lvl-1}</span>`:''}</span><span class="est">${esc(/≈/.test(est.main)?est.main:est.main.slice(0,8))}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}</button>`; }).join('');
+    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}">${kill?'<span class="kb">처치</span>':''}<span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${esc(df.n)}</span>${s.lvl>1?`<span class="sklv ${s.lvl>=5?'m':''}">+${s.lvl-1}</span>`:''}<span class="est">${esc(/≈/.test(est.main)?est.main:est.main.slice(0,8))}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}</button>`; }).join('');
   const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴<br>종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
   app.classList.add('arena-mode'); app.classList.remove('wide'); app.classList.remove('lobbyv');
-  app.innerHTML=`<div class="arena v2 ${critFlag?'quake':''} ${dying?'dying':''}">${top}${sceneHtml(actors,room,npE+stE+npP+stP,'field')}${dialogHtml()}<nav class="dock g-skills">${dock}${util}</nav></div>${mapHtml()}`;
+  const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut"><div class="bcb"><small>층의 주인</small><b>${esc(nm(e))}</b></div></div>`:'');
+  if(G.C.cut&&!G.C.cutT){ G.C.cutT=1; setTimeout(()=>{ if(G&&G.C) G.C.cut=0; },1600); }
+  app.innerHTML=`<div class="arena v2 ${critFlag?'quake':''} ${dying?'dying':''}">${top}${sceneHtml(actors+fxo,room,npE+stE+npP+stP,'field')}${dialogHtml()}<nav class="dock g-skills">${dock}${util}</nav></div>${mapHtml()}`;
   const db=document.getElementById('dlgBody'); if(db) db.scrollTop=db.scrollHeight;
   shakeE=false; hurtP=false; lvFlag=false; critFlag=false;
 }
@@ -3885,7 +3911,7 @@ function dmgCanvas(str,kind){
 }
 function popLayer(){ let L=document.getElementById('popLayer'); if(!L&&document.body&&document.body.appendChild){ L=document.createElement('div'); L.id='popLayer'; document.body.appendChild(L); } return L; }
 function popHost(e){ const a=document.getElementById(e==='e'?'popE':'popP')||(e==='e'?(document.querySelector('.scene')||document.getElementById('enemyBox')):document.getElementById('hudBox')); const L=popLayer(); if(!a||!L||!a.getBoundingClientRect) return a;
-  const r=a.getBoundingClientRect(); const h=document.createElement('div'); h.className='pophost'; h.style.left=Math.round(r.left+r.width/2)+'px'; h.style.top=Math.round(r.top+(a.classList&&a.classList.contains('anc')?0:r.height*.26))+'px'; L.appendChild(h); setTimeout(()=>h.remove(),1600); return h; }
+  const r=a.getBoundingClientRect(), z=(document.documentElement&&document.documentElement.style&&parseFloat(document.documentElement.style.zoom))||1; const h=document.createElement('div'); h.className='pophost'; h.style.left=Math.round((r.left+r.width/2)/z)+'px'; h.style.top=Math.round((r.top+(a.classList&&a.classList.contains('anc')?0:r.height*.26))/z)+'px'; L.appendChild(h); setTimeout(()=>h.remove(),1600); return h; }
 function popEl(pp){ const el=document.createElement('span'); el.className='pop px2 '+pp.c; const mm=/^(.*?)([+-]?\d+)$/.exec(String(pp.t)); if(mm){ const lb=mm[1].trim(); if(lb){ const l=document.createElement('i'); l.textContent=lb; el.appendChild(l); } el.appendChild(dmgCanvas(mm[2],pp.c)); } else { const l=document.createElement('i'); l.className='big'; l.textContent=pp.t; el.appendChild(l); } return el; }
 function hitShake(e){ const f=document.querySelector(e==='e'?'.abox.en .fig':'.abox.hr .fig'); if(!f||!f.classList||f.classList.contains('dying')) return; f.classList.remove('hitk'); void f.offsetWidth; f.classList.add('hitk'); }
 function flushPops(){
