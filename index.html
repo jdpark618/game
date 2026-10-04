@@ -701,7 +701,7 @@ button.pick.card .pk{align-self:flex-end;font-size:11px;color:#ffd27a;margin-top
 .arena.v2 .field .shadow.en{top:calc(12% + min(60%,290px) - 4%)}
 .scene img.actor.osc-chest,.scene img.actor.osc-spring{height:52%!important}
 .scene img.actor.osc-tomb{height:66%!important}
-.arena.v2 .util2 .endt{color:#fff3d0;font-size:10.5px;line-height:1.1;animation:curp 1.2s ease-in-out infinite alternate}
+.arena.v2 .util2 button{white-space:nowrap;overflow:hidden;min-height:34px;line-height:1.1!important;flex:1 1 0}.arena.v2 .util2 b{line-height:1.1}.arena.v2 .util2 .endt{color:#fff3d0;font-size:10.5px;line-height:1.1;letter-spacing:-.04em;animation:curp 1.2s ease-in-out infinite alternate}
 .sndb{min-width:30px!important;height:28px;padding:0 4px!important;color:#efe6d2;font-size:13px;line-height:1}
 .meta .sndb,.topline .sndb{height:26px}
 /* pets & gacha */
@@ -1326,6 +1326,9 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
  #app .g-skills .sk .tgs{position:absolute!important;left:1px!important;top:1px!important;transform:scale(.72);transform-origin:left top;z-index:3}
  #app .g-skills .sk .lvtag{top:1px!important;right:1px!important;font-size:8.5px!important;padding:1px 2px!important}
  #app .g-skills .sk .cd{z-index:4}
+ #app .dock .util2 button{height:34px!important;flex:none!important}
+ #app .dock>.sk{height:auto!important;align-self:stretch}
+ #app .dock>.sk .ic,#app .dock>.sk>.gi.ic{position:relative!important;left:auto!important;top:auto!important;transform:none!important;opacity:1;width:20px!important;height:20px!important;flex:none;margin-bottom:1px!important}
  .g-actions .btn,.g-actions button{min-height:0!important;height:34px!important;padding-top:0!important;padding-bottom:0!important}
  .bban{padding-top:18px}
 }
@@ -4033,7 +4036,7 @@ function renderArena(){
     const tip=`<b>${esc(skillName(s))}</b><br>${esc(est.main)} · ${esc(est.sub)}<br>${lvLine(s)}`;
     const kr=!dark&&!dis?estimate(p,df,effLv(s),e,s.mut):null, kill=kr&&kr.hits&&kr.total>=e.hp+e.shield;
     return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'} ${s.lvl>1?'hlv':''}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}"><span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${(n=>{ const i=n.lastIndexOf(' '); const bd=''; return i<0?`<span class="nw">${esc(n)}${bd}</span>`:`${esc(n.slice(0,i))} <span class="nw">${esc(n.slice(i+1))}${bd}</span>`; })(df.n)}</span><span class="est">${esc(est.main)}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}${s.lvl>1?`<span class="lvtag t${Math.min(7,s.lvl-1)}">+${s.lvl-1}</span>`:''}</button>`; }).join('');
-  const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴<br>종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
+  const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴 종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
   app.classList.add('arena-mode'); app.classList.remove('wide'); app.classList.remove('lobbyv');
   const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><div class="bcb" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><small>층의 주인</small><b>${esc(nm(e))}</b>${gimOn(e)&&!hidden()?`<em>${BGIM[e.id].n} · ${BGIM[e.id].d}</em>`:''}</div></div>`:'');
   if(G.C.cut&&!G.C.cutT){ G.C.cutT=1; G.C.cutAt=Date.now(); G.C.busy=true; setTimeout(()=>{ if(G&&G.C){ G.C.cut=0; if(G.C.turn==='p') G.C.busy=false; render(); } },1700); }
