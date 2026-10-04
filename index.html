@@ -1176,7 +1176,7 @@ img.npcic{width:100%;height:100%;object-fit:cover;border-radius:6px;box-shadow:n
 @keyframes cpin{from{opacity:0}to{opacity:1}}
 .cpop{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px;animation:cpup .22s}@keyframes cpup{from{transform:translateY(14px)}to{transform:none}}
 .cpop .show{margin:0;position:relative!important;top:0!important}.cpop .show .sd,.cpop .show .spv{display:block!important;-webkit-line-clamp:unset!important;height:auto!important;min-height:0!important;overflow:visible!important}.cpop .show .sd{font-size:12.5px}.cpop .show .spv{font-size:12px}.cpop .show .sp{height:210px!important}.cpop .skd{grid-column:1/-1;padding:0 10px 10px;display:flex;flex-direction:column;gap:5px}.cpop .skd div{font-size:11.5px;color:#b9b2a0;line-height:1.4}.cpop .skd b{color:#efe6d2;margin-right:6px}.cpopb{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
-.hside{position:absolute;left:12px;top:64px;width:50%;z-index:12;display:flex;flex-direction:column;gap:8px}
+.hside{position:absolute;left:12px;top:6px;width:50%;z-index:12;display:flex;flex-direction:column;gap:8px}
 .hcard{background:rgba(10,12,16,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(232,195,122,.22);border-radius:10px;padding:8px 10px;font-size:11.5px;color:#d8d0bd;line-height:1.45}
 .hcard h5{margin:0 0 5px;font-size:11px;color:#e8c37a;letter-spacing:1px;font-weight:700}
 .hcard .trow{display:grid;grid-template-columns:1fr auto;gap:4px;width:100%;padding:4px 0;border:0;border-top:1px solid rgba(255,255,255,.07);background:none;font:inherit;font-size:11.5px;color:inherit;text-align:left;cursor:pointer}
@@ -3814,7 +3814,7 @@ function goalState(){ META.gdone=META.gdone||{}; const claim=GOALS.find(g=>g.ok(
 function goalBanner(c){ const s=goalState();
   if(s.claim) return `<div class="gbar claim"><span class="gk">${gg('targeted')}${c?'':'목표 달성 '}${s.done+1}/${GOALS.length}</span><b>${s.claim.n}</b><button class="btn pri sm" data-act="gclaim" data-v="${s.claim.id}">받기 <span class="stone num">+${s.claim.r}</span></button></div>`;
   if(s.next) return `<div class="gbar"><span class="gk">${c?gg('targeted'):'목표 '}${s.done+1}/${GOALS.length}</span><b>${s.next.n}</b><span class="gr">보상 <span class="stone num">${s.next.r}</span></span></div>`;
-  return `<div class="gbar"><span class="gk">다음 목표</span><b>${nextGoal()}</b></div>`; }
+  return `<div class="gbar">${c?gg('targeted'):'<span class="gk">다음 목표</span>'}<b>${nextGoal()}</b></div>`; }
 function goalList(){ META.gdone=META.gdone||{}; return `<div class="glist">${GOALS.map(g=>{ const d=META.gdone[g.id], ok=g.ok(); return `<div class="${d?'done':ok?'ok':''}"><i>${d?'✓':ok?'!':'·'}</i><span>${g.n}</span><b class="stone num">${g.r}</b></div>`; }).join('')}</div>`; }
 function nextGoal(){
   for(const [k,t] of Object.entries(TOWERS)) if(!towerOpen(k)) return `${TOWERS[t.need].no} 답파 → ${t.no} 개방`;
