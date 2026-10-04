@@ -484,7 +484,7 @@ canvas.hpbar{width:100%;height:18px;display:block;margin-top:3px}
 .icchips{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;align-items:center}
 .icb{position:relative;display:inline-flex;align-items:center;gap:2px;padding:0 3px 0 1px;height:20px;font-family:'Silkscreen',var(--f-num);font-size:10px;color:#f0e6c8;text-shadow:1px 1px 0 #000}
 .icb canvas{width:16px;height:16px}
-.icb .tn{font-size:8px;color:#9aa3ad;margin-left:1px}.icb>.gi,.icb .gi{width:18px!important;height:18px!important;flex:none;margin:0!important}.icb>.gi svg{width:100%;height:100%}.arena.v2 .stP,.arena.v2 .stE .icchips{align-items:center;align-content:flex-end;row-gap:3px}.arena.v2 .icchips .icb{height:22px;line-height:22px}
+.icb .tn{font-size:8px;color:#9aa3ad;margin-left:1px}.icb.awk{color:#ffb4f0;font-family:var(--f-body);font-weight:800;font-size:10px;padding:0 5px;box-shadow:inset 0 0 0 1px #c070c0aa}.tile .awt,.mn .awt{position:absolute;right:4px;top:4px;z-index:3;font-size:9.5px;font-weight:800;color:#ffd0f4;background:#3a1438e6;border:1px solid #c070c0;border-radius:4px;padding:0 4px;line-height:15px}.tile.far .awt{font-size:8.5px;right:2px;top:2px;padding:0 3px}.icb>.gi,.icb .gi{width:18px!important;height:18px!important;flex:none;margin:0!important}.icb>.gi svg{width:100%;height:100%}.arena.v2 .stP,.arena.v2 .stE .icchips{align-items:center;align-content:flex-end;row-gap:3px}.arena.v2 .icchips .icb{height:22px;line-height:22px}
 .icb.deb{filter:hue-rotate(0deg)}
 .eint .echip{border:0;background:none;padding:0 4px;font-size:10px;color:#cfc8b8}
 .eint .echip.next{color:#ffd27a}
@@ -2304,11 +2304,11 @@ function genEq(slot,lvl,cls,luck=0,minRar){
 // ================= run setup =================
 const TOWERS={
  crypt:{no:'쉬움',n:'그림자 숲',lv:1,floors:10,art:'tyrant',em:1,sm:1,final:'tyrant',bosses:['gravekeeper','necro','count'],tags:['10층','숲·독','입문'],first:300,firstTx:'마석 300 · 보통·이벤트 개방'},
- vault:{no:'보통',n:'가라앉은 보물고',lv:2,floors:10,art:'goldeater',need:'crypt',fee:100,em:1.08,sm:3,final:'goldeater',bosses:['pharaoh','sphinx','count'],rooms:[['mon',27],['corpse',8],['chest',19],['tomb',7],['spring',6],['statue',3],['rest',5],['traveler',4],['npc',12],['empty',4]],tags:['10층','보물·수중','마석×3'],first:800,firstTx:'마석 800 · 어려움 개방'},
- spire:{no:'어려움',n:'용의 첨탑',lv:3,floors:10,art:'balrog',need:'vault',em:1.1,sm:2,loot:.2,elite:.2,final:'balrog',bosses:['greater','samael','sphinx'],tags:['10층','용·환수','정예·보상×2'],first:1500,firstTx:'마석 1500 · 무한 개방'},
- mine:{no:'이벤트',n:'마석 광산',ev:1,lv:2,floors:5,art:'pharaoh',need:'crypt',em:1.15,sm:9,pool:'vault',final:'goldeater',bosses:['pharaoh','count'],rooms:[['mon',40],['chest',26],['corpse',4],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],tags:['5층','마석×9','상자 多'],first:0,firstTx:'—'},
- forge:{no:'이벤트',n:'부품 공방',ev:1,lv:2,floors:5,art:'greater',need:'crypt',em:1,sm:.5,pool:'spire',partM:10,final:'tyrant',bosses:['greater','samael'],rooms:[['mon',44],['chest',14],['tomb',12],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],elite:.15,tags:['5층','개조 부품 대량','정예 多'],first:0,firstTx:'—'},
- abyss:{no:'무한',n:'끝없는 심연',lv:0,floors:0,art:'t_abyss',need:'spire',em:1.6,sm:2.5,ramp:[.06,.035],elite:.25,final:null,bosses:null,tags:['무한','극한 난이도','층마다 강해짐']},
+ vault:{no:'보통',n:'가라앉은 보물고',lv:2,floors:10,art:'goldeater',need:'crypt',fee:100,em:1.25,aw:[[2,1],[6,2]],awc:.5,ai:1,sh:.15,sm:3,final:'goldeater',bosses:['pharaoh','sphinx','count'],rooms:[['mon',27],['corpse',8],['chest',19],['tomb',7],['spring',6],['statue',3],['rest',5],['traveler',4],['npc',12],['empty',4]],tags:['10층','마석×3','적 각성'],first:800,firstTx:'마석 800 · 어려움 개방'},
+ spire:{no:'어려움',n:'용의 첨탑',lv:3,floors:10,art:'balrog',need:'vault',em:1.45,aw:[[1,1],[4,2],[8,3]],awc:.9,ai:2,sh:.08,sm:2,loot:.2,elite:.2,final:'balrog',bosses:['greater','samael','sphinx'],tags:['10층','보상×2','각성·전술'],first:1500,firstTx:'마석 1500 · 무한 개방'},
+ mine:{no:'이벤트',n:'마석 광산',ev:1,lv:2,floors:5,art:'pharaoh',need:'crypt',em:1.5,sm:9,pool:'vault',aw:[[1,1],[3,2]],awc:.6,ai:1,sh:.12,final:'goldeater',bosses:['pharaoh','count'],rooms:[['mon',40],['chest',26],['corpse',4],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],tags:['5층','마석×9','적 각성'],first:0,firstTx:'—'},
+ forge:{no:'이벤트',n:'부품 공방',ev:1,lv:2,floors:5,art:'greater',need:'crypt',em:1.42,sm:.5,pool:'spire',partM:10,aw:[[1,1],[3,2]],awc:.6,ai:1,sh:.12,final:'tyrant',bosses:['greater','samael'],rooms:[['mon',44],['chest',14],['tomb',12],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],elite:.15,tags:['5층','부품 대량','적 각성'],first:0,firstTx:'—'},
+ abyss:{no:'무한',n:'끝없는 심연',lv:0,floors:0,art:'t_abyss',need:'spire',em:1.5,sm:2.5,ramp:[1.06,1.035],elite:.25,aw:[[2,1],[10,2],[20,3]],awc:1,ai:2,sh:.06,final:null,bosses:null,tags:['무한','각성·전술','층마다 강해짐']},
 };
 const PET_G={common:{n:'일반',c:'#c9c2ad',w:55},magic:{n:'고급',c:'#7fb8e8',w:27},rare:{n:'희귀',c:'#e0cf62',w:12},epic:{n:'영웅',c:'#c99cf0',w:5},leg:{n:'전설',c:'#ff9a3a',w:1}};
 const PETS={
@@ -2462,20 +2462,52 @@ function genRoom(){
   if(t==='traveler') r.v=Math.floor(R()*NPCV.length);
   if(t==='npc') r.k=pick(npcPool());
   if(G.floor>1||G.stepsDone>1){ if(R()<.25) r.fx=pick(Object.keys(FX).filter(k=>k!=='wide'&&k!=='swamp')); }
-  if(t==='mon'){ r.m=pickMon(); if(G.floor>=2&&R()<(TW().elite||.1)) r.elite=1; }
+  if(t==='mon'){ r.m=pickMon(); if(G.floor>=2&&R()<(TW().elite||.1)) r.elite=1; const ac=awCount(TW(),G.floor); if(ac&&(r.elite||R()<(TW().awc||0))) r.aw=rollAw(ac+(r.elite?1:0)); }
   return r;
 }
 function pickMon(){ const tk=G.tower||'abyss'; const pool=Object.keys(MON).filter(k=>!MON[k].ev&&!MON[k].cut&&(MON[k].minF||1)<=G.floor&&(tk==='abyss'||(MON[k].tw||'crypt')===((TOWERS[tk]&&TOWERS[tk].pool)||tk))); return pick(pool); }
 function ensureKids(n){ if(n.t==='boss') return; if(!n.kids) n.kids=[genRoom(),genRoom()]; }
 function monLevel(){ return Math.max(1,G.floor*2-1+Math.floor((G.stepsDone||0)/3)); }
 let BOSS_HPM=.78, BOSS_ATM=.9;
+// ===== 각성: 난이도별로 적이 직업 기술을 추가로 쓴다 =====
+const AWK={
+ aw_heal:{n:'성역의 기도',cd:4,r:'heal',a:[{k:'heal',p:18,s:'maxhp'}]},
+ aw_shield:{n:'마력 장벽',cd:4,r:'guard',a:[{k:'shield',p:14,s:'maxhp'}]},
+ aw_bar:{n:'방벽 전개',cd:5,r:'guard',a:[{k:'bar',n:2}]},
+ aw_rage:{n:'전투의 함성',cd:5,r:'buff',a:[{k:'buff',st:'str',v:40,dur:3}]},
+ aw_curse:{n:'쇠약의 저주',cd:4,r:'debuff',a:[{k:'debuff',st:'weak',v:25,dur:3}]},
+ aw_blind:{n:'모래 뿌리기',cd:4,r:'debuff',a:[{k:'debuff',st:'blind',v:35,dur:2}]},
+ aw_multi:{n:'난무',cd:3,r:'atk',a:[{k:'atk',p:55,ac:85,hits:3}]},
+ aw_pierce:{n:'관통 일격',cd:3,r:'atk',a:[{k:'atk',p:150,ac:90,pierce:1}]},
+ aw_venom:{n:'맹독',cd:3,r:'debuff',a:[{k:'debuff',st:'dot',v:60,dur:3}]},
+ aw_seal:{n:'기술 봉인',cd:4,r:'tactic',a:[{k:'cdUp',n:1}]},
+ aw_drain:{n:'흡혈 일격',cd:3,r:'atk',a:[{k:'atk',p:120,ac:90,drain:60}]},
+ aw_cleanse:{n:'정화',cd:4,r:'cleanse',a:[{k:'cleanse',n:3}]},
+};
+function awCount(T,F){ let n=0; for(const [f,c] of (T.aw||[])) if(F>=f) n=c; return n; }
+function rollAw(n){ const ks=shuffle(Object.keys(AWK)); return ks.slice(0,Math.min(n,ks.length)); }
+function aiLv(){ return (TW().ai)||0; }
+function addAw(e,ids){ if(!ids||!ids.length) return; e.aw=ids.slice(); for(const id of ids){ const d=AWK[id]; e.sk.unshift({def:Object.assign({aw:1},d),cd:1+Math.floor(R()*2)}); } }
+function smartNext(e){ const p=G.p, lv=aiLv(), rdy=e.sk.filter(s=>s.cd<=0&&!(s.def.low&&e.hp>e.maxhp*.6)); if(!rdy.length) return e.sk[e.sk.length-1];
+  const by=r=>rdy.find(s=>s.def.r===r), hpR=e.hp/e.maxhp, deb=e.st.filter(x=>!ST[x.id].buff).length;
+  if(hpR<.4&&by('heal')) return by('heal');
+  if(deb>=2&&by('cleanse')) return by('cleanse');
+  if(lv>=2){ const big=p.sk.some(s=>s.cd<=0&&SK[s.id].cd>=4); if(big&&e.shield<=0&&e.barrier<=0&&by('guard')) return by('guard');
+    if(by('debuff')){ const d=by('debuff'), st=d.def.a[0].st; if(!p.st.some(x=>x.id===st)) return d; }
+    if(by('buff')&&!e.st.some(x=>x.id==='str')){ const strong=rdy.some(s=>s.def.r!=='buff'&&s.def.a.some(a=>a.k==='atk'&&(a.p*(a.hits||1))>=150)); if(strong) return by('buff'); }
+    if(by('tactic')&&p.sk.some(s=>s.cd<=0&&SK[s.id].cd>=3)) return by('tactic'); }
+  const nat=rdy.filter(s=>!s.def.aw), awa=rdy.find(s=>s.def.aw&&(s.def.r==='atk'||(lv<2&&s.def.r!=='heal'&&s.def.r!=='cleanse')));
+  if(nat.length&&nat[0].def.cd>0) return nat[0];
+  if(awa) return awa;
+  return nat[0]||rdy[0]; }
+
 function mkEnemy(id,lvl,o={}){
   const m=(o.boss?BOSS:MON)[id];
   const f=(1+.2*(lvl-1))*(o.boss?BOSS_HPM*(G&&G.floor===1?.8:1):1), fa=(1+.13*(lvl-1))*(o.boss?BOSS_ATM:1);
   const e={isE:1,id,name:m.n,lvl,maxhp:Math.round(m.hp*f),atk:Math.round(m.atk*fa),dr:m.dr||0,eva:m.eva||0,
     shield:Math.round((m.sh||0)*f),barrier:m.bar||0,st:[],sk:m.sk.map(x=>({def:x,cd:0})),boss:!!o.boss,sp:m.sp,col:m.col,prefix:''};
   const em=TW().em||1; e.maxhp=Math.round(e.maxhp*em); e.atk=Math.round(e.atk*em);
-  if(G&&G.tower==='abyss'){ const F=G.floor||1, ab=TW().ramp||[0,0]; e.maxhp=Math.round(e.maxhp*(1+ab[0]*(F-1))); e.atk=Math.round(e.atk*(1+ab[1]*(F-1))); }
+  if(G&&G.tower==='abyss'){ const F=G.floor||1, ab=TW().ramp||[0,0]; e.maxhp=Math.round(e.maxhp*Math.pow(ab[0]||1,F-1)); e.atk=Math.round(e.atk*Math.pow(ab[1]||1,F-1)); }
   { const F=(G&&G.floor)||1, d=F-3; const sl=TW().lv===1?.7:1, hk=F<=3?[1,.85,.92,.97][F]:1+sl*(.05*d+.002*d*d), ak=F<=3?[1,.88,.94,.98][F]:1+sl*(.035*d+.001*d*d); const bk=o.boss&&F>3?.5:1; const H=1+(hk-1)*bk, K=1+(ak-1)*bk; e.maxhp=Math.round(e.maxhp*H); e.shield=Math.round(e.shield*H); e.atk=Math.round(e.atk*K); }
   if(G&&G.easy&&G.floor<=3){ const k=G.floor===1?.7:.85; e.maxhp=Math.round(e.maxhp*k); e.atk=Math.round(e.atk*(k+.05)); }
   if(o.elite){ const P=pick(PREFIX); P.f(e); e.prefix=P.n; e.maxhp=Math.round(e.maxhp*1.5); e.atk=Math.round(e.atk*1.15); e.elite=1; e.name='정예 '+e.name; }
@@ -2517,8 +2549,8 @@ function enter(i){
 function resolveRoom(n){
   const p=G.p;
   switch(n.t){
-    case 'mon': startCombat(mkEnemy(n.m,monLevel(),{mutate:fx('mutate'),elite:n.elite}),{ambush:fx('door')}); break;
-    case 'boss': startCombat(mkEnemy(n.m,monLevel()+1,{boss:true})); break;
+    case 'mon': { const en=mkEnemy(n.m,monLevel(),{mutate:fx('mutate'),elite:n.elite}); addAw(en,n.aw); startCombat(en,{ambush:fx('door')}); break; }
+    case 'boss': { const en=mkEnemy(n.m,monLevel()+1,{boss:true}); const ac=awCount(TW(),G.floor); if(ac) addAw(en,rollAw(ac+1)); startCombat(en); break; }
     case 'rest': { ach('rest'); const b=p.hp, h=Math.round(D(p).maxhp*(pv(p,'okami')?.8:.4)); healU(p,h); for(const s of p.sk) s.cd=0; const got=p.hp-b; const out=`비파 악사의 노래에 몸이 풀렸다.\nHP +${got}${got<h?' (최대치까지)':''} · 모든 기술 대기 초기화`; log(out.replace('\n',' '),'good'); G.ev={t:'rest',stage:'done',out}; G.mode='event'; break; }
     case 'empty': log('아무것도 없는 방이다.','mute'); toast('빈 방 — 아무 일도 없었다'); break;
     case 'corpse': log('쓰러진 모험가가 남긴 갑옷 더미에서 장비를 발견했다.','good'); G.loot=[{kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,D(p).luck),rr:0}]; G.mode='loot'; break;
@@ -2658,7 +2690,7 @@ function attack(src,tgt,a,lm,opt={}){
     if(R()*100<eva){ pop(tgt,'회피','miss'); log(`${nm(tgt)}이(가) 공격을 피했다.`,'mute'); if(isP(tgt)&&pv(tgt,'celestial')&&tgt.hp<maxHp(tgt)) healU(tgt,maxHp(tgt)*.06,'날개'); return 0; }
   }
   const base=statOf(src,a.s||'str')*a.p/100*lm*(opt.pow||1);
-  const pierce=P&&sd.flags.pierce&&R()<[0,.15,.25,.35][fl(sd,'pierce')];
+  const pierce=(!P&&!!a.pierce)||(P&&sd.flags.pierce&&R()<[0,.15,.25,.35][fl(sd,'pierce')]);
   let mult;
   if(pierce){ mult=dmgMult(src,null,a)*(1+sum(tgt,'vuln')/100); }
   else mult=dmgMult(src,tgt,a);
@@ -2858,6 +2890,7 @@ function endPlayerTurn(){
   setTimeout(enemyTurn,delay());
 }
 function enemyNext(e){
+  if(aiLv()>=1) return smartNext(e);
   for(const s of e.sk){ if(s.cd>0) continue; if(s.def.low && e.hp>e.maxhp*.6) continue; return s; }
   return e.sk[e.sk.length-1];
 }
@@ -2963,9 +2996,10 @@ function victoryNow(){
   if(pv(p,'necro')){ const cap=p.lvl*4, cur=p.perm.pursuit||0; if(cur<cap){ const add=Math.min(cap-cur,1+Math.floor(p.lvl/10)); p.perm.pursuit=cur+add; log(`망자의 군세: 추격 +${add} (${cur+add}/${cap})`,'gold'); } }
   if(d.uniq.souleater&&!fx('hot')){ p.hp=d.maxhp; log('묘지기의 수의: HP 완전 회복','gold'); }
   if(d.uniq.research){ p.perm.power=(p.perm.power||0)+2; log('금서: 능력치 +2% (이번 런 영구)','gold'); }
-  let xp=Math.round((6+e.lvl*5)*(e.boss?3:1)*(1+d.exp/100));
+  const awm=1+.25*((e.aw&&e.aw.length)||0);
+  let xp=Math.round((6+e.lvl*5)*(e.boss?3:1)*(1+d.exp/100)*awm);
   if(ctIs('powerprice')) xp=Math.round(xp/2); if(ctIs('thorns')) xp=Math.round(xp*1.5); if(d.uniq.genius) xp*=2;
-  const st=gainStones((e.boss?ri(15,30):e.elite?ri(6,10):ri(1,4)*(1+(e.gold||0)))*G.floor*(1+d.luck/200));
+  const st=gainStones((e.boss?ri(15,30):e.elite?ri(6,10):ri(1,4)*(1+(e.gold||0)))*G.floor*(1+d.luck/200)*awm);
   log(`경험치 ${xp} · 마석 ${st}`,'gold');
   gainExp(xp);
   p.st=p.st.filter(s=>s.id!=='delay'); p.shield=0;
@@ -2985,7 +3019,7 @@ function victoryNow(){
   } else if(e.elite){
     G.loot.push({kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,luck+20,'rare'),rr:0});
     { const t=upSkill(1,{low:1}); toast('정예 처치 보상 — '+t.replace('기술 강화 — ','')); }
-  } else if(R()<.42+luck/300+(TW().loot||0)){
+  } else if(R()<.42+luck/300+(TW().loot||0)+((e.aw&&e.aw.length)||0)*.2){
     if(R()<.5) G.loot.push({kind:'eq',item:genEq(pick(['weapon','armor','acc']),p.lvl,p.cls,luck),rr:0});
     else G.loot.push(skillLoot(false));
   }
@@ -3056,7 +3090,7 @@ function rollSkill(rare){
   const fit=k=>SK[k].a.some(a=>a.s&&prim.includes(a.s));
   return wpick(ids.map(k=>[k,w[SK[k].r]*(fit(k)?1.8:1)*(SK_CLS[k]?3:1)]));
 }
-function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; ach('floor'); { const b=G.p.hp; G.p.hp=Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*.25)); const g=G.p.hp-b; log(`계단에서 숨을 돌렸다. HP +${g}`,'good'); toast(`다음 층으로 · HP +${g} 회복`); } G.p.vkUsed=0; newFloor(); G.mode='explore'; }
+function advanceFloor(){ if(TW().floors&&G.floor>=TW().floors) return clearRun(); G.pendingFloor=false; ach('floor'); { const b=G.p.hp; G.p.hp=Math.min(D(G.p).maxhp,G.p.hp+Math.round(D(G.p).maxhp*(TW().sh!=null?TW().sh:.25))); const g=G.p.hp-b; log(`계단에서 숨을 돌렸다. HP +${g}`,'good'); toast(`다음 층으로 · HP +${g} 회복`); } G.p.vkUsed=0; newFloor(); G.mode='explore'; }
 function finishLoot(){ G.loot.shift(); if(!G.loot.length){ G.mode='explore'; if(G.pendingFloor) advanceFloor(); } render(); }
 function rerollCost(o){ return o.rr===0?0:3+G.floor*2; }
 function reroll(){
@@ -3591,7 +3625,7 @@ function tileHtml(n,size,i,vis){
   else if(S&&npcBodyKey(n)){ icon=`<span class="npcbw"><img class="ill-s npcbody" src="${ILL[npcBodyKey(n)]}" alt="" draggable="false"></span>`; label=n.t==='npc'&&NPCE[n.k]?NPCE[n.k].n:n.t==='traveler'?NPCV[(n.v|0)%NPCV.length].title:RTYPE[n.t]; }
   else { icon=ILL['o_'+n.t]||ILL['oi_'+n.t]||n.t==='npc'?`<span style="width:${S?54:30}px;height:${S?54:30}px;display:block">${objArt(n).replace(/^<(canvas|img)/,'<$1 style="width:100%;height:100%"')}</span>`:`<canvas class="px" data-spr="${n.t}" style="width:${S?34:20}px;height:${S?34:20}px"></canvas>`; label=n.t==='npc'&&NPCE[n.k]?NPCE[n.k].n:RTYPE[n.t]; }
   const tb=vis&&!hiddenT?(n.t==='mon'||n.t==='boss'?`<span class="tbd gt m ${n.elite||n.t==='boss'?'el':''}">${gg(n.t==='boss'?'crowned-skull':n.elite?'skull-crossed-bones':'crossed-swords')}</span>`:EVT_T.has(n.t)?`<span class="tbd gt e">${gg('scroll-unfurled')}</span>`:''):'';
-  const tag=fxv&&(vis||S)?`<span class="fx" data-tip="${fxTip(n.fx)}">${FX[n.fx].n}</span>`:'';
+  const tag=(fxv&&(vis||S)?`<span class="fx" data-tip="${fxTip(n.fx)}">${FX[n.fx].n}</span>`:'')+(vis&&!hiddenT&&n.aw&&n.aw.length?`<span class="awt" data-tip="<b>각성 ${n.aw.length}</b><br>${n.aw.map(k=>AWK[k].n).join(' · ')}<br>보상 +${n.aw.length*25}%">각성 ${n.aw.length}</span>`:'');
   const hr=G.p.hp/D(G.p).maxhp; const hint=S&&vis&&!hiddenT?((n.t==='spring'||n.t==='rest')&&hr<.6?'<span class="hint ok">회복 추천</span>':(n.t==='mon'||n.t==='boss')&&hr<.3?'<span class="hint bad">HP 위험</span>':''):'';
   if(S) return `<button class="tile near ${n.t==='boss'?'boss':''} ${n.elite?'elite':''}" style="--rc:${col.c}" data-enter="${i}" aria-label="${esc(label)}">${tb}${hint}${icon}<span class="t">${esc(label)}</span>${tag}<span class="key">${G.choices.length>1?(i===0?'←':'→'):'→'}</span></button>`;
   return `<div class="tile far ${n.t==='boss'?'boss span':''}" style="--rc:${col.c}">${tb}${icon}<span class="t">${esc(label)}</span>${tag}</div>`;
@@ -4024,7 +4058,8 @@ function renderArena(){
   const intent=dark?`<span class="intent pxf tag-f">다음 ▸ ???</span>`:`<span class="intent pxf tag-f on ${ii.cls}" data-tip="${skTip}${ii.tip}">다음 ▸ <i class="ik">${ii.ic}</i>${esc(nxt.def.n)}${ii.txt}</span>`;
   const top=`<div class="topbar"><span class="floor gplq">B${G.floor}F${TW().floors?`<small>/${TW().floors}</small>`:''}</span>${progHtml()}<button class="gbtn tgb ${spd()>1?'on':''}" data-act="spd" aria-label="전투 속도">${gg('fast-forward-button')}<b>×${spd()}</b></button><button class="gbtn tgb ${META.auto?'on':''}" data-act="auto" aria-label="자동 전투">${gg('auto-repair')}<b>AUTO</b></button><button class="gbtn" data-act="sheet" aria-label="상태 메뉴">${gg('hamburger-menu')}</button></div>`;
   const npE=`<div class="np e pxf panel-f" id="enemyBox" ${dark?'':`data-tip="${skTip}"`}><div class="nm"><b>${dark?'???':`${e.prefix?`<span class="pre">${e.prefix} </span>`:''}${esc(e.name)}`}</b><span>Lv.${e.lvl}${e.boss?' ★':''}</span></div><canvas class="px hpbar" data-hpbar="${e.hp},${e.maxhp},${e.shield},e"></canvas></div>`;
-  const stE=`<div class="stE">${intent}<div class="icchips">${iconChips(e)}${fxs.join('')}</div></div>`;
+  const awc=e.aw&&e.aw.length&&!dark?`<span class="icb pxf tag-f awk" data-tip="<b>각성</b> — 직업 기술을 쓴다<br>${e.aw.map(k=>AWK[k].n).join(' · ')}<br>처치 보상 +${e.aw.length*25}%">각성 ${e.aw.length}</span>`:'';
+  const stE=`<div class="stE">${intent}<div class="icchips">${awc}${iconChips(e)}${fxs.join('')}</div></div>`;
   const npP=`<div class="np p pxf panel-f" id="hudBox"><div class="nm"><b>${c.n}</b><span>Lv.${p.lvl}</span></div><canvas class="px hpbar" data-hpbar="${p.hp},${d.maxhp},${p.shield},p"></canvas></div>`;
   const stP=`<div class="stP icchips">${petChip(p)}${synChips(p)}${iconChips(p)}</div>`;
   const esc2=dying?' dying':shakeE?' flash':'';
@@ -4098,7 +4133,7 @@ function renderHall(){
   const hud=`<div class="lhud">${tab==='battle'?'<button class="lpill back" data-tab="home">‹ 로비</button><span class="sp"></span>':tab==='home'?goalBanner(1):'<span class="sp"></span>'}<span class="lpill"><b class="stone num">${META.stones.toLocaleString()}</b></span>${sndBtn()}</div>`;
   app.innerHTML=`<div class="lob ${cls}"><div class="lbg" style="background-image:url(${LBG[bgk]||LBG.lobby})"></div><div class="lshade ${cls}"></div>${hud}<main class="lmain ${cls}">${body}</main>${bar}</div>${gachaHtml()}${hallTut()}${tab==='home'?clsPop():''}`;
 }
-const HTIPS=['{P}★ 직업은 {P} 계열 기술이 더 자주 나온다.','정예 마물은 위험하지만 희귀 장비와 기술 강화 +1을 남긴다.','전투가 20턴을 넘기면 격노(피해 증가), 40턴부터는 탈진(양쪽 HP 감소)이 시작된다.','죽어도 도달한 층만큼 탐사 보상 마석을 받는다.','몬스터와 보물에서 드물게 개조 부품을 얻는다.','지도에서 앞의 두 칸까지 내다보고 길을 고르자.','빛나는 샘과 쉼터는 체력이 낮을 때 아껴 두자.','떠돌이 나그네는 희귀 기술을 가르쳐 준다.','계약을 걸면 어려워지는 대신 보상이 커진다.','물약은 위험할 때 자동으로 쓰도록 설정할 수 있다.'];
+const HTIPS=['보통 이상 던전의 적은 「각성」해 직업 기술을 쓴다. 지도에서 각성 수를 보고 길을 고르자.','어려운 던전일수록 계단에서 회복되는 HP가 적다. 쉼터·샘의 가치가 커진다.','{P}★ 직업은 {P} 계열 기술이 더 자주 나온다.','정예 마물은 위험하지만 희귀 장비와 기술 강화 +1을 남긴다.','전투가 20턴을 넘기면 격노(피해 증가), 40턴부터는 탈진(양쪽 HP 감소)이 시작된다.','죽어도 도달한 층만큼 탐사 보상 마석을 받는다.','몬스터와 보물에서 드물게 개조 부품을 얻는다.','지도에서 앞의 두 칸까지 내다보고 길을 고르자.','빛나는 샘과 쉼터는 체력이 낮을 때 아껴 두자.','떠돌이 나그네는 희귀 기술을 가르쳐 준다.','계약을 걸면 어려워지는 대신 보상이 커진다.','물약은 위험할 때 자동으로 쓰도록 설정할 수 있다.'];
 function renderHome(){
   const sel=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior', c=CLASSES[sel], slots=slotsFor(sel), eq=eqClean(sel);
   const prim=((c.slots&&c.slots.weapon)||[]).map(k=>({str:'근력',dex:'기교',mag:'마력',fai:'신앙'}[k])).filter(Boolean);
