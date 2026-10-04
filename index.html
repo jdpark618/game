@@ -1322,6 +1322,9 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
 .arena.v2 .field .abox.hr.spx,.field .abox.hr.spx{width:60%;height:74%;overflow:visible;-webkit-mask-image:none;mask-image:none}
 .arena.v2 .field .abox.hr.spx .fig,.arena.v2 .field .abox.hr.pose.spx .fig,.arena.v2 .field .abox.hr.pose.nf.spx .fig{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:0% 100%;transform:none}
 .arena.v2 .field .abox.hr.spx .fig.flash{animation:flash .22s}
+.lhud .gbar{flex:1;min-width:0;margin:0;padding:4px 8px;gap:6px;font-size:11.5px;line-height:1.3;border-radius:8px}
+.lhud .gbar b{word-break:keep-all;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px}
+.lhud .gbar .gk{font-size:10px}.lhud .gbar .gr{font-size:10px}.lhud .gbar .btn.sm{padding:3px 7px;font-size:11px;white-space:nowrap}
 </style>
 <div id="boot"><div class="bt-in"><div class="bt-t">언더크립트</div><div class="bt-s">무덤 아래로 내려가는 중…</div><div class="bt-bar"><i id="btbar"></i></div><div class="bt-p" id="btp">0%</div><div class="bt-tip" id="bttip"></div></div></div>
 <style>#boot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1c1712,#07080a 70%);color:#e9e2cf;font-family:'Gowun Batang',serif;transition:opacity .45s}
@@ -3801,9 +3804,9 @@ const GOALS=[
  {id:'t1',n:'제1탑을 답파한다',r:200,ok:()=>!!(META.tclear||{}).crypt},
  {id:'ct1',n:'계약을 걸고 출정한다',r:150,ok:()=>!!META.ctUsed}];
 function goalState(){ META.gdone=META.gdone||{}; const claim=GOALS.find(g=>g.ok()&&!META.gdone[g.id]); const next=GOALS.find(g=>!g.ok()&&!META.gdone[g.id]); return {claim,next,done:GOALS.filter(g=>META.gdone[g.id]).length}; }
-function goalBanner(){ const s=goalState();
-  if(s.claim) return `<div class="gbar claim"><span class="gk">${gg('targeted')}목표 달성 ${s.done+1}/${GOALS.length}</span><b>${s.claim.n}</b><button class="btn pri sm" data-act="gclaim" data-v="${s.claim.id}">받기 <span class="stone num">+${s.claim.r}</span></button></div>`;
-  if(s.next) return `<div class="gbar"><span class="gk">목표 ${s.done+1}/${GOALS.length}</span><b>${s.next.n}</b><span class="gr">보상 <span class="stone num">${s.next.r}</span></span></div>`;
+function goalBanner(c){ const s=goalState();
+  if(s.claim) return `<div class="gbar claim"><span class="gk">${gg('targeted')}${c?'':'목표 달성 '}${s.done+1}/${GOALS.length}</span><b>${s.claim.n}</b><button class="btn pri sm" data-act="gclaim" data-v="${s.claim.id}">받기 <span class="stone num">+${s.claim.r}</span></button></div>`;
+  if(s.next) return `<div class="gbar"><span class="gk">${c?gg('targeted'):'목표 '}${s.done+1}/${GOALS.length}</span><b>${s.next.n}</b><span class="gr">보상 <span class="stone num">${s.next.r}</span></span></div>`;
   return `<div class="gbar"><span class="gk">다음 목표</span><b>${nextGoal()}</b></div>`; }
 function goalList(){ META.gdone=META.gdone||{}; return `<div class="glist">${GOALS.map(g=>{ const d=META.gdone[g.id], ok=g.ok(); return `<div class="${d?'done':ok?'ok':''}"><i>${d?'✓':ok?'!':'·'}</i><span>${g.n}</span><b class="stone num">${g.r}</b></div>`; }).join('')}</div>`; }
 function nextGoal(){
@@ -4036,7 +4039,7 @@ function renderHall(){
   const TB=[['home','로비','M3 11l9-7 9 7v9h-6v-6H9v6H3z'],['cls','직업','M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c1-4 4-6 8-6s7 2 8 6'],['mod','개조','M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z'],['pet','펫','M7 17c0-3 2.5-5 5-5s5 2 5 5c0 2-2 3-5 3s-5-1-5-3zM7 9a2 2 0 1 0 0-.01M17 9a2 2 0 1 0 0-.01M10 5a2 2 0 1 0 0-.01M14 5a2 2 0 1 0 0-.01'],['rec','기록','M5 4h11l3 3v13H5zM9 10h6M9 14h6']];
   const bar=tab==='battle'?'':`<nav class="lbar">${TB.map(([k,n,d])=>{ const op=['home','cls'].includes(k)||tabOpen(k), nw=op&&((HTUT[k]&&!(META.htut||{})[k])||(k==='rec'&&cxClaimable()>0)), on=tab===k||(k==='home'&&tab==='battle');
     return op?`<button class="lb ${on?'on':''}" data-tab="${k}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg><span>${n}</span>${nw?'<i class="tnew"></i>':''}</button>`:`<button class="lb lockt" data-tip="<b>${n}</b><br>${TAB_LOCK[k]}"><svg viewBox="0 0 24 24"><path d="${d}"/></svg><span>🔒 ${n}</span></button>`; }).join('')}</nav>`;
-  const hud=`<div class="lhud">${tab==='battle'?'<button class="lpill back" data-tab="home">‹ 로비</button>':''}<span class="sp"></span><span class="lpill"><b class="stone num">${META.stones.toLocaleString()}</b></span>${sndBtn()}</div>`;
+  const hud=`<div class="lhud">${tab==='battle'?'<button class="lpill back" data-tab="home">‹ 로비</button><span class="sp"></span>':tab==='home'?goalBanner(1):'<span class="sp"></span>'}<span class="lpill"><b class="stone num">${META.stones.toLocaleString()}</b></span>${sndBtn()}</div>`;
   app.innerHTML=`<div class="lob ${cls}"><div class="lbg" style="background-image:url(${LBG[bgk]||LBG.lobby})"></div><div class="lshade ${cls}"></div>${hud}<main class="lmain ${cls}">${body}</main>${bar}</div>${gachaHtml()}${hallTut()}${tab==='home'?clsPop():''}`;
 }
 const HTIPS=['{P}★ 직업은 {P} 계열 기술이 더 자주 나온다.','몬스터와 보물에서 드물게 개조 부품을 얻는다.','지도에서 앞의 두 칸까지 내다보고 길을 고르자.','빛나는 샘과 쉼터는 체력이 낮을 때 아껴 두자.','떠돌이 나그네는 희귀 기술을 가르쳐 준다.','계약을 걸면 어려워지는 대신 보상이 커진다.','물약은 위험할 때 자동으로 쓰도록 설정할 수 있다.'];
@@ -4053,7 +4056,7 @@ function renderHome(){
   else { const lk=Object.entries(TOWERS).find(([k])=>!towerOpen(k)); nxt=lk?`<div class="nx"><i>🗝</i><span>${lk[1].n}<small>${lk[1].need&&TOWERS[lk[1].need]?TOWERS[lk[1].need].n+' 제패 시 열림':'조건 달성 시 열림'}</small></span></div>`:`<div class="nx"><i>✨</i><span>개조 슬롯 모두 열림<small>다른 직업도 키워 보자</small></span></div>`; }
   const tip=HTIPS[((META.graves||[]).length+sel.length)%HTIPS.length].replace('{P}',prim.join('·')||'주력');
   const side=`<div class="hside"><div class="hcard"><h5>${gg('stars-stack')}탑 기록</h5>${trows}</div><div class="hcard"><h5>다음 해금</h5>${nxt}</div><div class="hcard htip"><h5>팁</h5>${tip}</div></div>`;
-  return `<div class="hgoal">${goalBanner()}</div>${side}<button class="hfigw" data-act="cpop" aria-label="직업 정보">${img}</button>
+  return `${side}<button class="hfigw" data-act="cpop" aria-label="직업 정보">${img}</button>
   <div class="hinfo"><div class="hk">${META.maxFloor[sel]?`최고 B${META.maxFloor[sel]}F`:'기록 없음'}</div><div class="hn">${c.n}</div>
    <div class="hchips"><span class="lchip">${prim.join('·')} ★</span>${tabOpen('mod')?`<span class="lchip">개조 ${eq.length}/${slots}</span>`:''}</div>
    <div class="hlinks"><button class="hlink" data-act="cpop">ⓘ 직업 정보</button><button class="hlink" data-tab="cls">직업 변경 ▸</button></div></div>
