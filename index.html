@@ -1197,7 +1197,7 @@ canvas.hfig{width:100%;height:100%}
 .hlink{margin-top:6px;background:none;border:0;color:var(--lg);font:inherit;font-size:12px;padding:0;cursor:pointer}
 .lmain.home .lgo{position:relative;z-index:12}
 /* battle */
-.lmain.battle{gap:8px;padding-top:0}
+.lmain.battle{gap:8px;padding-top:0}.lmain.battle{overflow-y:auto!important;overflow-x:hidden}.lmain.battle>*{flex-shrink:0}.lmain.battle>.bban{flex-shrink:1}.lmain.battle .lgo{position:sticky;bottom:0;z-index:6}@media (max-height:600px){.lmain.battle .bban{min-height:96px!important;padding-top:10px!important}.lmain.battle .bban .bnm{font-size:26px}.lmain.battle .barr,.lmain.battle .bpg{display:none}.hside .hcard:nth-child(2){display:none}}
 .bban{position:relative;height:auto;flex:1 1 250px;min-height:120px;max-height:250px;text-align:center;padding-top:34px}
 .bno{font-size:12px;color:var(--lg);letter-spacing:2px}.bno span{letter-spacing:1px}
 .bnm{font-size:31px;font-weight:900;font-family:var(--f-disp);text-shadow:0 0 18px rgba(232,195,122,.45),0 2px 8px #000,0 0 3px #000}
@@ -1315,6 +1315,17 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
  .g-hud.hud{padding-top:2px!important;padding-bottom:2px!important}.g-hud .portrait{width:38px!important;height:38px!important}
  .g-hud .who b{font-size:15px}.g-hud .chips{margin-top:2px!important}.g-hud .chips .icb{height:18px}
  .g-skills button{min-height:0!important;height:46px!important;padding-top:2px!important;padding-bottom:2px!important}
+ #app .g-skills .sk{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:0!important;text-align:center!important;padding:1px 3px!important;overflow:hidden}
+ #app .g-skills .sk .ic,#app .g-skills .sk>.gi.ic{position:absolute!important;left:50%!important;top:50%!important;width:34px!important;height:34px!important;transform:translate(-50%,-50%)!important;opacity:.2;margin:0!important;z-index:0;pointer-events:none}
+ #app .g-skills .sk span.nm,#app.arena-mode .g-skills .sk span.nm{position:relative;z-index:1;flex:none;display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:2.2em;white-space:normal!important;word-break:keep-all;overflow-wrap:anywhere;width:100%;font-size:10px!important;line-height:1.1!important;padding:0 2px!important;text-align:center!important;letter-spacing:-.03em}
+ #app .g-skills .sk.hlv span.nm{padding-right:13px!important}
+ #app .g-skills .sk:has(.tgs .tg) span.nm{padding-left:11px!important}
+ #app .g-skills .sk .nm .mut{display:inline!important;width:auto!important;font-size:9.5px!important;margin:0 2px 0 0!important}
+ #app .g-skills .sk .nm .nw{white-space:nowrap}
+ #app .g-skills .sk .est{position:relative;z-index:1;flex:none;font-size:10px!important;line-height:1.05!important;width:100%;text-align:center}
+ #app .g-skills .sk .tgs{position:absolute!important;left:1px!important;top:1px!important;transform:scale(.72);transform-origin:left top;z-index:3}
+ #app .g-skills .sk .lvtag{top:1px!important;right:1px!important;font-size:8.5px!important;padding:1px 2px!important}
+ #app .g-skills .sk .cd{z-index:4}
  .g-actions .btn,.g-actions button{min-height:0!important;height:34px!important;padding-top:0!important;padding-bottom:0!important}
  .bban{padding-top:18px}
 }
@@ -4021,7 +4032,7 @@ function renderArena(){
     const df=SK[s.id], dis=!myTurn||s.cd>0||(df.b&&p.barrier<df.b)||healBlock(p,df), T=df.t||isTurnFree(df,s.mut), est=estLine(p,s,e);
     const tip=`<b>${esc(skillName(s))}</b><br>${esc(est.main)} · ${esc(est.sub)}<br>${lvLine(s)}`;
     const kr=!dark&&!dis?estimate(p,df,effLv(s),e,s.mut):null, kill=kr&&kr.hits&&kr.total>=e.hp+e.shield;
-    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'} ${s.lvl>1?'hlv':''}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}"><span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span>`:''}${(n=>{ const i=n.lastIndexOf(' '); const bd=''; return i<0?`<span class="nw">${esc(n)}${bd}</span>`:`${esc(n.slice(0,i))} <span class="nw">${esc(n.slice(i+1))}${bd}</span>`; })(df.n)}</span><span class="est">${esc(est.main)}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}${s.lvl>1?`<span class="lvtag t${Math.min(7,s.lvl-1)}">+${s.lvl-1}</span>`:''}</button>`; }).join('');
+    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'} ${s.lvl>1?'hlv':''}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}"><span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${(n=>{ const i=n.lastIndexOf(' '); const bd=''; return i<0?`<span class="nw">${esc(n)}${bd}</span>`:`${esc(n.slice(0,i))} <span class="nw">${esc(n.slice(i+1))}${bd}</span>`; })(df.n)}</span><span class="est">${esc(est.main)}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}${s.lvl>1?`<span class="lvtag t${Math.min(7,s.lvl-1)}">+${s.lvl-1}</span>`:''}</button>`; }).join('');
   const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴<br>종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
   app.classList.add('arena-mode'); app.classList.remove('wide'); app.classList.remove('lobbyv');
   const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><div class="bcb" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><small>층의 주인</small><b>${esc(nm(e))}</b>${gimOn(e)&&!hidden()?`<em>${BGIM[e.id].n} · ${BGIM[e.id].d}</em>`:''}</div></div>`:'');
