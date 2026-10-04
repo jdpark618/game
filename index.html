@@ -1332,6 +1332,7 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
 .topbar .gbtn:active{transform:translateY(1px)}
 .topbar .floor.gplq{display:inline-flex;align-items:baseline;gap:1px;height:30px;padding:0 9px;border-radius:8px;border:1px solid #0a0b0d;background:linear-gradient(145deg,#3a4048,#1a1d22);box-shadow:inset 0 1px 0 #5a626c,inset 0 -2px 0 #0a0b0d;line-height:30px;color:#f0e0b0}
 .toprow .floor{border:1px solid #0a0b0d!important;border-image:none!important;border-radius:8px!important;background:linear-gradient(145deg,#3a4048,#1a1d22)!important;box-shadow:inset 0 1px 0 #5a626c,inset 0 -2px 0 #0a0b0d!important;padding:2px 10px!important;height:30px;display:inline-flex!important;align-items:baseline;line-height:26px;color:#f0e0b0}
+.sk .est{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.sk .nm .nw{white-space:nowrap}.sk .nm .mut{display:block;width:100%;font-size:9.5px;line-height:1.15;margin-bottom:1px}
 </style>
 <div id="boot"><div class="bt-in"><div class="bt-t">언더크립트</div><div class="bt-s">무덤 아래로 내려가는 중…</div><div class="bt-bar"><i id="btbar"></i></div><div class="bt-p" id="btp">0%</div><div class="bt-tip" id="bttip"></div></div></div>
 <style>#boot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1c1712,#07080a 70%);color:#e9e2cf;font-family:'Gowun Batang',serif;transition:opacity .45s}
@@ -3464,8 +3465,12 @@ function estLine(p,s,e){
   if(a.k==='heal') return {main:`회복 ≈${Math.round(statOf(p,a.s)*a.p/100*lm*pw*(pv(p,'priest')?1.5:1))}`,sub:''};
   if(a.k==='shield') return {main:`보호막 ≈${Math.round(statOf(p,a.s)*a.p/100*lm*pw)}`,sub:''};
   if(a.k==='buff'&&a.s) return {main:`${ST[a.st].n} ≈${Math.round(statOf(p,a.s)*a.v/100*lm*pw)}`,sub:`${a.dur}턴`};
-  return {main:actText(a),sub:''};
+  return {main:shortAct(def),sub:''};
 }
+const SPSH={resch:'대기 교환',serve:'대접',bill:'계산서',merc:'용병 고용',cut:'구조조정',tighten:'지연 -40%',unwrap:'피해 되돌리기',intro:'펫 공격',oath:'하수인 희생',cheer2:'함성 +2',pyr:'피해감소'};
+function shortAct(def){ const a=def.a[0]; if(!a) return '';
+  switch(a.k){ case 'buff': return `${ST[a.st].n} ${a.dur}턴`; case 'selfst': return `${ST[a.st].n} ${a.dur}턴`; case 'debuff': return `적 ${ST[a.st].n}`; case 'bar': return `방벽 +${a.n}`; case 'cdUp': return `적 대기 +${a.n}`; case 'cdDown': return `대기 -${a.n}`; case 'cleanse': return '디버프 해제'; case 'selfdmg': return `HP ${a.p}% 소모`; case 'sp': { const x=SPSH[a.f]||''; return a.f==='serve'?`대접 +${a.n}`:x; } }
+  return actText(a); }
 function mainSkill(p){ return p.sk.find(s=>SK[s.id].a.some(a=>a.k==='atk')); }
 function skIcon(def){
   if(def&&def.gi) return 'gi:'+def.gi;
@@ -3989,7 +3994,7 @@ function renderArena(){
     const df=SK[s.id], dis=!myTurn||s.cd>0||(df.b&&p.barrier<df.b)||healBlock(p,df), T=df.t||isTurnFree(df,s.mut), est=estLine(p,s,e);
     const tip=`<b>${esc(skillName(s))}</b><br>${esc(est.main)} · ${esc(est.sub)}<br>${lvLine(s)}`;
     const kr=!dark&&!dis?estimate(p,df,effLv(s),e,s.mut):null, kill=kr&&kr.hits&&kr.total>=e.hp+e.shield;
-    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}">${kill?'<span class="kb">처치</span>':''}<span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}</span> `:''}${esc(df.n)}${s.lvl>1?`<span class="sklv ${s.lvl>=5?'m':''}">+${s.lvl-1}</span>`:''}</span><span class="est">${esc(/≈/.test(est.main)?est.main:est.main.slice(0,8))}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}</button>`; }).join('');
+    return `<button class="sk pxf ${kill?'btn-on-f kill':'btn-f'}" data-sk="${i}" ${dis?'disabled':''} data-tip="${tip}${kill?'<br><b>이 공격으로 처치 가능</b>':''}">${kill?'<span class="kb">처치</span>':''}<span class="tgs">${T?'<span class="tg">T</span>':''}${df.f?'<span class="tg f">F</span>':''}${df.b?`<span class="tg b">B${df.b}</span>`:''}</span>${artC('icon:'+skIcon(df),'ic')}<span class="nm">${s.mut?`<span class="mut">${MUT[s.mut].n}${s.lvl>1?` <span class="sklv ${s.lvl>=5?'m':''}">+${s.lvl-1}</span>`:''}</span>`:''}${(n=>{ const i=n.lastIndexOf(' '); const bd=s.lvl>1&&!s.mut?`<span class="sklv ${s.lvl>=5?'m':''}">+${s.lvl-1}</span>`:''; return i<0?`<span class="nw">${esc(n)}${bd}</span>`:`${esc(n.slice(0,i))} <span class="nw">${esc(n.slice(i+1))}${bd}</span>`; })(df.n)}</span><span class="est">${esc(est.main)}</span>${s.cd>0?`<span class="cd">${s.cd}</span>`:''}</button>`; }).join('');
   const util=`<div class="util2"><button class="pxf btn-f" data-act="potion" ${potOK?'':'disabled'}>${artC('icon:heal','uic')}<b>${p.potions}</b></button>${myTurn&&G.C.used&&G.C.used.length?'<button class="pxf btn-on-f endt" data-act="wait">턴<br>종료</button>':`<button class="pxf btn-f" data-act="wait" ${myTurn?'':'disabled'}>대기</button>`}</div>`;
   app.classList.add('arena-mode'); app.classList.remove('wide'); app.classList.remove('lobbyv');
   const fxo=(critFlag&&!dying?'<div class="critfx"></div>':'')+(hurtP?'<div class="hurtfx"></div>':'')+(dying?`<div class="killfx">${'<i></i>'.repeat(14)}</div>`:'')+(G.C.cut?`<div class="bosscut" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><div class="bcb" style="animation-delay:-${Math.max(0,Date.now()-(G.C.cutAt||Date.now()))}ms"><small>층의 주인</small><b>${esc(nm(e))}</b>${gimOn(e)&&!hidden()?`<em>${BGIM[e.id].n} · ${BGIM[e.id].d}</em>`:''}</div></div>`:'');
