@@ -2308,7 +2308,7 @@ const TOWERS={
  spire:{no:'어려움',n:'용의 첨탑',lv:3,floors:10,art:'balrog',need:'vault',em:1.1,sm:2,loot:.2,elite:.2,final:'balrog',bosses:['greater','samael','sphinx'],tags:['10층','용·환수','정예·보상×2'],first:1500,firstTx:'마석 1500 · 무한 개방'},
  mine:{no:'이벤트',n:'마석 광산',ev:1,lv:2,floors:5,art:'pharaoh',need:'crypt',em:1.15,sm:9,pool:'vault',final:'goldeater',bosses:['pharaoh','count'],rooms:[['mon',40],['chest',26],['corpse',4],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],tags:['5층','마석×9','상자 多'],first:0,firstTx:'—'},
  forge:{no:'이벤트',n:'부품 공방',ev:1,lv:2,floors:5,art:'greater',need:'crypt',em:1,sm:.5,pool:'spire',partM:10,final:'tyrant',bosses:['greater','samael'],rooms:[['mon',44],['chest',14],['tomb',12],['spring',6],['rest',6],['traveler',4],['npc',8],['empty',6]],elite:.15,tags:['5층','개조 부품 대량','정예 多'],first:0,firstTx:'—'},
- abyss:{no:'무한',n:'끝없는 심연',lv:0,floors:0,art:'t_abyss',need:'spire',em:1.25,sm:1.5,final:null,bosses:null,tags:['무한','고난이도','모든 몬스터']},
+ abyss:{no:'무한',n:'끝없는 심연',lv:0,floors:0,art:'t_abyss',need:'spire',em:1.6,sm:2.5,ramp:[.06,.035],elite:.25,final:null,bosses:null,tags:['무한','극한 난이도','층마다 강해짐']},
 };
 const PET_G={common:{n:'일반',c:'#c9c2ad',w:55},magic:{n:'고급',c:'#7fb8e8',w:27},rare:{n:'희귀',c:'#e0cf62',w:12},epic:{n:'영웅',c:'#c99cf0',w:5},leg:{n:'전설',c:'#ff9a3a',w:1}};
 const PETS={
@@ -2389,7 +2389,7 @@ const MAST_P=['','','시작 물약 +1','시작 기술 하나 +1 강화','최대 
 function mastLv(cls){ const x=(META.mast||{})[cls]||0; let l=1; for(let i=1;i<MAST_T.length;i++) if(x>=MAST_T[i]) l=i+1; return Math.min(5,l); }
 function mastTx(cls){ const x=(META.mast||{})[cls]||0, l=mastLv(cls), nx=MAST_T[l]; return {l,x,nx}; }
 function mastPerks(cls){ const l=mastLv(cls), r=[]; for(let i=2;i<=l;i++) r.push(MAST_P[i]); return r; }
-const ABY_M=[[10,300],[20,600],[30,1000],[40,1500],[50,2000]];
+const ABY_M=[[10,500],[20,1200],[30,2500],[40,4000],[50,6000]];
 function dayKey(){ const d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
 function hashN(n){ n=(n^61)^(n>>>16); n=n+(n<<3); n=n^(n>>>4); n=Math.imul(n,0x27d4eb2d); n=n^(n>>>15); return Math.abs(n); }
 function dailyCfg(){ const k=dayKey(), h=hashN(k), cl=Object.keys(CLASSES).filter(k=>!CLASSES[k].grp), tw=['crypt','spire','vault'].filter(t=>towerOpen(t)), ct=Object.keys(CT);
@@ -2475,6 +2475,7 @@ function mkEnemy(id,lvl,o={}){
   const e={isE:1,id,name:m.n,lvl,maxhp:Math.round(m.hp*f),atk:Math.round(m.atk*fa),dr:m.dr||0,eva:m.eva||0,
     shield:Math.round((m.sh||0)*f),barrier:m.bar||0,st:[],sk:m.sk.map(x=>({def:x,cd:0})),boss:!!o.boss,sp:m.sp,col:m.col,prefix:''};
   const em=TW().em||1; e.maxhp=Math.round(e.maxhp*em); e.atk=Math.round(e.atk*em);
+  if(G&&G.tower==='abyss'){ const F=G.floor||1, ab=TW().ramp||[0,0]; e.maxhp=Math.round(e.maxhp*(1+ab[0]*(F-1))); e.atk=Math.round(e.atk*(1+ab[1]*(F-1))); }
   { const F=(G&&G.floor)||1, d=F-3; const sl=TW().lv===1?.7:1, hk=F<=3?[1,.85,.92,.97][F]:1+sl*(.05*d+.002*d*d), ak=F<=3?[1,.88,.94,.98][F]:1+sl*(.035*d+.001*d*d); const bk=o.boss&&F>3?.5:1; const H=1+(hk-1)*bk, K=1+(ak-1)*bk; e.maxhp=Math.round(e.maxhp*H); e.shield=Math.round(e.shield*H); e.atk=Math.round(e.atk*K); }
   if(G&&G.easy&&G.floor<=3){ const k=G.floor===1?.7:.85; e.maxhp=Math.round(e.maxhp*k); e.atk=Math.round(e.atk*(k+.05)); }
   if(o.elite){ const P=pick(PREFIX); P.f(e); e.prefix=P.n; e.maxhp=Math.round(e.maxhp*1.5); e.atk=Math.round(e.atk*1.15); e.elite=1; e.name='정예 '+e.name; }
