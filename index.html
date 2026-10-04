@@ -4326,7 +4326,7 @@ const SND=(()=>{
   const mode=()=>META.snd||'all';
   const vol=()=>META.vol||{bgm:.45,sfx:.75};
   const VB=()=>{ const v=vol().bgm; return .5*v*v; }, VS=()=>.77*Math.pow(vol().sfx,1.5);
-  const TR={lobby:{src:'bgm_home.mp3'},dungeon:{srcs:['bgm_battle3.mp3','bgm_battle4.mp3']}};
+  const TR={lobby:{src:'bgm_home.mp3'},dungeon:{src:'bgm_battle.mp3'}};
   const pickSrc=T=>T.srcs?T.srcs[Math.floor(Math.random()*T.srcs.length)]:T.src;
   function play(T){ if(!T.el) return; if(VB()<=0){ T.el.pause(); return; } const pr=T.el.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
   function tgtVol(T){ return Math.max(0,Math.min(1,(T.tlv||0)*VB()*2)); }
