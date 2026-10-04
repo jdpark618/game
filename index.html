@@ -338,7 +338,7 @@ table.rec th{color:var(--mute);font-weight:500}
 .prologue summary{list-style:none;cursor:pointer;font-size:12px;color:var(--accent)}
 .prologue summary::-webkit-details-marker{display:none}
 @media (max-width:899px){
-  html,body{height:100%;height:100dvh}
+  html,body{height:100%;height:100dvh;margin:0;padding:0}
   #app.wide{height:100%;padding-block:8px;gap:8px}
   #app.wide .game{height:100%;gap:8px}
   .g-stage{flex:1 1 auto;min-height:0;overflow-y:auto;padding:8px;gap:8px;min-height:0}
@@ -1206,7 +1206,7 @@ canvas.hfig{width:100%;height:100%}
 .barr{position:absolute;top:110px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(10,12,16,.55);backdrop-filter:blur(6px);color:#efe6d2;font-size:20px;cursor:pointer;line-height:1}
 .barr.l{left:0}.barr.r{right:0}
 .bpg{position:absolute;bottom:8px;left:0;right:0;display:flex;gap:5px;justify-content:center}.bpg i{width:6px;height:6px;border-radius:3px;background:#ffffff44}.bpg i.on{width:18px;background:var(--lg)}
-.bths{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;flex:0 0 auto}@media (max-width:620px){.bths{grid-template-columns:repeat(3,1fr)}.bths .bth{height:42px}}
+.bths{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;flex:0 0 auto}@media (max-width:620px){.bths{grid-template-columns:repeat(3,1fr)}.bths .bth{height:42px}}@media (max-width:620px) and (max-height:760px){.bths{grid-template-columns:repeat(6,1fr);gap:4px}.bths .bth{height:34px}.bths .bth span{font-size:10.5px;left:4px!important;bottom:3px!important;letter-spacing:-.02em;white-space:nowrap}}
 .bth{position:relative;height:50px;border-radius:10px;border:1px solid rgba(232,195,122,.3);background-size:cover;background-position:center;cursor:pointer;overflow:hidden;font:inherit;padding:0}
 .bth:before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,6,8,.85),transparent 70%)}
 .bth span{position:absolute;left:6px;bottom:3px;font-size:11px;font-weight:800;color:#efe6d2}
@@ -3112,7 +3112,7 @@ const NPCE={
  ghoul:{n:'쓰러진 모험가?',text:'벽에 기댄 모험가가 신음한다. "살려… 줘…" 그런데 얼굴빛이 이상하게 푸르스름하다.'},
  knight:{n:'길 잃은 여기사',text:'금발의 여기사가 피 묻은 검을 들고 달려온다. "동료들이 습격당했어요! 제발 도와주세요!"'},
 };
-function npcPool(){ const tk=(G&&G.tower)||'abyss'; return Object.keys(NPCE).filter(k=>!NPCE[k].tw||NPCE[k].tw.includes(tk)); }
+function npcPool(){ const t0=(G&&G.tower)||'abyss', tk=(TOWERS[t0]&&TOWERS[t0].pool)||t0; return Object.keys(NPCE).filter(k=>!NPCE[k].tw||NPCE[k].tw.includes(tk)); }
 const WHEEL=[{l:'×2',m:2,c:'#3c6e4a'},{l:'꽝',m:0,c:'#3a2a2a'},{l:'×3',m:3,c:'#c9953e'},{l:'💀',f:1,c:'#6a1f1f'},{l:'×2',m:2,c:'#3c6e4a'},{l:'꽝',m:0,c:'#3a2a2a'},{l:'×½',m:.5,c:'#4a4f5a'},{l:'🎁',g:1,c:'#5a3f8a'}];
 const TAROT=[{k:'sun',n:'태양',t:'HP 완전 회복 · 기술 대기 초기화'},{k:'star',n:'별',t:'행운 +6 (영구)'},{k:'tower',n:'탑',t:'정예 마물 출현 · 이기면 희귀 장비'},{k:'death',n:'죽음',t:'25턴 동안 피해증가 +40%'},{k:'wheel',n:'수레바퀴',t:'마석 한 줌'},{k:'magus',n:'마법사',t:'희귀 기술 하나'},{k:'moon',n:'달',t:'25턴 동안 실명 30%'},{k:'force',n:'힘',t:'능력치 +4% (영구)'}];
 function npcBet(ev){ return Math.max(10,G.floor*12); }
@@ -3366,7 +3366,7 @@ function evAct(choice){
     if(r==='part'){ const po=partOffer(1); if(po){ G.ev=null; G.loot=[{kind:'part',opts:po,rr:0,src:'chest'}]; G.mode='loot'; log('상자 깊숙한 곳에서 개조 부품을 찾았다!','gold'); return render(); } const n=gainStones(ri(4,14)*G.floor); out=`상자 안에는 마석 ${n}개가 들어 있었다.`; log(out,'gold'); }
     if(r==='contract'){ findContract(); out='상자 바닥에 핏자국이 밴 계약서가 깔려 있었다.'; }
     if(r==='boom'){ if(trap){ out='찰칵 하는 소리를 듣고 몸을 날렸다. 함정을 피했다.'; log(out,'good'); } else { const v=Math.round(p.hp*.3); p.hp-=v; hurtP=true; out=`상자가 폭발했다! ${v} 피해.`; log(out,'dmg'); } }
-    if(r==='mimic'){ log('상자 속에 숨어 있던 괴물이 튀어나왔다!','bad'); return fight(G.tower==='vault'?'rmimic':'mimic'); }
+    if(r==='mimic'){ log('상자 속에 숨어 있던 괴물이 튀어나왔다!','bad'); return fight((G.tower==='vault'||TW().pool==='vault')?'rmimic':'mimic'); }
   }
   if(ev.t==='tomb'){
     const r=wpick([['map',12],['power',12],['luck',10],['guard',10],['loot',8],['part',3*(TW().partM||1)],['contract',hasLeft?6:0],['boom',10],['gas',10],['vuln',9],['stun',9],['cleaner',8]]);
@@ -3838,7 +3838,7 @@ const GOALS=[
  {id:'cls1',n:'새 직업을 깨운다',r:150,ok:()=>META.unlocked.length>3},
  {id:'t1',n:'그림자 숲(쉬움)을 답파한다',r:200,ok:()=>!!(META.tclear||{}).crypt},
  {id:'ct1',n:'계약을 걸고 출정한다',r:150,ok:()=>!!META.ctUsed},
- {id:'ev1',n:'이벤트 던전 하나를 답파한다',r:150,ok:()=>!!((META.tclear||{}).mine||(META.tclear||{}).forge)}];
+ {id:'ev1',n:'이벤트 던전 답파',r:150,ok:()=>!!((META.tclear||{}).mine||(META.tclear||{}).forge)}];
 function goalState(){ META.gdone=META.gdone||{}; const claim=GOALS.find(g=>g.ok()&&!META.gdone[g.id]); const next=GOALS.find(g=>!g.ok()&&!META.gdone[g.id]); return {claim,next,done:GOALS.filter(g=>META.gdone[g.id]).length}; }
 function goalBanner(c){ const s=goalState();
   if(s.claim) return `<div class="gbar claim"><span class="gk">${gg('targeted')}${c?'':'목표 달성 '}${s.done+1}/${GOALS.length}</span><b>${s.claim.n}</b><button class="btn pri sm" data-act="gclaim" data-v="${s.claim.id}">받기 <span class="stone num">+${s.claim.r}</span></button></div>`;
