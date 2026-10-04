@@ -1325,6 +1325,7 @@ img.spx{object-fit:cover!important;object-position:50% 10%!important}
 .lhud .gbar{flex:1;min-width:0;margin:0;padding:4px 8px;gap:6px;font-size:11.5px;line-height:1.3;border-radius:8px}
 .lhud .gbar b{word-break:keep-all;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px}
 .lhud .gbar .gk{font-size:10px}.lhud .gbar .gr{font-size:10px}.lhud .gbar .btn.sm{padding:3px 7px;font-size:11px;white-space:nowrap}
+.sndb.gbtn{display:inline-flex;align-items:center;justify-content:center;width:34px!important;min-width:34px!important;height:32px!important;padding:0!important;border-radius:8px!important;border:1px solid #0a0b0d;background:linear-gradient(145deg,#3a4048,#1a1d22);box-shadow:inset 0 1px 0 #5a626c,inset 0 -2px 0 #0a0b0d,0 2px 4px #0008;cursor:pointer}.sndb.gbtn .gg{width:19px;height:19px;margin:0}.sndb.gbtn:hover{background:linear-gradient(145deg,#454c55,#22262c)}.sndb.gbtn:active{transform:translateY(1px)}
 </style>
 <div id="boot"><div class="bt-in"><div class="bt-t">언더크립트</div><div class="bt-s">무덤 아래로 내려가는 중…</div><div class="bt-bar"><i id="btbar"></i></div><div class="bt-p" id="btp">0%</div><div class="bt-tip" id="bttip"></div></div></div>
 <style>#boot{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1c1712,#07080a 70%);color:#e9e2cf;font-family:'Gowun Batang',serif;transition:opacity .45s}
@@ -4314,7 +4315,7 @@ const SND=(()=>{
   const mode=()=>META.snd||'all';
   const vol=()=>META.vol||{bgm:.45,sfx:.75};
   const VB=()=>{ const v=vol().bgm; return .5*v*v; }, VS=()=>.77*Math.pow(vol().sfx,1.5);
-  const TR={lobby:{src:'bgm_home.mp3'},dungeon:{srcs:['bgm_battle1.mp3','bgm_battle2.mp3']}};
+  const TR={lobby:{src:'bgm_home.mp3'},dungeon:{srcs:['bgm_battle1.mp3','bgm_battle2.mp3','bgm_battle3.mp3','bgm_battle4.mp3']}};
   const pickSrc=T=>T.srcs?T.srcs[Math.floor(Math.random()*T.srcs.length)]:T.src;
   function play(T){ if(!T.el) return; if(VB()<=0){ T.el.pause(); return; } const pr=T.el.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
   function tgtVol(T){ return Math.max(0,Math.min(1,(T.tlv||0)*VB()*2)); }
@@ -4433,10 +4434,10 @@ function uiScale(){ const f=fitScale(), v=META.scale||'auto'; if(f===1&&(window.
 function applyScale(){ if(typeof document==='undefined'||!document.documentElement||!document.documentElement.style) return; const s=uiScale(); const de=document.documentElement; de.style.zoom=s===1?'':String(s); if(de.style.setProperty) de.style.setProperty('--vh',((window.innerHeight||800)/s)+'px'); }
 if(typeof window!=='undefined'&&window.addEventListener){ window.addEventListener('resize',applyScale); }
 function scaleRow(){ if((window.innerWidth||0)<900) return ''; const v=META.scale||'auto'; return `<div class="vrow scl"><span class="vn">${gg('magnifying-glass')}화면</span><div class="sclb">${SCALES.filter(k=>k==='auto'||k<=fitScale()).map(k=>`<button class="btn sm ${String(v)===String(k)?'pri':''}" data-act="scale" data-v="${k}">${k==='auto'?'자동':Math.round(k*100)+'%'}</button>`).join('')}</div></div>`; }
-const sndIc=()=>gg('settings-knobs','w');
+const sndIc=()=>gg('settings-knobs');
 function skinRow(){ const v=META.skin||'anime'; return `<div class="vrow scl"><span class="vn">${gg('paint-brush')}그림체</span><div class="sclb">${[['anime','애니'],['classic','클래식']].map(([k,n])=>`<button class="btn sm ${v===k?'pri':''}" data-act="skin" data-v="${k}">${n}</button>`).join('')}</div></div>`; }
 function optRows(){ const ap=META.apot==null?.25:META.apot; return `<div class="vrow scl"><span class="vn">${gg('potion-ball')}AUTO 물약</span><div class="sclb">${[[0,'끔'],[.25,'HP 25%'],[.4,'40%'],[.5,'50%']].map(([v,n])=>`<button class="btn sm ${ap===v?'pri':''}" data-act="opt" data-k="apot" data-v="${v}">${n}</button>`).join('')}</div></div><div class="vrow scl"><span class="vn">${gg('breastplate')}장비</span><div class="sclb">${[[0,'직접 고르기'],[1,'더 좋으면 자동 장착']].map(([v,n])=>`<button class="btn sm ${(META.autoEq?1:0)===v?'pri':''}" data-act="opt" data-k="autoEq" data-v="${v}">${n}</button>`).join('')}</div></div>`; }
-function sndBtn(){ return `<button class="pxf btn-f mini sndb" data-act="sndopen" aria-label="설정">${sndIc()}</button>`; }
+function sndBtn(){ return `<button class="sndb gbtn" data-act="sndopen" aria-label="설정">${sndIc()}</button>`; }
 
 // ================= input =================
 document.addEventListener('click',ev=>{
