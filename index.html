@@ -1188,7 +1188,7 @@ img.npcic{width:100%;height:100%;object-fit:cover;border-radius:6px;box-shadow:n
 .hgoal{position:absolute;top:2px;left:12px;right:12px;z-index:12}
 .hgoal .gbar{background:rgba(12,14,20,.66);backdrop-filter:blur(8px);border:1px solid rgba(232,195,122,.3);border-left:3px solid var(--lg);border-radius:10px;font-size:12px}
 .hfigw{position:absolute;right:-10%;bottom:92px;height:80%;width:74%;z-index:5;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-.hfig{max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 10px 24px #000)}
+.hfig{max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 10px 24px #000)}.hfig.spl{max-height:64%!important;max-width:86%!important;filter:none;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%),linear-gradient(to top,transparent 0,#000 18%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 86%,transparent 100%),linear-gradient(to top,transparent 0,#000 18%);mask-composite:intersect}
 canvas.hfig{width:100%;height:100%}
 .hinfo{position:relative;z-index:12;width:62%;margin-bottom:6px}
 .hk{font-size:11px;color:var(--lg);letter-spacing:2px}
@@ -4150,7 +4150,7 @@ const HTIPS=['대기는 손해가 아니다 — 자세를 가다듬어 피해감
 function renderHome(){
   const sel=META.sel&&CLASSES[META.sel]&&META.unlocked.includes(META.sel)?META.sel:'warrior', c=CLASSES[sel], slots=slotsFor(sel), eq=eqClean(sel);
   const prim=((c.slots&&c.slots.weapon)||[]).map(k=>({str:'근력',dex:'기교',mag:'마력',fai:'신앙'}[k])).filter(Boolean);
-  const img=illImg('h_'+sel,'hfig')||artC('hero:'+sel,'hfig');
+  const img=illImg('h_'+sel,'hfig'+(SPCL.includes(sel)?' spl':''))||artC('hero:'+sel,'hfig');
   const mf=META.maxFloor[sel]||0, nx=SLOT_FLOORS.find(f=>mf<f);
   const trows=Object.entries(TOWERS).map(([k,t])=>{ const op=towerOpen(k), b=(META.tbest||{})[k]||0, cl=(META.tclear||{})[k];
     return `<button class="trow ${op?'':'lk'}" data-btower2="${k}"><b>${gg(TWI[k])}${t.n}</b><em>${!op?'🔒':cl&&t.floors?'제패 ✓':b?'B'+b+'F':'—'}</em></button>`; }).join('');
